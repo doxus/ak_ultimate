@@ -1,0 +1,490 @@
+% !TeX spellcheck = pl_PL
+\documentclass[a4paper,twoside]{article}
+\usepackage{polski}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+
+\usepackage[unicode, bookmarks=true]{hyperref} %do zakładek
+
+\setlength{\textheight}{24cm}
+\setlength{\textwidth}{15.92cm}
+\setlength{\footskip}{10mm}
+\setlength{\oddsidemargin}{0mm}
+\setlength{\evensidemargin}{0mm}
+\setlength{\topmargin}{0mm}
+\setlength{\headsep}{5mm}
+
+\begin{document}
+\bibliographystyle{plain}
+
+\begin{titlepage}
+\title{\huge Architektura komputerów - ULTIMATE}
+\author{\large SonMati \\ Doxus}
+\maketitle
+\end{titlepage}
+
+%===============================================================================
+% *** PYTANIA I ODPOWIEDZI *****************************************************
+%===============================================================================
+\part*{Pytania i odpowiedzi}
+\section{Moc obliczeniowa komputerów wektorowych :}
+	\begin{itemize}
+    \item Zależy od liczby stopni potoku
+    \item \textbf{Jest odwrotnie proporcjonalna do długości taktu zegarowego}
+    \item Jest wprost proporcjonalna do długości taktu zegarowego
+    \item Zależy odwrotnie proporcjonalnie od liczby jednostek potokowych połączonych łańcuchowo
+    \item \textbf{Zmierza asymptotycznie do wartości maksymalnej wraz ze wzrostem długości wektora}
+    \item Nie zależy od długości wektora
+    \item Zależy liniowo od długości wektora
+    \end{itemize}
+
+\section{Czy poniższa lista jest rosnąco uporządkowana według skalowalności:}
+	\begin{itemize}
+    \item Systemy ściśle połączone, systemy ze wspólną pamięcią, systemy SMP
+    \item \textbf{Systemy ze wspólna magistralą, systemy wielomagistralowe, systemy z przełącznicą krzyżową}
+    \item Systemy SMP, systemy z pamięcią wieloportową, systemy z przełącznicą krzyżową
+    \item NUMA, MPP, SMP
+    \item \textbf{Systemy z pamięcią wspólną, systemy o niejednorodnym dostępie do pamięci, z pamięcią rozproszoną}
+    \item Systemy SMP, NUMA, klastry, UMA
+    \item \textbf{Systemy symetryczne, o niejednorodnym dostępie do pamięci, systemy z przesyłem komunikatów}
+    \end{itemize}
+    
+\section{Komputery macierzowe}
+	\begin{itemize}
+    \item \textbf{Mają w liście rozkazów m.in. rozkazy operujące na wektorach danych}
+    \item Mają macierzowe potokowe układy arytmetyczne
+    \item Mają w typowych rozwiązaniach zestaw pełnych procesów połączonych siecią połączeń
+    \item \textbf{Wykonują synchroniczną operację wektorową w sieci elementów przetwarzających}
+    \end{itemize}
+    
+\section{Przetwarzanie potokowe}
+	\begin{itemize}
+    \item Nie jest realizowane dla operacji zmiennoprzecinkowych
+    \item Nie jest realizowane w procesorach CISC
+    \item \textbf{Daje przyspieszenie nie większe od liczby segmentów (stopni) jednostki potokowej}
+    \item W przypadku wystąpienia zależności między danymi wywołuje błąd i przerwanie wewnętrzne
+    \item Jest realizowane tylko dla operacji zmiennoprzecinkowych
+    \end{itemize}
+
+\section{W procesorach superskalarnych}
+	\begin{itemize}
+    \item \textbf{Liczba rozkazów, które procesor może wykonać w 1 takcie zależy od liczby jednostek potokowych w procesorze}
+    \item Liczba rozkazów, które procesor może wykonać w jednym takcie, zależy od liczby stopni potoku
+    \item Liczba rozkazów pobieranych z pamięci, w każdym takcie musi przekraczać liczbę jednostek potokowych
+    \item \textbf{Liczba rozkazów, które procesor może wykonać w taktach zależy od liczby jednostek potokowych w procesorze}
+    \end{itemize}
+
+\section{Systemy SMP}
+	\begin{itemize}
+    \item Wykorzystują protokół MESI do sterowania dostępem do wspólnej magistrali
+    \item Posiadają skalowalne procesory
+    \item Posiadają pamięć fizycznie rozproszoną, ale logicznie wspólną
+    \end{itemize}
+
+\section{Komputery wektorowe}
+	\begin{itemize}
+    \item Posiadają jednostki potokowe o budowie wektorowej
+    \item \textbf{Posiadają w liście rozkazów m.in. rozkazy operujące na wektorach danych}
+    \item \textbf{Wykorzystują od kilku do kilkunastu potokowych jednostek arytmetycznych}
+    \item Posiadają listę rozkazów operujących wyłącznie na wektorach
+    \end{itemize}
+
+\section{Procesory wektorowe}
+	\begin{itemize}
+    \item \textbf{Mogą być stosowane w systemach wieloprocesorowych}
+    \item \textbf{Mają listę rozkazów operującą jedynie na wektorach}
+    \item \textbf{Mają moc kilka razy większą od procesorów skalarnych}
+    \end{itemize}
+
+\section{Systemy MPP są zbudowane z węzłów którymi mogą być}
+	\begin{itemize}
+    \item \textbf{Systemy SMP}
+    \item Klastry
+    \item Konstelacje
+    \item \textbf{Systemy NUMA}
+    \item \textbf{Procesory}
+    \end{itemize}
+
+\section{W architekturze NUMA}
+	\begin{itemize}
+    \item \textbf{Dane są wymieniane między węzłami w postaci linii pamięci podręcznej (PaP)}
+    \item Spójność PaP węzłów jest utrzymywana za pomocą protokołu MESI
+    \item Czas dostępu do pamięci lokalnej w węźle jest podobny do czasu dostępu do pamięci nielokalnej
+    \item \textbf{Czas zapisu danych do pamięci nielokalnej może być znacznie dłuższy od czasu odczytu z tej pamięci}
+    \item \textbf{Każdy procesor ma dostęp do pamięci operacyjnej każdego węzła}
+    \item Procesy komunikują się poprzez przesył komunikatów
+    \item \textbf{Pamięć operacyjna jest rozproszona fizycznie pomiędzy węzłami, ale wspólna logicznie}
+    \end{itemize}
+
+\section{Mechanizmy potokowe stosowane są w celu}
+	\begin{itemize}
+    \item Uszeregowania ciągu wykonywanych rozkazów
+    \item \textbf{Uzyskania równoległej realizacji rozkazów}
+    \item \textbf{Przyspieszenia realizacji rozkazów}
+    \end{itemize}
+
+\section{Protokół MESI}
+	\begin{itemize}
+    \item Jest wykorzystywany do sterowania dostępem do magistrali w systemie SMP
+    \item \textbf{Zapewnia spójność pamięci cache w systemie SMP}
+    \item Służy do wymiany komunikatów w systemie MPP
+    \item Chroni przed hazardem w proc superskalarnych
+    \end{itemize}
+    
+\section{Mechanizm skoków opóźnionych}
+	\begin{itemize}
+    \item \textbf{Polega na opóźnianiu wykonywania skoku do czasu wykonania rozkazu następnego za skokiem}
+    \item Wymaga wstrzymania potoku na jeden takt
+    \item Powoduje błąd na końcu pętli
+    \item \textbf{Wymaga umieszczenia rozkazu NOP za rozkazem skoku lub reorganizacje programu}
+    \end{itemize}
+    
+\section{Charakterystyczne cechy architektury MPP}
+	\begin{itemize}
+    \item Spójność pamięci podręcznej wszystkich węzłów
+    \item \textbf{Fizycznie rozproszona PaO}
+    \item Fizycznie rozproszona PaO, ale logicznie wspólna
+    \item \textbf{Przesył komunikatów między procesorami}
+    \item Niska skalowalność
+    \item Jednorodny dostęp do pamięci wszystkich węzłów
+    \end{itemize}
+
+\section{Jak można ominąć hazard danych}
+	\begin{itemize}
+    \item Poprzez rozgałęzienia
+    \item Poprzez uproszczenie adresowania - adresowanie bezpośrednie
+    \item \textbf{Przez zamianę rozkazów}
+    \end{itemize}
+
+\section{Cechy architektury CISC}
+	\begin{itemize}
+    \item Czy może być wykonana w VLIW
+    \item \textbf{Czy występuje model wymiany danych typu pamięć - pamięć}
+    \item Jest mała liczba rozkazów
+    \end{itemize}
+
+\section{Cechy architektury RISC}
+	\begin{itemize}
+    \item Czy występuje model wymiany danych typu rej-rej
+    \item Jest mała liczba trybów adresowania
+    \item Jest wykonywanych kilka rozkazów w jednym takcie
+    \item Jest wykonywanych kilka rozkazów w jednym takcie (w danej chwili czasu)
+    \item textbf{Jest wykonywanych kilka instrukcji procesora w jednym rozkazie asemblerowym}
+    \item Układ sterowania w postaci logiki szytej
+    \end{itemize}
+
+\section{Przepustowość (moc obliczeniowa) dużych komputerów jest podawana w}
+	\begin{itemize}
+    \item \textbf{GFLOPS}
+    \item Liczbie instrukcji wykonywanych na sekundę
+    \item \textbf{Liczbie operacji zmiennoprzecinkowych na sekundę}
+    \item Mb/sek
+    \end{itemize}
+
+\section{Podstawą klasyfikacji Flynna jest}
+	\begin{itemize}
+    \item Liczba jednostek przetwarzających i sterujących w systemach komputerowych
+    \item Protokół dostępu do pamięci operacyjnej
+    \item \textbf{Liczba strumieni rozkazów i danych w systemach komputerowych}
+    \item Liczba modułów pamięci operacyjnej w systemach komputerowych
+    \end{itemize}
+
+\section{Liczba modułów pamięci operacyjnej w systemach komputerowych}
+	\begin{itemize}
+    \item \textbf{Macierzy elementów przetwarzających}
+    \item Zestawu procesorów superskalarnych
+    \item \textbf{Technologii MMX}
+    \item Sieci połączeń typu krata
+    \item \textbf{Potokowych jednostek arytmetycznych}
+    \end{itemize}
+
+\section{Architektura superskalarna}
+	\begin{itemize}
+    \item Dotyczy systemów SMP
+    \item Wymaga zastosowania protokołu MESI
+    \item \textbf{Umożliwia równoległe wykonywanie kilku rozkazów w jednym procesorze}
+    \item Wywodzi się z architektury VLIW
+    \end{itemize}
+
+\section{Klastry}
+	\begin{itemize}
+    \item Mają średnią skalowalność
+    \item Wykorzystują model wspólnej pamięci
+    \item \textbf{W węzłach mogą wykorzystywać systemy SMP}
+    \item \textbf{Do komunikacji między procesami wykorzystują przesył komunikatów}
+    \item Wykorzystują przełącznicę krzyżową jako sieć łączącą węzły
+    \item \textbf{W każdym węźle posiadają pełną instalację systemu operacyjnego}
+    \end{itemize}
+
+\section{Pojęcie równoległości na poziomie rozkazów:}
+	\begin{itemize}
+    \item Dotyczy architektury MIMD
+    \item \textbf{Odnosi się m.in. do przetwarzania potokowego}
+    \item Dotyczy architektury MPP
+    \item \textbf{Dotyczy m.in. architektury superskalarnej}
+    \end{itemize}
+
+\section{Systemy wieloprocesorowe z pamięcią wspólną}
+	\begin{itemize}
+    \item Zapewniają jednorodny dostęp do pamięci
+    \item \textbf{Mogą wykorzystywać procesory CISC}
+    \item \textbf{Są wykorzystywane w klastrach}
+    \item Wykorzystują przesył komunikatów między procesorami
+    \item \textbf{Wykorzystują katalog do utrzymania spójności pamięci podręcznych}
+    \end{itemize}
+
+\section{Hazard danych}
+	\begin{itemize}
+    \item \textbf{Czasami może być usunięty przez zmianę kolejności wykonania rozkazów}
+    \item Nie występuje w architekturze superskalarnej
+    \item Jest eliminowany przez zastosowanie specjalnego bitu w kodzie programu
+    \item Może wymagać wyczyszczenia potoku i rozpoczęcia nowej (…)
+    \end{itemize}
+
+\section{Przetwarzanie wielowątkowe}
+	\begin{itemize}
+    \item \textbf{Zapewnia lepsze wykorzystanie potoków}
+    \item \textbf{Minimalizuje straty wynikające z chybionych odwołań do pamięci podręcznej}
+    \item \textbf{Wymaga zwielokrotnienia zasobów procesora (rejestry, licznik rozkazów…)}
+    \item Nie może być stosowane w przypadku hazardu danych
+    \end{itemize}
+
+\section{Okna rejestrów}
+	\begin{itemize}
+    \item Chronią przez hazardem danych
+    \item \textbf{Minimalizują liczbę odwołań do pamięci operacyjnej przy operacjach wywołania procedur}
+    \item Są charakterystyczne dla architektury CISC
+    \item Są zamykane po błędnym przewidywaniu wykonania skoków warunkowych
+    \item \textbf{Są przesuwane przy operacjach wywołania procedur}
+    \end{itemize}
+
+\section{Tablica historii rozgałęzień}
+	\begin{itemize}
+    \item \textbf{Zawiera m.in. adresy rozkazów (?) rozgałęzień}
+    \item \textbf{Pozwala zminimalizować liczbę błędnych przewidywań rozgałęzień w zagnieżdżonej… (pętli?)}
+    \item Nie może być stosowana w procesorach CISC
+    \item Jest obsługiwana przez jądro systemu operacyjnego
+    \end{itemize}
+
+\section{Rozkazy wektorowe}
+	\begin{itemize}
+    \item Nie mogą być wykonywane bez użycia potokowych jednostek arytmetycznych
+    \item \textbf{W komputerach wektorowych ich czas wykonania jest wprost proporcjonalny do długości wektora}
+    \item \textbf{Są charakterystyczne dla architektury SIMD}
+    \item Są rozkazami dwuargumentowymi i w wyniku zawsze dają wektor
+    \end{itemize}
+
+\section{Model SIMD}
+	\begin{itemize}
+    \item Był wykorzystywany tylko w procesorach macierzowych
+    \item \textbf{Jest wykorzystywany w multimedialnych rozszerzeniach współczesnych procesorów}
+    \item \textbf{Jest wykorzystywany w heterogenicznej architekturze PowerXCell}
+    \item \textbf{Zapewnia wykonanie tej samej operacji na wektorach argumentów}
+    \end{itemize}
+
+\section{Przesył komunikatów}
+	\begin{itemize}
+    \item \textbf{Ma miejsce w systemach MPP}
+    \item W systemach MPP II-giej generacji angażuje wszystkie procesory na drodze przesyłu
+    \item \textbf{Ma miejsce w klastrach}
+    \end{itemize}
+
+\section{Cechami wyróżniającymi klastry są}
+	\begin{itemize}
+    \item \textbf{niezależność programowa każdego węzła}
+    \item Fizycznie rozproszona, ale logicznie wspólna pamięć operacyjna
+    \item Nieduża skalowalność
+    \item \textbf{Na ogół duża niezawodność}
+    \end{itemize}
+
+\section{Systemy wieloprocesorowe z pamięcią rozproszoną}
+	\begin{itemize}
+    \item Wyróżniają się bardzo dużą skalowalnością
+    \item Są budowane z węzłów, którymi są klastry
+    \item \textbf{Realizują synchronicznie jeden wspólny program}
+    \item Wymagają zapewnienia spójności pamięci podręcznych pomiędzy węzłami
+    \end{itemize}
+
+\section{Problemy z potokowym wykonywaniem rozkazów skoków (rozgałęzień) mogą być wyeliminowane lub ograniczone przy pomocy}
+	\begin{itemize}
+    \item Zapewnienia spójności pamięci podręcznej
+    \item \textbf{Tablicy historii rozgałęzień}
+    \item Techniki wyprzedzającego pobrania argumentu
+    \item \textbf{Wystawienia do programu rozkazów typu „nic nie rób”}
+    \item Protokołu MESI
+    \item \textbf{Wykorzystania techniki skoków opóźniających}
+    \item Technologii MMX
+    \end{itemize}
+
+\section{W architekturze ccNUMA}
+	\begin{itemize}
+    \item \textbf{Każdy procesor ma dostęp do pamięci operacyjnej każdego węzła}
+    \item Spójność pamięci pomiędzy węzłami jest utrzymywana za pomocą protokołu MESI
+    \item \textbf{Dane są wymieniane między węzłami w postaci linii pamięci podręcznej}
+    \item \textbf{Pamięć operacyjna jest fizycznie rozproszona pomiędzy węzłami, ale wspólna logicznie}
+    \end{itemize}
+
+\section{Dla sieci systemowych (SAN) są charakterystyczne}
+	\begin{itemize}
+    \item \textbf{Przesył komunikatów w trybie zdalnego DMA}
+    \item \textbf{Bardzo małe czasy opóźnień}
+    \item Topologia typu hipersześcian
+    \item Niska przepustowość
+    \end{itemize}
+
+\section{W systemach wieloprocesorowych katalog służy do}
+	\begin{itemize}
+    \item Śledzenia adresów w protokole MESI
+    \item Sterowania przesyłem komunikatów
+    \item \textbf{Utrzymania spójności pamięci w systemach o niejednorodnym dostępie do pamięci}
+    \item \textbf{Realizacji dostępu do nielokalnych pamięci w systemach NUMA}
+    \end{itemize}
+
+\section{W procesorach superskalarnych}
+	\begin{itemize}
+    \item \textbf{Jest możliwe równoległe wykonywanie kilku rozkazów w jednym procesorze(rdzeniu) }
+    \item \textbf{Rozszerzenia architektury wykorzystujące model SIMD umożliwiają wykonanie rozkazów wektorowych}
+    \item Nie występuje prawdziwa zależność danych
+    \item \textbf{Mogą wystąpić nowe formy hazardu danych: zależności wyjściowe między rozkazami oraz antyzależności}
+    \end{itemize}
+
+\section{Efektywne wykorzystanie równoległości na poziomie danych umożliwiają}
+	\begin{itemize}
+    \item \textbf{Komputery wektorowe}
+    \item \textbf{Komputery macierzowe}
+    \item \textbf{Klastry}
+    \item \textbf{Procesory graficzne}
+    \item \textbf{Rozszerzenia SIMD procesorów superskalarnych}
+    \end{itemize}
+
+\section{Wielowątkowość współbieżna w procesorze wielopotokowym zapewnia}
+	\begin{itemize}
+    \item \textbf{Możliwość wprowadzenia rozkazów różnych wątków do wielu potoków}
+    \item \textbf{Realizację każdego z wątków do momentu wstrzymania któregoś rozkazu z danego wątku}
+    \item Przełączanie wątków co takt
+    \item Automatyczne przemianowanie rejestrów
+    \end{itemize}
+
+\section{Architektura CUDA}
+	\begin{itemize}
+    \item \textbf{Umożliwia bardzo wydajne wykonywanie operacji graficznych}
+    \item \textbf{Stanowi uniwersalną architekturę obliczeniowa połączoną z równoległym modelem programistycznym}
+    \item \textbf{Realizuje model obliczeniowy SIMT}
+    \item Jest podstawą budowy samodzielnych, bardzo wydajnych komputerów
+    \end{itemize}
+
+\section{Spójność pamięci podręcznych w procesorze wielordzeniowym może być m.in. zapewniona za pomocą}
+	\begin{itemize}
+    \item Przełącznicy krzyżowej
+    \item Katalogu
+    \item \textbf{Protokołu MESI}
+    \item Wspólnej magistrali
+    \end{itemize}
+
+\section{Metoda przemianowania rejestrów jest stosowana w celu eliminacji}
+	\begin{itemize}
+    \item Błędnego przewidywania rozgałęzień
+    \item Chybionego odwołania do pamięci podręcznej
+    \item Prawdziwej zależności danych
+    \item \textbf{Zależności wyjściowej między rozkazami}
+    \item \textbf{Antyzależności między rozkazami}
+    \end{itemize}
+
+\section{W systemach wieloprocesorowych o architekturze CC-NUMA}
+	\begin{itemize}
+    \item \textbf{Spójność pamięci wszystkich węzłów jest utrzymywana za pomocą katalogu}
+    \item \textbf{Pamięć operacyjna jest rozproszona fizycznie pomiędzy węzłami, ale wspólna logicznie}
+    \item Każdy procesor ma bezpośredni dostęp do pamięci operacyjnej każdego węzła
+    \item Dane są wymieniane między węzłami w postaci linii pamięci podręcznej
+    \end{itemize}
+
+\section{W tablicy historii rozgałęzień z 1 bitem historii można zastosować następujący algorytm przewidywania (najbardziej złożony)}
+	\begin{itemize}
+    \item Skok opóźniony
+    \item Przewidywanie, że rozgałęzienie(skok warunkowy) zawsze nastąpi
+    \item Przewidywanie, że rozgałęzienie nigdy nie nastąpi
+    \item \textbf{Przewidywanie, że kolejne wykonanie rozkazu rozgałęzienia będzie przebiegało tak samo jak poprzednie}
+    \item Wstrzymanie napełniania potoku
+    \end{itemize}
+
+\section{Do czynników tworzących wysoką niezawodność klastrów należą}
+	\begin{itemize}
+    \item \textbf{Mechanizm mirroringu dysków}
+    \item \textbf{Dostęp każdego węzła do wspólnych zasobów(pamięci zewnętrznych)}
+    \item \textbf{Redundancja węzłów}
+    \item Mechanizm "heartbeat"
+    \item Zastosowanie procesorów wielordzeniowych w węzłach
+    \end{itemize}
+
+
+\newpage
+%===============================================================================
+%*******************************************************************************
+%===============================================================================
+\part*{Opracowanie wykładów}
+\section*{Historia rozwoju komputerów}
+	\begin{enumerate}
+    \item Liczydło
+    \item Pascalina - maszyna licząca Pascala (dodawanie i odejmowanie)
+    \item Maszyna mnożąca Leibniza (dodawanie, odejmowanie, mnożenie, dzielenie, pierwiastek kwadratowy
+    \item Maszyna różnicowa - Charles Babbage, obliczanie wartości matematycznych do tablic
+    \item Maszyna analityczna - Charles Babvage, programowalna za pomocą kart perforowanych
+  	\item Elektryczna maszyna sortująca i tabelaryzująca Holleritha 1890
+    \item Kalkulator elektromechaniczny Mark I, tablicowanie funkcji, całkowanie numeryczne, rozwiązywanie równań różniczkowych, rozwiązywanie układów równań liniowych, analiza harmoniczna, obliczenia statystyczne
+    \item Maszyny liczące Z1: pamięć mechaniczna, zmiennoprzecinkowa reprezentacja liczb, binarna jednostka zmiennoprzecinkowa
+    \item Z3: Pierwsza maszyna w pełni automatyczna, kompletna w sensie Turinga, pamięć przekaźnikowa
+    \item Colossus i Colossus 2
+    \item ENIAC
+    \item EDVAC - J. von Neumann (wtedy utworzył swoją architekturę) \\
+    	\begin{figure}[h]
+		\centering
+		\includegraphics[scale=0.1]{architektura_von_Neumanna.png}
+		\end{figure}
+    \item UNIVAC I (pierwszy udany komputer komercyjny)
+    \item IBM 701, potem 709
+    \item po 1955 zaczyna się zastosowanie tranzystorów w komputerach (komputery II generacji)
+    \item po 1965 komputery III generacji z układami scalonymi
+    \item od 1971 komputery IV generacji - z układami scalonymi wielkiej skali inegracji VLSI
+    \end{enumerate}
+    
+\section*{Charakterystyka architektury CISC}
+	\subsection*{Przyczyny rozwoju architektury CISC}
+    	\begin{itemize}
+        \item drogie, małe i wolne pamięci komputerów
+        \item duża popularność mikroprogramowalnych układów sterujących (prostych w rozbudowie)
+        \item dążenie do uproszczenia kompilatorów
+        \end{itemize}
+    
+    \subsection*{Cechy architektury CISC}
+    	\begin{itemize}
+        \item duża liczba rozkazów (z czego te najbardziej zaawansowane i tak nie były używane)
+        \item model obliczeń pamięć - pamięć
+        \item duża ilość trybów adresowania (związane z modelem obliczeń)
+        \item zróżnicowana długość słowa rozkazu
+        \item niewiele rejestrów (bo były droższe niż pamięć i przy przełączaniu kontekstu obawiano się )
+        \end{itemize}
+   
+   \textbf{\large CIEKAWOSTKA:} Przeanalizowano jakieś tam programy i w procesorze VAX 20\% najbardziej złożonych rozkazów odpowiadało za 60\% kodu, stanowiąc przy tym ok 0.2\% wywołań.\\ W procesorze MC68020 71\% rozazów nie zostało nawet użytych w badanych programach
+   
+	\section*{Architektura RISC}
+   		\subsection*{TODO}
+        
+    \section*{Procesory superskalarne}
+    	\subsection*{Cechy architektury superskalarnej}
+        	\begin{itemize}
+            \item Możliwośc wykonania kilku rozkazów w jednym takcie, co powoduje konieczność:
+            \item Kilka jednostek potokowych
+            \item Konieczność załadowania kilku rozkazów z pamięci operacyjnej w jednym takcie procesora
+            \end{itemize}
+            
+		
+        \subsection*{Zależności między rozkazami i sposoby ich eliminacji}
+        	\begin{itemize}
+            \item \textbf{Prawdziwa zależność danych:} Występuje w momencie kiedy jeden rozkaz wymaga argumentu obliczanego przez poprzedni rozkaz. Eliminowane za pomocą "wyprzedzającego pobierania argumentu" - dana nie jest zapisywana do rejestru, tylko pobierana bezpośrednio z 
+            \end{itemize}
+	
+%===============================================================================	
+%*******************************************************************************
+%===============================================================================
+\end{document}
