@@ -61,7 +61,7 @@
     {\small \emph{Bzdura, patrz wyżej.}}
     \end{itemize}
 
-\section{Czy poniższa lista jest rosnąco uporządkowana według skalowalności:}
+\section{Czy poniższa lista jest rosnąco uporządkowana według skalowalności: {\small /Nie dotyczy}}
 	\begin{itemize}
     \item Systemy ściśle połączone, systemy ze wspólną pamięcią, systemy SMP
     \item \textbf{Systemy ze wspólna magistralą, systemy wielomagistralowe, systemy z przełącznicą krzyżową}
@@ -111,14 +111,14 @@
     {\small \emph{Tak, patrz pierwsza odpowiedź.}}
     \end{itemize}
 
-\section{Systemy SMP}
+\section{Systemy SMP {\small /Nie dotyczy}}
 	\begin{itemize}
     \item Wykorzystują protokół MESI do sterowania dostępem do wspólnej magistrali
     \item Posiadają skalowalne procesory
     \item Posiadają pamięć fizycznie rozproszoną, ale logicznie wspólną
     \end{itemize}
 
-\section{Komputery wektorowe}
+\section{Komputery wektorowe  {\small /Forczu}}
 	\begin{itemize}
     \item Posiadają jednostki potokowe o budowie wektorowej\\
     {\small \emph{Nie, posiadają potokowe jednostki arytmetyczne, które nie są wektorowe.}}
@@ -130,14 +130,17 @@
     {\small \emph{Zdecydowanie nie. Owszem, te komputery posiadają rejestry wektorowe i wektorowe jednostki zmiennoprzecinkowe, ale nie jest to wszystko. Mają również normalne rejestry, adresację, jednostki skalarne i możliwosć wykonywania na nich operacji.}}
     \end{itemize}
 
-\section{Procesory wektorowe}
+\section{Procesory wektorowe {\small /Forczu}}
 	\begin{itemize}
-    \item \textbf{Mogą być stosowane w systemach wieloprocesorowych}
-    \item \textbf{Mają listę rozkazów operującą jedynie na wektorach}
-    \item \textbf{Mają moc kilka razy większą od procesorów skalarnych}
+    \item \textbf{Mogą być stosowane w systemach wieloprocesorowych}\\
+    {\small \emph{Domyslnie procesory wektorowe mogą pracowac pojedynczo, ale mogą być częscia takiego systemu. Poza tym nie znalazłem nic, co by temu przeczyło. Jest też np. CUDA - architektura wielordzeniowych procesorów graficznych. Sama architektura SIMD działa na wielu procesorach.}}
+    \item Mają listę rozkazów operującą jedynie na wektorach\\
+    {\small \emph{Nie, posidają też m.in. potokowe jednostki arytrmetyczne oraz jednostki skalarane, do operowania na zwykłych liczbach.}}
+    \item \textbf{Mają moc kilka razy większą od procesorów skalarnych}\\
+    {\small \emph{Tak, przyspieszenie jest ilorazem czasu wykonywania na procesorze niewektorowym do czasu wykonywania na procesorze wektorowym. Np. dla rozkazu dodawania \emph{n} wektorów przyspieszenie wyliczane jest wg wzoru $ a=\frac{15\tau n}{t_{start}+(n-1)\tau} $, gdzie przy \emph{n} dążącym do nieskończonosci \emph{a} jest równe 15.}}
     \end{itemize}
 
-\section{Systemy MPP są zbudowane z węzłów którymi mogą być}
+\section{Systemy MPP są zbudowane z węzłów którymi mogą być {\small /Nie dotyczy}}
 	\begin{itemize}
     \item \textbf{Systemy SMP}
     \item Klastry
@@ -147,7 +150,7 @@
     \end{itemize}
 
 % --- PYTANIE 10
-\section{W architekturze NUMA}
+\section{W architekturze NUMA {\small /Nie dotyczy}}
 	\begin{itemize}
     \item \textbf{Dane są wymieniane między węzłami w postaci linii pamięci podręcznej (PaP)}
     \item Spójność PaP węzłów jest utrzymywana za pomocą protokołu MESI
@@ -162,13 +165,13 @@
 	\begin{itemize}
     \item Uszeregowania ciągu wykonywanych rozkazów\\
     {\small \emph{Nie, zupełnie nie o to chodzi. Ciąg może zostać uszeregowany przez kompilator w celu optymalizacji. Jednak celem tego mechanizmu jest zrównoleglenie wykonywania rozkazów -> zmiana kolejnosci ich realizacji nie jest założeniem.}}
-    \item \textbf{Uzyskania równoległej realizacji rozkazów}
+    \item \textbf{Uzyskania równoległej realizacji rozkazów}\\
     {\small \emph{No tyć. Potoki umożliwiają realizację wielu rozkazów jednoczesnie dzieląc jednostkę centralną na wg stopni, jak np. pobranie rozkazu i wykonania rozkazu. Dzięki temu dwa rozkazy mogą wykonywać się jednoczesnie, oba w innych fazach.}}
     \item \textbf{Przyspieszenia realizacji rozkazów}\\
     {\small \emph{Tak, to główny cel. Umożliwienie wykonania rozkazów umożliwia przyspieszenie, które oblicza się jako stosunek czasu wykonywania rozkazów w procesorze niepotokowym do czasu realizacji w procesorze potokowym. W idealnym przypadku jest ono równe \emph{P} - ilości podziałów / stopni / faz / zwał jak zwał.}}
     \end{itemize}
 
-\section{Protokół MESI}
+\section{Protokół MESI {\small /Nie dotyczy}}
 	\begin{itemize}
     \item Jest wykorzystywany do sterowania dostępem do magistrali w systemie SMP
     \item \textbf{Zapewnia spójność pamięci cache w systemie SMP}
@@ -188,7 +191,7 @@
     {\small \emph{Tak, mechanizm sprowadza się do tego, i tylko do tego, patrz pierwsza odpowiedź.}}
     \end{itemize}
     
-\section{Charakterystyczne cechy architektury MPP}
+\section{Charakterystyczne cechy architektury MPP {\small /Nie dotyczy}}
 	\begin{itemize}
     \item Spójność pamięci podręcznej wszystkich węzłów
     \item \textbf{Fizycznie rozproszona PaO}
@@ -202,9 +205,9 @@
 \section{Jak można ominąć hazard danych {\small /Forczu}}
 	\begin{itemize}
     \item Poprzez rozgałęzienia\\
-    {\small \emph{Nie, to jest stosowane do usuwania hazardu sterowania związanego ze skokami i rozgałęzieniami.}}
+    {\small \emph{Nie, rozgałęzienie to po prostu instrukcje typu IF, które tworzą takie rozgałęzienia. Mechanizm przewidywania rozgałęzień jest stosowany do usuwania hazardu sterowania związanego ze skokami i rozgałęzieniami.}}
     \item Poprzez uproszczenie adresowania - adresowanie bezpośrednie.\\
-    {\small \emph{Bullshit. Nie wiem w czym miało by pomóc uproszczenia adresowania, poza pójsciem w stronę RISCu, ale na hazard to nie pomoże.}}
+    {\small \emph{Bullshit. Nie wiem w czym miało by pomóc uproszczenia adresowania, poza pójsciem w stronę RISCu, ale na hazard to nie pomoże. Tym można tylko skrócić czas odwołania sie do danych.}}
     \item \textbf{Przez zamianę rozkazów}\\
     {\small \emph{Tak, i na tym polega mechanizm skoków opóźnionych, które mogą program zmodyfikować (dodać rozkaz NOP) albo zoptymalizować, własnie zamieniają rozkazy kolejnoscią.}}
     \end{itemize}
@@ -226,7 +229,8 @@
     \item \textbf{Jest mała liczba trybów adresowania}\\
     {\small \emph{Tak, raptem 4 w procesorze RISC I podczas gdy CISCi mogą mieć ich kilkanascie, w tym takie bardzo złożone.}}
     \item \textbf{Jest wykonywanych kilka rozkazów w jednym takcie}\\
-    {\small \emph{Tu jest haczyk - pierwszy procesor RISC I (1980) stawiał sobie za cel wykonanie \emph{jednego rozkazu w jednym takcie} i dokładnie tak brzmiało jego założenie projektowe. Jednak jego fizyczna realizacja (1982) posiadała dwustopniowy potok.}}
+    {\small \emph{Tu jest haczyk - pierwszy procesor RISC I (1980) stawiał sobie za cel wykonanie \emph{jednego rozkazu w jednym takcie} i dokładnie tak brzmiało jego założenie projektowe. Jednak jego fizyczna realizacja (1982) posiadała dwustopniowy potok. To raz.\\
+    Z drugiej strony wyłącznie 2+ potoków zapewnia równoległosć. Jeden potok zapewnia tylko, że w każdym takcie procesora cos z niego wyjdzie, a nie że wykona się jednoczesnie.}}
     \item \textbf{Jest wykonywanych kilka rozkazów w jednym takcie (w danej chwili czasu)}\\
     {\small \emph{Chodzi o przetwarzanie potokowe. Patrz wyżej + w wykładach jako cecha tej architektury jest napisane "Intensywne wykorzystanie przetwarzania potokowego", co odnosi się do faktu, że obecnie nie ma procesora typu RISC, który go nie ma. Wg mnie prawda.}}
     \item Jest wykonywanych kilka instrukcji procesora w jednym rozkazie asemblerowym\\
@@ -235,12 +239,13 @@
     {\small \emph{Tak.}}
     \end{itemize}
 
-\section{Przepustowość (moc obliczeniowa) dużych komputerów jest podawana w}
+\section{Przepustowość (moc obliczeniowa) dużych komputerów jest podawana w {\small /Forczu}}
 	\begin{itemize}
     \item \textbf{GFLOPS}
     \item Liczbie instrukcji wykonywanych na sekundę
     \item \textbf{Liczbie operacji zmiennoprzecinkowych na sekundę}
-    \item Mb/sek
+    \item Mb/sek\\\\
+    {\small \emph{To jest do zapamiętania na prostu - takie są standardy}}.
     \end{itemize}
 
 \section{Podstawą klasyfikacji Flynna jest {\small /Forczu}}
@@ -280,7 +285,7 @@
     {\small \emph{Wręcz odwrotnie, to VLIW wykorzystuje architekturę superskalarną na której opiera swój podział rozkazów na paczki.}}
     \end{itemize}
 
-\section{Klastry}
+\section{Klastry {\small /Nie dotyczy}}
 	\begin{itemize}
     \item Mają średnią skalowalność
     \item Wykorzystują model wspólnej pamięci
@@ -302,7 +307,7 @@
     {\small \emph{Tak, patrz wyżej.}}
     \end{itemize}
 
-\section{Systemy wieloprocesorowe z pamięcią wspólną}
+\section{Systemy wieloprocesorowe z pamięcią wspólną {\small /Nie dotyczy, ale lezy blisko ostatniego wykładu}}
 	\begin{itemize}
     \item Zapewniają jednorodny dostęp do pamięci
     \item \textbf{Mogą wykorzystywać procesory CISC}
@@ -316,7 +321,8 @@
 	\begin{itemize}
     \item \textbf{Czasami może być usunięty przez zmianę kolejności wykonania rozkazów}\\
     {\small \emph{Tak, służy do tego mechanizm skoków opóżnionych, który odbywa się na poziomie kompilacji programu.}}
-    \item Nie występuje w architekturze superskalarnej
+    \item Nie występuje w architekturze superskalarnej\\
+    {\small \emph{Występuje wszędzie tam gdzie jest potokowe przetwarzania rozkazów.}}
     \item Jest eliminowany przez zastosowanie specjalnego bitu w kodzie programu\\
     {\small \emph{Nic mi o tym nie wiadomo. Pewne dodatkowe bity są wykorzystywane w mechaniźmie przewidywania rozgałęzień, który służy do eliminacji hazardu, jednak on to odbywa się PRZED realizacją programu i sprowadza się do zmiany kolejnosci wykonywania rozkazów przez kompilator. Nic nie dodaje do tresci programu.}}
     \item Może wymagać wyczyszczenia potoku i rozpoczęcia nowej (…)\\
@@ -363,7 +369,7 @@
     \item Nie może być stosowana w procesorach CISC\\
     {\small \emph{Ten mechanizm służy zabezpieczeniu przed hazardem, który występuje w przetwarzeniu potokowym, a z tego korzystają zarówn CISC jak i RISC.}}
     \item Jest obsługiwana przez jądro systemu operacyjnego\\
-    {\small \emph{Chyba nie, ten mechanizm znajduje się w kompilatorze.}}
+    {\small \emph{Chyba nie, ten mechanizm znajduje się w sprzęcie procesora.}}
     \end{itemize}
 
 \section{Rozkazy wektorowe {\small /Forczu}}
@@ -380,7 +386,7 @@
     \end{itemize}
 
 % --- PYTANIE 30
-\section{Model SIMD}
+\section{Model SIMD  {\small /Forczu}}
 	\begin{itemize}
     \item Był wykorzystywany tylko w procesorach macierzowych\\
     {\small \emph{Nie, o niego oparte są również m.in. procesory wektorowe, GPU, technologie MMX oraz SSE.}}
@@ -390,14 +396,14 @@
     \item \textbf{Zapewnia wykonanie tej samej operacji na wektorach argumentów}
     \end{itemize}
 
-\section{Przesył komunikatów}
+\section{Przesył komunikatów {\small /Nie dotyczy}}
 	\begin{itemize}
     \item \textbf{Ma miejsce w systemach MPP}
     \item W systemach MPP II-giej generacji angażuje wszystkie procesory na drodze przesyłu
     \item \textbf{Ma miejsce w klastrach}
     \end{itemize}
 
-\section{Cechami wyróżniającymi klastry są}
+\section{Cechami wyróżniającymi klastry są {\small /Nie dotyczy}}
 	\begin{itemize}
     \item \textbf{niezależność programowa każdego węzła}
     \item Fizycznie rozproszona, ale logicznie wspólna pamięć operacyjna
@@ -405,7 +411,7 @@
     \item \textbf{Na ogół duża niezawodność}
     \end{itemize}
 
-\section{Systemy wieloprocesorowe z pamięcią rozproszoną}
+\section{Systemy wieloprocesorowe z pamięcią rozproszoną {\small /Nie dotyczy, ale leży blisko ostatniego wykładu}}
 	\begin{itemize}
     \item Wyróżniają się bardzo dużą skalowalnością
     \item Są budowane z węzłów, którymi są klastry
@@ -415,21 +421,23 @@
 
 \section{Problemy z potokowym wykonywaniem rozkazów skoków (rozgałęzień) mogą być wyeliminowane lub ograniczone przy pomocy {\small /Forczu}}
 	\begin{itemize}
-    \item Zapewnienia spójności pamięci podręcznej
+    \item Zapewnienia spójności pamięci podręcznej\\
+    {\small \emph{Nie, to problem komputerów wieloprocesorowych.}}
     \item \textbf{Tablicy historii rozgałęzień}\\
     {\small \emph{Tak, to najprawdopodobniej najlepszy służący ku temu mechanizm. Stara się przewidywać czy skok będzie wykonany bądź nie, wykorzystuje do tego kilka strategii.}}
     \item Techniki wyprzedzającego pobrania argumentu\\
     {\small \emph{Nie, ten mechanizm służy do eliminacji hazardu danych - zależnosci między argumentami.}}
     \item \textbf{Wystawienia do programu rozkazów typu „nic nie rób”}\\
     {\small \emph{Tak, tym rozkazem jest \emph{NOP} i jest wstawiany przez mechanizm skoków opóźnionych, który służy do zabezpieczania potoku.}}
-    \item Protokołu MESI
+    \item Protokołu MESI\\
+    {\small \emph{Nie, on jest od zapewnienia spójnosci pamięci wspólnej czy jakos tak.}}
     \item \textbf{Wykorzystania techniki skoków opóźniających}\\
     {\small \emph{Tak, umożliwiają ona modyfikację programu (wstawienie rozkazu NOP), albo jego optymalizację (zamiana kolejnosci wykonywania rozkazów.) Mechanizm ten opóźnia efekt skoku o jeden rozkaz, co zapewnia, że rozkaz po skoku będzie w całosci wykonany.}}
     \item Technologii MMX
     \end{itemize}
 
 % --- PYTANIE 35
-\section{W architekturze ccNUMA}
+\section{W architekturze ccNUMA {\small /Nie dotyczy}}
 	\begin{itemize}
     \item \textbf{Każdy procesor ma dostęp do pamięci operacyjnej każdego węzła}
     \item Spójność pamięci pomiędzy węzłami jest utrzymywana za pomocą protokołu MESI
@@ -437,7 +445,7 @@
     \item \textbf{Pamięć operacyjna jest fizycznie rozproszona pomiędzy węzłami, ale wspólna logicznie}
     \end{itemize}
 
-\section{Dla sieci systemowych (SAN) są charakterystyczne}
+\section{Dla sieci systemowych (SAN) są charakterystyczne {\small /Nie dotyczy}}
 	\begin{itemize}
     \item \textbf{Przesył komunikatów w trybie zdalnego DMA}
     \item \textbf{Bardzo małe czasy opóźnień}
@@ -445,7 +453,7 @@
     \item Niska przepustowość
     \end{itemize}
 
-\section{W systemach wieloprocesorowych katalog służy do}
+\section{W systemach wieloprocesorowych katalog służy do {\small /Nie dotyczy}}
 	\begin{itemize}
     \item Śledzenia adresów w protokole MESI
     \item Sterowania przesyłem komunikatów
@@ -487,20 +495,32 @@
     {\small \emph{Głowy nie dam, ale chyba żadna wielowątkowosć nie zapewnia automatycznego przemianowania.}}
     \end{itemize}
 
-\section{Architektura CUDA}
+\section{Architektura CUDA {\small Forczu}}
 	\begin{itemize}
-    \item \textbf{Umożliwia bardzo wydajne wykonywanie operacji graficznych}
-    \item \textbf{Stanowi uniwersalną architekturę obliczeniowa połączoną z równoległym modelem programistycznym}
-    \item \textbf{Realizuje model obliczeniowy SIMT}
-    \item Jest podstawą budowy samodzielnych, bardzo wydajnych komputerów
+    \item \textbf{Umożliwia bardzo wydajne wykonywanie operacji graficznych}\\
+    {\small \emph{Tak, ta architektura jest rozwinięciem mechanizmów wektorowych oraz macierzowych i jest przeznaczona specjalnie dla przetwarzania grafiki.}}
+    \item \textbf{Stanowi uniwersalną architekturę obliczeniowa połączoną z równoległym modelem programistycznym}\\
+    {\small \emph{Tak, pomimo specjalizacji graficznej, architektura ta jest uniwersalna i zdolna do wszystkiego. Procesory posiadają uniwersalne programy obliczeniowe, a CUDA posiada model programistyczny (oraz podział programu na 5 faz). Składa się on z: \begin{itemize}
+    		\item Kompilatora NVCC
+    		\item Podział programu na kod wykonywany przez procesor (host code) oraz kartę graficzną (kernel)
+    		\item realizacja obliczen równoległych wg modelu SIMT (Single Instruction Multiple Threading)
+   		\end{itemize}}}
+    \item \textbf{Realizuje model obliczeniowy SIMT}\\
+    {\small \emph{Tak, patry wyżej. Działanie: wiele niezależmnych wąktów wykonuje tę samą operację. Architektura posiada również mechanizm synchronizacji wątków (\emph{barrir synchronization}) dla komunikacji oraz współdzielona pamięć.}}
+    \item Jest podstawą budowy samodzielnych, bardzo wydajnych komputerów\\
+    {\small \emph{Komputery CUDA nie są ogólnego zastosowania, tylko do ogólnych problemów numerycznych. Na pewno nie są podstawą, bo np. komputer rozwymagają }}
     \end{itemize}
 
-\section{Spójność pamięci podręcznych w procesorze wielordzeniowym może być m.in. zapewniona za pomocą}
+\section{Spójność pamięci podręcznych w procesorze wielordzeniowym może być m.in. zapewniona za pomocą {\small /Raczej nie dotyczy}}
 	\begin{itemize}
-    \item Przełącznicy krzyżowej
-    \item Katalogu
-    \item \textbf{Protokołu MESI}
-    \item Wspólnej magistrali
+    \item Przełącznicy krzyżowej\\
+    {\small \emph{Nie, to tylko jakies rozwiązanie sieci połączeń.}}
+    \item Katalogu\\
+    {\small \emph{Nie,to bardziej zaawansowany shit służący do komunikacji.}}
+    \item \textbf{Protokołu MESI}\\
+    {\small \emph{Tak, i tylko to do tego służy.}}
+    \item Wspólnej magistrali\\
+    {\small \emph{Nie, ona służy do kominukacji i synchronizacji (?) dostępu do pamięci.}}
     \end{itemize}
 
 \section{Metoda przemianowania rejestrów jest stosowana w celu eliminacji {\small /Forczu}}
@@ -518,7 +538,7 @@
     
     \end{itemize}
 
-\section{W systemach wieloprocesorowych o architekturze CC-NUMA}
+\section{W systemach wieloprocesorowych o architekturze CC-NUMA {\small /Nie dotyczy}}
 	\begin{itemize}
     \item \textbf{Spójność pamięci wszystkich węzłów jest utrzymywana za pomocą katalogu}
     \item \textbf{Pamięć operacyjna jest rozproszona fizycznie pomiędzy węzłami, ale wspólna logicznie}
@@ -546,7 +566,7 @@
     {\small \emph{Nie, wstrzymywanie potoku mogą spowodować algorytmy zajmujące się eliminacją hazardu danych - zależnosci między argumentami.}}
     \end{itemize}
 
-\section{Do czynników tworzących wysoką niezawodność klastrów należą}
+\section{Do czynników tworzących wysoką niezawodność klastrów należą {\small /Nie dotyczy}}
 	\begin{itemize}
     \item \textbf{Mechanizm mirroringu dysków}
     \item \textbf{Dostęp każdego węzła do wspólnych zasobów(pamięci zewnętrznych)}
@@ -1270,6 +1290,90 @@
 			\item \textbf{pamięć stałych} – niewielki fragment pamięci globalnej, który jest cache-owany, przez co dostęp do niego jest bardzo szybki. Jest ona tylko do odczytu. Czas życia pamięci stałych oraz jej dostępność jest taka sama jak pamięci globalnej,
 			\item \textbf{rejestry} – niewielka, bardzo szybka pamięć o czasie życia wątku (po zakończeniu wątku dane z rejestrów są usuwane). Tylko jeden wątek może w danym momencie korzystać z danego rejestru,
 			\item \textbf{pamięć lokalna i pamięć tekstur} – podobnie jak w przypadku pamięci stałych, są to dedykowane fragmenty pamięci globalnej. Pamięć lokalna jest wykorzystywana do przechowywania danych lokalnych wątku, które nie mieszczą się w rejestrach, a pamięć tekstur posiada specyficzne metody adresowania i cache-owanie specyficzne dla zastosowań graficznych.
+		\end{itemize}
+		
+\part*{Uzupełnienie, na kolosie ma nie być}
+	\section*{Systemy wieloprocesorowe}
+		\subsection*{Rodzaje}
+		\begin{itemize}
+			\item systemy z pamięcią wspólną
+			\item systemy z pamięcią rozproszoną
+		\end{itemize}
+		\subsubsection*{Z pamięcią wspólną}
+		\begin{itemize}
+			\item Systemy z jednorodnym dostępem do pamięci (UMA – Uniform Memory Access)
+			\item Systemy z niejednorodnym dostępem do pamięci (NUMA – Non 	- Uniform Memory Access)
+			\item Klasyfikacja:
+			\begin{itemize}
+				\item Systemy ze wspólną magistralą
+				\item Systemy wielomagistralowe
+				\item Systemy z przełącznicą krzyżową
+				\item Systemy z wielostopniową siecią połączeń
+				\item Systemy z pamięcią wieloportową
+				\item Systemy z sieciami typu punkt - punkt
+			\end{itemize}
+		\end{itemize}
+		\subsubsection*{Systemy ze wspólną magistralą}
+		\begin{itemize}
+			\item prostota konstrukcji – niska złożoność układowa całości
+			\item niski koszt
+			\item łatwość rozbudowy – dołączenia kolejnego procesora, ale tylko w ograniczonym zakresie
+			\item ograniczona złożoność magistrali (jej szybkość jest barierą)
+			\item niska skalowalność
+		\end{itemize}
+		\subsection*{Skalowalność}
+		\textbf{System skalowalny} - System, w którym dodanie pewnej liczby procesorów prowadzi do proporcjonalnego przyrostu mocy obliczeniowej.
+		\subsection*{Protokół MESI}
+		\begin{itemize}
+			\item I - invalid
+			\item S - shared
+			\item E - exclusive
+			\item M - modified
+		\end{itemize}
+		\subsection*{Systemy wielomagistralowe}
+		\begin{itemize}
+			\item Wielokrotnie zwiększona przepustowość
+			\item Konieczność stosowania układu arbitra do sterowania dostępem do magistral
+			\item Rozwiązania kosztowne
+			\item Zadania każdego przełącznika
+			\begin{itemize}
+				\item Rozwiązywanie konfliktów dostępu do tego samego modułu pamięci
+				\item Zapewnienie obsługi równoległych transmisji, krzyżujących się w przełączniku
+			\end{itemize}
+		\end{itemize}
+		\subsection*{Systemy UMA}
+		\begin{itemize}
+			\item Symetryczna architektura – jednakowy dostęp procesorów do pamięci operacyjnej oraz we/wy
+			\item Utrzymanie spójności pamięci podręcznych (cache):
+			\begin{itemize}
+				\item snooping - metoda starsza i mało skalowalna (głównie w systemach ze wspólną magistralą)
+				\item katalog - metoda lepiej skalowalna, stosowana razem z sieciami typu punkt - punkt
+			\end{itemize}
+			\item Łatwe programowanie (realizacja algorytmów równoległych)
+			\item Niska skalowalność
+		\end{itemize}
+		\subsection*{Systemy NUMA}
+		\begin{itemize}
+			\item PaO fizycznie rozproszona, ale logicznie wspólna
+			\item Niejednorodny dostęp do pamięci - PaO lokalna, PaO zdalna
+			\item Utrzymanie spójności pamięci podręcznych (cache) - katalog
+			\item Hierarchiczna organizacja: procesor – węzeł (system UMA) – system NUMA
+			\item Zalety modelu wspólnej pamięci dla programowania
+			\item Dobra efektywność dla aplikacji o dominujących odczytach z nielokalnej pamięci
+			\item Gorsza efektywność dla aplikacji o dominujących zapisach do nielokalnej pamięci
+			\item Skalowalność: 1024 – 2560 rdzeni
+		\end{itemize}
+		\subsection*{Systemy SMP}
+		\begin{itemize}
+			\item Symetryczna architektura – jednakowy dostęp procesorów do pamięci operacyjnej oraz we/wy (na poziomie fizycznych przesyłów –
+			tylko w systemach wieloprocesorowe z pamięcią wspólną fizycznie - UMA)
+			\item Utrzymanie spójności pamięci podręcznych (cache):
+			\begin{itemize}
+				\item systemy UMA - snooping lub katalog
+				\item systemy NUMA - katalog
+			\end{itemize}
+			\item Łatwe programowanie (realizacja algorytmów równoległych)
+			\item Niska (UMA) i średnia (NUMA) skalowalność
 		\end{itemize}
 	
 %===============================================================================	
