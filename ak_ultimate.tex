@@ -327,7 +327,7 @@
     \item Jest eliminowany przez zastosowanie specjalnego bitu w kodzie programu\\
     {\small \emph{Nic mi o tym nie wiadomo. Pewne dodatkowe bity są wykorzystywane w mechaniźmie przewidywania rozgałęzień, który służy do eliminacji hazardu, jednak on to odbywa się PRZED realizacją programu i sprowadza się do zmiany kolejnosci wykonywania rozkazów przez kompilator. Nic nie dodaje do tresci programu.}}
     \item Może wymagać wyczyszczenia potoku i rozpoczęcia nowej (…)\\
-    {\small \emph{Nie wiem jak hazard danych może czegokolwiek wymagać skoro jest zjawiskiem ubocznym i je eliminujemy. Jeżeli jednak chodzi o metody eliminacji hazardu, jak mechanizmy skoków opóźnionych lub przewidywania rozgałęzień, nie wymagają czyszczenia potoku. Sprzetowa i programowa eliminacja hazardu jedynie może doprowadzić do \textbf{wstrzymania} napełniania potoku.}}
+    {\small \emph{Nie wiem jak hazard danych może czegokolwiek wymagać skoro jest zjawiskiem ubocznym i je eliminujemy. Sprzetowa i programowa eliminacja hazardu jedynie może doprowadzić do \textbf{wstrzymania} napełniania potoku.}}
     \end{itemize}
 
 \section{Przetwarzanie wielowątkowe {\small /Forczu}}
@@ -941,7 +941,7 @@
         \subsection*{Zależności między rozkazami}
         	\begin{itemize}
 	            \item \textbf{Prawdziwa zależność danych} - \emph{Read After Write (RAW)}\\
-	            Występuje w momencie kiedy jeden rozkaz wymaga argumentu obliczanego przez poprzedni rozkaz. Opóźnienie eliminowane za pomocą "wyprzedzającego pobierania argumentu" - dana nie jest zapisywana do rejestru, tylko pobierana bezpośrednio z 
+	            Występuje w momencie kiedy jeden rozkaz wymaga argumentu obliczanego przez poprzedni rozkaz. Opóźnienie eliminowane za pomocą "wyprzedzającego pobierania argumentu" - dana nie jest zapisywana do rejestru, tylko pobierana bezpośrednio z poprzedniego rozkazu, który znajduje się w akumulatorze (jeżeli dobrze rozumiem rysunek ze slajdu 21, wykład 4)
 	            \item \textbf{Zależność wyjściowa} - \emph{Write After Write (WAW)}\\
 	            Gdy rozkazy zapisująca dane do tego samego rejestru wykonują się równolegle to drugi z nich musi czekać aż pierwszy się zakończy. Układ sterujący musi kontrolować tego typu zależność.
 	            \item \textbf{Antyzależność} - \emph{Write After Read (WAR)}\\
