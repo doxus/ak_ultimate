@@ -1,0 +1,75 @@
+% === DEFINICJA ZIELONEGO ==================== %
+\definecolor{Gurin}{rgb}{0, 0.35, 0}
+
+% === MAKRODEFINICJA POPRAWNEJ I ZŁEJ ODPOWIEDZI ==================== %
+\newcommand{\Tak}[1] {
+	\color{Gurin}{#1}
+}
+\newcommand{\Nie}[1] {
+	\color{Red}{#1}
+}
+
+% === Porównywarka odpowiedzi
+\newcommand{\answer}[3] {
+	\ifnum\pdfstrcmp{#1}{Tak}=0
+	\Tak{\item \textbf{#2}}
+	\else
+	\Nie{\item #2}
+	\fi
+	\if\relax\detokenize{#3}\relax
+	\else
+	\\
+	\fi
+	\color{Black}{\emph{#3}}\\
+}
+
+% === MAKRODEFINICJA PYTANIA I ODPOWIEDZI =========================== %
+\newcommand{\question}[2]{ %
+	\setkeys{Question}{#1} %
+	\begin{itemize}
+		\setkeys{Answers}{#2}
+	\end{itemize}
+}
+
+% definicje treści pytania i odpowiedzi
+\makeatletter
+\define@key{Question}{question}{\item \textbf{#1}}
+\define@key{Answers}{isTrue1}{\def\QA@isTrueI{#1}}
+\define@key{Answers}{answer1}{\def\QA@answerI{#1}}
+\define@key{Answers}{explain1}{\answer{\QA@isTrueI}{\QA@answerI}{#1}}
+\define@key{Answers}{isTrue2}{\def\QA@isTrueII{#1}}
+\define@key{Answers}{answer2}{\def\QA@answerII{#1}}
+\define@key{Answers}{explain2}{\answer{\QA@isTrueII}{\QA@answerII}{#1}}
+\define@key{Answers}{isTrue3}{\def\QA@isTrueIII{#1}}
+\define@key{Answers}{answer3}{\def\QA@answerIII{#1}}
+\define@key{Answers}{explain3}{\answer{\QA@isTrueIII}{\QA@answerIII}{#1}}
+\define@key{Answers}{isTrue4}{\def\QA@isTrueIV{#1}}
+\define@key{Answers}{answer4}{\def\QA@answerIV{#1}}
+\define@key{Answers}{explain4}{\answer{\QA@isTrueIV}{\QA@answerIV}{#1}}
+\define@key{Answers}{isTrue5}{\def\QA@isTrueV{#1}}
+\define@key{Answers}{answer5}{\def\QA@answerV{#1}}
+\define@key{Answers}{explain5}{\answer{\QA@isTrueV}{\QA@answerV}{#1}}
+\define@key{Answers}{isTrue6}{\def\QA@isTrueVI{#1}}
+\define@key{Answers}{answer6}{\def\QA@answerVI{#1}}
+\define@key{Answers}{explain6}{\answer{\QA@isTrueVI}{\QA@answerVI}{#1}}
+\define@key{Answers}{isTrue7}{\def\QA@isTrueVII{#1}}
+\define@key{Answers}{answer7}{\def\QA@answerVII{#1}}
+\define@key{Answers}{explain7}{\answer{\QA@isTrueVII}{\QA@answerVII}{#1}}
+\define@key{Answers}{isTrue8}{\def\QA@isTrueVIII{#1}}
+\define@key{Answers}{answer8}{\def\QA@answerVIII{#1}}
+\define@key{Answers}{explain8}{\answer{\QA@isTrueVIII}{\QA@answerVIII}{#1}}
+\define@key{Answers}{isTrue9}{\def\QA@isTrueIX{#1}}
+\define@key{Answers}{answer9}{\def\QA@answerIX{#1}}
+\define@key{Answers}{explain9}{\answer{\QA@isTrueIX}{\QA@answerIX}{#1}}
+\define@key{Answers}{isTrue10}{\def\QA@isTrueX{#1}}
+\define@key{Answers}{answer10}{\def\QA@answerX{#1}}
+\define@key{Answers}{explain10}{\answer{\QA@isTrueX}{\QA@answerX}{#1}}
+
+
+
+
+
+
+
+
+
