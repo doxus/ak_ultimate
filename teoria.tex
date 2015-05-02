@@ -1048,3 +1048,228 @@
 		\item Łatwe programowanie (realizacja algorytmów równoległych)
 		\item Niska (UMA) i średnia (NUMA) skalowalność
 	\end{itemize}
+
+%========================================
+%*** Systemy MMP ************************
+%========================================
+\section{Systemy MMP}
+	Systemy wieloprocesorowe z pamięcią rozproszoną.\\
+	MPP – \emph{Massively Parallel Processors}.
+	\subsection{Uproszczona organizacja}
+		\begin{center}
+			\includegraphics[width=0.3\textwidth]{./images/MMP01}
+		\end{center}
+	\subsection{Hierarchiczna organizacja}
+		\subsubsection{Rodzaje węzłów}
+		\begin{itemize}
+			\item Procesor + PaO
+			\item System wieloprocesorowy z pamięcią wspólną UMA
+			\item System wieloprocesorowy NUMA (z niejednorodnym dostępem do pamięci)
+		\end{itemize}
+		\begin{center}
+			\includegraphics[width=0.5\textwidth]{./images/MMP02}
+		\end{center}
+\newpage
+		\subsection{Topologia}
+			Sieci łączące węzły MPP.
+			\begin{itemize}
+				\item Hipersześcian
+				\item Krata 2D, 3D
+				\item Torus 2D, 3D
+				\item Przełącznica krzyżowa (hierarchiczne przełącznice krzyżowe
+				\item Sieci wielostopniowe (Omega, Butterfly, grube drzewo, Dragonfly i inne)
+				\item Sieci specjalizowane (\emph{proprietary} / \emph{custom network})
+			\end{itemize}
+		\subsection{Obsługa przesyłu komunikatów}
+			Obsługa przesyłu komunikatów w węzłach systemu wieloprocesorowego.
+			\begin{itemize}
+				\item Programowa obsługa przesyłu przez procesory węzłów pośredniczących (systemy I generacji)
+				\item Sprzętowa obsługa przesyłu przez routery węzłów pośredniczących, bez angażowania procesorów (systemy II generacji)
+			\end{itemize}
+		\subsection{Narzędzia programowe}
+			Narzędzia programowe wspierające budowę programów z przesyłem komunikatów:
+			\begin{itemize}
+				\item PVM (Parallel Virtual Machine)
+				\item MPI (Message Passing Interface)
+				\item Inne (Cray SHMEM, PGAS )
+			\end{itemize}
+		\subsection{Podsumowanie}
+			\begin{itemize}
+				\item Hierarchiczna architektura
+				\item Węzeł: procesor, system UMA, (system NUMA)
+				\item Bardzo duża skalowalność
+				\item Wolniejsza (na ogół) komunikacja – przesył komunikatów
+				\item Dedykowane, bardzo szybkie, sieci łączące
+			\end{itemize}
+			
+%========================================
+%*** Klastry ****************************
+%========================================	
+\section{Klastry}
+	Klaster (komputerowy) (ang. \emph{cluster}).
+	\subsection{Definicja}
+		\begin{itemize}
+			\item Klaster to zestaw pełnych komputerów (węzłów) połączonych razem, pracujących jako jeden system.
+			\item Wikipedia:\\
+			Klaster komputerowy -grupa połączonych jednostek komputerowych, które współpracują ze sobą w celu udostępnienia zintegrowanego środowiska pracy
+			\item A computer cluster consists of a set of loosely connected computers that work together so that in many respects they can be viewed as a single system.
+		\end{itemize}
+	\subsection{Ogólna struktura systemów typu klaster}
+		\begin{center}
+			\includegraphics[width=0.5\textwidth]{./images/klastry01}
+		\end{center}
+	\subsection{Ogólna charakterystyka klastrów}
+		\subsubsection{Węzły}
+			\begin{itemize}
+				\item Serwery SMP
+				\item Pełne komputery: PC, stacje robocze
+			\end{itemize}
+		\subsubsection{System operacyjny}
+			\begin{itemize}
+				\item Linux
+				\item Unix
+				\item Windows
+			\end{itemize}
+		\subsubsection{Infrastruktura scalająca}
+			\begin{itemize}
+				\item MPI (\emph{Message Passing Interface})
+				\item PVM (\emph{Parallel Virtual Machine})
+				\item SSI (\emph{Single System Image})
+			\end{itemize}
+		\subsubsection{Komunikacja między węzłami}
+			\begin{itemize}
+				\item Przesył komunikatów
+			\end{itemize}
+		\subsubsection{Sieci łączące}
+			\begin{itemize}
+				\item Sieci specjalizowane – starsze rozwiązania
+				\item Sieci LAN (\emph{Local Area Network})
+				\item Sieci specjalizowane -nowsze rozwiązania
+			\end{itemize}
+		\subsubsection{Cele budowy klastrów}
+			\begin{itemize}
+				\item Wysoka wydajność (klastry wydajnościowe, klastry obliczeniowe) (\emph{High-performace clusters})
+				\item Wysoka niezawodność (klastry niezawodnościowe) (\emph{High-availability clusters})
+				\item Równoważenie obciążenia (\emph{Load balancing clusters})
+			\end{itemize}
+		\subsubsection{Inne}
+			\begin{itemize}
+				\item Zależność moc obliczeniowa –niezawodność
+				\item Korzystny wskaźnik wydajność -cena
+			\end{itemize}
+	\subsection{Sieci łączące klastrów}
+		\subsubsection{Sieci specjalizowane - starsze rozwiązania}
+		 	\begin{itemize}
+		 		\item HiPPI (\emph{High Performance Parallel Interface}) – pierwszy standard sieci “near-gigabit” (0.8 Gbit/s) - kabel 50-par (tylko superkomputery)
+		 		\item Memory Channel
+		 	\end{itemize}
+		\subsubsection{Sieci LAN}
+			\begin{itemize}
+				\item Ethernet
+				\item Fast Ethernet
+				\item Gigabit Ethernet
+			\end{itemize}
+		\subsubsection{Sieci specjalizowane - nowsze rozwiązania}
+			Systemowe SAN.
+			\begin{itemize}
+				\item Myrinet
+				\item Quadrics (QsNet)
+				\item SCI (Scalable Coherent Interface)
+				\item InfiniBand
+			\end{itemize}
+	\subsection{Fibre Channel}
+		\begin{itemize}
+			\item Technologia sieciowa o dużej przepustowości (16 Gb/s) stosowana zwykle do łączenia komputera z pamięcią zewnętrzną
+			\item Standard magistrali szeregowej definiujący wielowarstwową architekturę
+			\item Powstał w 1988 jako uproszczona wersja HIPPI
+			\item Łącza światłowodowe i miedziane
+			\item Głównym stosowanym protokołem jest SCSI, ponadto ATM, TCP/IP
+		\end{itemize}
+	\subsection{Sieci łączące -różnice}
+		\begin{itemize}
+			\item Parametry – przepustowość, czas opóźnienia
+			\item Topologia
+			\begin{itemize}
+				\item Ethernet – magistrala, gwiazda, struktury hierarchiczne
+				\item Sieci specjalizowane – sieć przełączników (\textit{switched fabric}) – popularna topologia „grubego drzewa”
+			\end{itemize}
+		\end{itemize}
+	\subsection{Klastry o wysokiej niezawodności}
+		\subsubsection{Czynniki tworzące wysoką niezawodność klastrów}
+			\begin{enumerate}
+				\item Redundancja węzłów (mocy obliczeniowej)
+				\item Dostęp do wspólnych zasobów (pamięci zewnętrznych)
+				\item Mirroring dysków
+				\item Mechanizmy kontrolujące funkcjonowanie węzłów
+				\item Redundancja sieci łączących (dla 3 rodzajów sieci)
+				\item Redundancja zasilania
+			\end{enumerate}
+		\subsubsection{Redundancja węzłów / mocy obliczeniowej}
+			Tryby pracy węzłów:
+			\begin{itemize}
+				\item Model klastra „aktywny - pasywny”
+				\item Model klastra „aktywny - aktywny”
+				\begin{center}
+					\includegraphics[width=0.3\textwidth]{./images/klastry02}
+				\end{center}
+				\item Modele mieszane
+				\begin{center}
+					\includegraphics[width=0.4\textwidth]{./images/klastry03}
+				\end{center}
+			\end{itemize}
+		\subsubsection{Warianty modelu mieszanego}
+			\begin{itemize}
+				\item \emph{N + 1} – jeden węzeł dodatkowy, o uniwersalnych możliwościach zastąpienia każdego z pozostałych.
+				\item \emph{N + M} – zwiększenie liczby dodatkowych węzłów do M w celu zwiększenia redundancji w przypadku dużej różnorodności usług świadczonych przez węzły.
+				\item \emph{N – to – N} – kombinacja modeli „aktywny -aktywny” oraz „N + M” –redystrybucja zadań węzła uszkodzonego na kilka innych węzłów aktywnych
+			\end{itemize}
+	\subsection{Warianty dostępu do wspólnych zasobów}
+		\subsubsection{Zasada „współdziel wszystko”}
+			\begin{center}
+				\includegraphics[width=0.35\textwidth]{./images/klastry04}
+			\end{center}
+			Wszystkie węzły mają dostęp do wspólnej pamięci zewnętrznej (kontrola dostępu przez mechanizmy blokad).
+		\subsubsection{Zasada „nie współdziel nic”}
+			\begin{center}
+				\includegraphics[width=0.35\textwidth]{./images/klastry05}
+			\end{center}
+			Węzły nie współdzielą tego samego obszaru dysku –każdy ma dostęp do własnej części; po awarii czynny węzeł otrzymuje prawo dostępu do całego dysku.
+		\subsubsection{Mirroring}
+			\begin{center}
+				\includegraphics[width=0.35\textwidth]{./images/klastry06}
+			\end{center}
+			Każdy węzeł zapisuje dane na własny dysk i automatycznie (pod kontrolą odpowiedniego oprogramowania) jest tworzona kopia tego zapisu na dyskach innych węzłów.
+			
+	\subsection{Podsumowanie}
+		\begin{itemize}
+			\item Węzły – typowe serwery SMP „z półki” + pełna instancja Systemu Operacyjnego
+			\item Sieci łączące – standardy: Gigabit Ethernet, Infiniband
+			\item Komunikacja między węzłami (procesami) – przesył komunikatów
+			\item Bardzo wysoka skalowalność
+			\item Cele budowy: wysoka wydajność lub/i wysoka niezawodność, równoważenie obciążenia
+			\item Korzystny wskaźnik: cena/wydajność
+		\end{itemize}
+		
+			
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
