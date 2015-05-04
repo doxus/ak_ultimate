@@ -1,0 +1,213 @@
+% !TeX spellcheck = pl_PL
+\newpage
+% --- Opcje listingu kodu Javy
+\lstset{
+	language=Java,
+	frame=single,
+	autogobble=true,
+	commentstyle=\ttfamily\itshape\color{gray},
+	keywordstyle=\color{blue},
+	frameround=ffff,
+	rulecolor=\color{black},
+	tabsize=4,
+	breaklines=true,
+	extendedchars
+}
+
+% --- Polskie znaki w listingu kodu
+\lstset{
+	literate=%
+	{ą}{{\c{a}}}1
+	{ć}{{\'c}}1
+	{ę}{{\c{e}}}1
+	{ł}{{\l{}}}1
+	{ń}{{\'n}}1
+	{ó}{{\'o}}1
+	{ś}{{\'s}}1
+	{ż}{{\"z}}1
+	{ź}{{\.z}}1
+}
+
+\section{Java Spaces}
+	\subsection{Wstęp z laborek}
+		\subsubsection{Treść}
+			Napisać program zawierający jednego Nadzorcę oraz wielu Pracowników. Nadzorca przekazuje do JavaSpace 2 równe tablice zawierające obiekty typu Integer, a następnie otrzymuje wynikową tablicę zawierającą sumy odpowiadających sobie komórek. Operację dodawania mają realizować Pracownicy.
+		\subsubsection{Rozwiązanie}
+			Zadanie obliczania sumy tabel dzielimy na dwie części: \textit{Task} oraz \textit{Result}. \textit{Taski} są generowane przez \textit{Nadzorcę} i przekazywane \textit{Pracownikom}, ci zaś wykonują zadanie i tworzą obiekty klasy \textit{Result}, a następnie przekazuję je \textit{Nadzorcy}. \textit{Nadzorca} je odbiera, kompletuje i ew. coś z nimi robi.\\\\
+			\textit{Nadzorca} przydziela tyle zadań, ile potrzebuje, z kolei \textit{Pracownicy} działają w nieskończoność. Aby zakończyć ich pracę, \textit{Nadzorca} musi wysłać zadania z tzw. zatrutą pigułką (ang. \emph{Poisoned Pill}), czyli obiekt zadania z nietypowym parametrem, który sygnalizuje zakończenie pracy. Może to być np. \textit{Boolean} o wartości \textit{false}, \textit{Integer} o wartości -1, itp.
+			Składowymi klas implementujących interfejs Entry nie mogą być typu prostego (int, double itp.), muszą być opakowane (Integer, Double itp.). Najbezpieczniej dawać je wszędzie.\\
+			\begin{lstlisting}
+				/**
+				* @author Son Mati
+				* @waifu Itsuka Kotori
+				*/
+				public class Task implements Entry {
+					public Integer cellID;	// ID komórki tabeli
+					public Integer valueA;	// wartość z tabeli A
+					public Integer valueB;	// wartość z tabeli B
+					public Boolean isPill;	// czy zadanie jest zatrutą pigułką
+
+					// Domyślny konstruktor, musi się znajdować
+					public Task() {
+						this.cellID = this.valueA = this.valueB = null;
+						this.isPill = false;
+					}
+					
+					public Task(Integer entryID, Integer valueA, Integer valueB, Boolean isPill) {
+						this.cellID = entryID;
+						this.valueA = valueA;
+						this.valueB = valueB;
+						this.isPill = isPill;
+					}
+				}
+			\end{lstlisting}
+			\newpage
+			\begin{lstlisting}
+				/**
+				* @author Son Mati
+				* @waifu Itsuka Kotori
+				*/
+				public class Result implements Entry {
+					public Integer cellID, value;
+					public Result() {
+						this.cellID = this.value = null;
+					}
+					public Result(final Integer EntryID, final Integer Value) {
+						this.cellID = EntryID;
+						this.value = Value;
+					}
+				}
+			\end{lstlisting}
+			\begin{lstlisting}
+				public class Client {
+					protected Integer defaultLease = 100000;
+					protected JavaSpace space;
+					protected Lookup lookup;
+					public Client() {
+						lookup = new Lookup(JavaSpace.class);
+					}
+				}
+			\end{lstlisting}
+			\begin{lstlisting}
+				/**
+				* @author Son Mati
+				* @waifu Itsuka Kotori
+				*/
+				public class Worker extends Client {
+					public Worker() {
+					}
+					public void startWorking() {
+						while(true) {
+							try {
+								this.space = (JavaSpace)lookup.getService();
+								Task task = new Task();
+								task = (Task) space.take(task, null, defaultLease);
+								if (task.isPill == true)
+								{
+									space.write(task, null, defaultLease);
+									System.out.println("Koniec pracy workera.");
+									return;
+								}
+								Integer res = task.valueA + task.valueB;
+								Result result = new Result(task.cellID, res);
+								space.write(result, null, defaultLease);
+							}
+							catch (Exception ex) {}
+						}
+					}
+					public static void main(String[] args) {
+						Worker w = new Worker();	// utworzenie obiektu
+						w.startWorking();			// realizacja zadan
+					}
+				}
+			\end{lstlisting}
+			\newpage
+			\begin{lstlisting}
+				/**
+				* @author Son Mati
+				* @waifu Itsuka Kotori
+				*/
+				public class Supervisor extends Client {
+					static final Integer INT_NUMBER = 125;
+					public Integer[] TableA = new Integer[INT_NUMBER];
+					public Integer[] TableB = new Integer[INT_NUMBER];
+					public Integer[] TableC = new Integer[INT_NUMBER];
+					// konstruktor
+					public Supervisor() {
+					}
+					// wygenerowanie zawartości tablic
+					public void generateData() {
+						Random rand = new Random();
+						for (int i = 0; i < INT_NUMBER; ++i) {
+							TableA[i] = rand.nextInt(INT_NUMBER);
+							TableB[i] = rand.nextInt(INT_NUMBER);
+							TableC[i] = 0;
+						}
+					}
+					// rozpoczecie pracy
+					public void startProducing() {
+						try {
+							this.space = (JavaSpace)lookup.getService();
+							// utworzenie zadania
+							for (Integer i = 0; i < INT_NUMBER; ++i) {
+								Task task = new Task(i, this.TableA[i], this.TableB[i], false);
+								space.write(task, null, defaultLease);
+							}
+							// pobranie wyniku zadania
+							System.out.println("Tablica C:");
+							for(Integer i = 0 ; i < INT_NUMBER; ++i) {
+								Result result = new Result();
+								result = (Result) space.take(result, null, defaultLease);
+								TableC[result.cellID] = result.value;
+							}
+							// utworzenie zatrutej pigulki na sam koniec
+							Task poisonPill = new Task(null, null, null, true);
+							space.write(poisonPill, null, defaultLease);
+						}
+						catch (Exception ex) {
+						}
+					}
+				
+					public static void main(String[] args) {
+						// utworzenie obiektu
+						Supervisor sv = new Supervisor();
+						// utworzenie zadan
+						sv.generateData();
+						sv.startProducing();
+					}
+				}
+			\end{lstlisting}
+
+	\subsection{Zadanie 1}
+		\subsubsection{Treść}
+			Napisać program odbierający z przestrzeni JavaSpace kolejno 100 obiektów klasy Zadanie posiadające w atrybucie typ (typu całkowitego) wartość 15 i dla każdego obiektu Zadanie wygenerować i umieścić w przestrzeni JavaSpace obiekt klasy Silnia posiadający jako atrybut... (dalej nie pamiętam dobrze) wartość będącą silnią wartości uzyskanej z liczba(typu całkowitego) z klasy Zadanie.
+			
+	\subsection{2012, I termin}
+		\subsubsection{Treść}
+			Napisać program umieszczający w przestrzeni JavaSpace \textbf{1000} obiektów zadań zawierających \textbf{trzy} pola typu całkowitego oraz \textbf{dwa} pola typu łańcuch znakowy (zawartość nieistotna, różna od NULL), podać deklarację klasy zadań. Następnie odebrać z przestrzeni kolejno \textbf{1000} obiektów klasy \textit{Odpowiedź} o atrybutach \textit{id} typu \textit{Integer} oraz \textit{wynik} typu \textit{Integer} posiadające w atrybucie id wartość \textbf{35}, a następnie wszystkie z atrybutem \textit{id} = \textbf{10}. Przyjąć, że klasa \textit{Odpowiedź} jest już zdefiniowana zgodnie z powyższym opisem.
+			
+	\subsection{2013, I termin}
+		\subsubsection{Treść}
+			Napisać program umieszczający w przestrzeni JavaSpace \textbf{200} obiektów zadań zawierających \textbf{dwa} pola typu całkowitego oraz \textbf{dwa} pola typu łańcuch znakowy (zawartość nieistotna, różna od NULL), podać deklarację klasy zadań. Następnie odebrać z przestrzeni kolejno \textbf{100} obiektów klasy \textit{Odpowiedź} o atrybutach \textit{id} typu \textit{Integer} oraz \textit{wynik} typu \textit{Integer} posiadające w atrybucie id wartość \textbf{35}, a następnie wszystkie z atrybutem \textit{id} = \textbf{10}. Przyjąć, że klasa \textit{Odpowiedź} jest już zdefiniowana zgodnie z powyższym opisem.
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
