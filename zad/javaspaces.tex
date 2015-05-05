@@ -24,8 +24,17 @@
 	{ń}{{\'n}}1
 	{ó}{{\'o}}1
 	{ś}{{\'s}}1
-	{ż}{{\"z}}1
-	{ź}{{\.z}}1
+	{ź}{{\'z}}1
+	{ż}{{\.z}}1
+	{Ą}{{\c{A}}}1
+	{Ć}{{\'C}}1
+	{Ę}{{\c{E}}}1
+	{Ł}{{\L{}}}1
+	{Ń}{{\'N}}1
+	{Ó}{{\'O}}1
+	{Ś}{{\'S}}1
+	{Ź}{{\'Z}}1
+	{Ż}{{\.Z}}1
 }
 
 \section{Java Spaces}
@@ -181,17 +190,212 @@
 	\subsection{Zadanie 1}
 		\subsubsection{Treść}
 			Napisać program odbierający z przestrzeni JavaSpace kolejno 100 obiektów klasy Zadanie posiadające w atrybucie typ (typu całkowitego) wartość 15 i dla każdego obiektu Zadanie wygenerować i umieścić w przestrzeni JavaSpace obiekt klasy Silnia posiadający jako atrybut... (dalej nie pamiętam dobrze) wartość będącą silnią wartości uzyskanej z liczba(typu całkowitego) z klasy Zadanie.
-			
-	\subsection{2012, I termin}
+	
+	\newpage
+	\subsection{2010, I termin, Adam Duszeńko}
+		\subsubsection{Treść}
+			Napisać kod programu głównego zarządzającego równoległym wykonywaniem zadania w maszynie JavaSpace polegającym na wyznaczeniu zbioru klatek video zawierających ruch. Wykrywanie ruchu ma odbywać się w procesorach wykonawczych na zasadzie porównania różnicowego, czyli wymaga poddania analizie dwóch kolejnych klatek. W tym celu program główny posługując się \textit{byte[] GetImage()} (przyjąć, że jest zdefiniowana i zaimplementowana) ma pobierać kolejne klatki obrazu i umieszczać je w przestrzeni JavaSpace, wraz z jej kolejnym numerem (numerowania ma odbywać się na poziomie programu głównego). Program główny kończy wysyłania zadań gdy funkcja \textit{GetImage} zwróci wartość \textit{NULL}. Jako wynik swojego działania programy wykonawcze zwracają obiekt odpowiedzi zawierający numer pierwszego obrazu z analizowanej pary oraz wartość logiczną czy para była identyczna czy też zawierała wykryty ruch. Na zakończenie działania program główny po zebraniu wszystkich odpowiedzi powinien wypisać numery obrazów dla których wykryto ruch oraz zakończyć procesy wykonawcze rozsyłając "zatrutą pigułkę". Zaproponować strukturę obiektu zadania i odpowiedzi.
+		\subsubsection{Propozycja rozwiązania 1}
+			Nie jest do końca prawidłowa, ponieważ kod nie jest spójny i nie wiadomo czy analizuje pary klatek.
+			\begin{lstlisting}
+				public class Image implements Entry {
+					//należy pamiętać o tym aby każde pole było publiczne!
+					public byte[] frame;
+					public Integer id;
+					//wymagane konstruktory
+					public Image() {}
+					public Image(Integer id, byte[] frame) {
+						this.id = new Integer(id);
+						this.frame = frame;
+					}
+				}
+			\end{lstlisting}
+			\begin{lstlisting}
+				//Dane przesyłane jako odpowiedź
+				public class Result implements Entry {
+					public Integer id;
+					public Boolean move;
+					public Result() {}
+					public Result(Integer id, Boolean move) {
+						this.id = new Integer(id);
+						this.move = new Boolean(move);
+					}
+				}
+			\end{lstlisting}
+			\newpage
+			\begin{lstlisting}
+				public class Program {
+					public int defaultLease = 100000;
+					public int id = 1;
+					
+					public void producer() {
+						byte [] img1, img2;
+						img1 = getImage();
+						try {
+							Lookup lookup = new Lookup(JavaSpace.class);
+							JavaSpace space = (JavaSpace) lookup.getService();
+							img2 = getImage();
+							while(true) {
+								img = getImage();	// dostarczone w zadaniu
+								if (img == null || img2 == null) break;	// null = koniec
+								Package data = new Data(id, img1, id + 1, img2);
+								space.write(data, null, defaultLease);	// paczka do space
+								img1 = img2;
+								id++;
+							}
+						// bo breaku przełączamy się w tryb odbierania
+						for (int i = 1; i < id; i++) {
+							Result result = (Result) space.takeIfExsists(new Result(), null, defaultLease);
+							if (result.move)
+								System.out.println("Ruch obrazków: " + result.id1 + " " + result.id2);
+						}
+						space.write(new Image(), null, defaultLease);
+						} catch (Exception e) {}
+					}
+					
+					public void consumer() {
+						try {
+							Lookup lookup = new Lookup(JavaSpace.class);
+							JavaSpace space = (JavaSpace) lookup.getService();
+							int i = 0;
+							while(true) {
+								Image img1 = new Image();	img1.id = i++;
+								Image img2 = new Image(); 	img2.id = i;
+								img1 = (Image) space.take(img1, null, defaultLese);
+								img2 = (Image) space.read(img2, null, defaultLese);
+								//czy wysłano "zatrutą pigułkę"
+								if (img2.frame == null && img2.id == null) break;
+								// czy wykonano ruch na obrazkach
+								if (img1.frame.equals(img2.frame)) {
+									// tego chyba nie trzeba nawet wysyłać w tym zadaniu
+									result = new Result(img2.id, false);
+								} else {
+									result = new Result(img2.id, true);
+								}
+								// wysyłanie wyniku do space
+								space.write(result, null, defaultLease);
+							}
+						} catch (Exception e) {}
+					}
+				}
+			\end{lstlisting}
+	\newpage		
+	\subsection{2011, I termin, Adam Duszeńko}
+		\subsubsection{Treść}
+			Napisać program umieszczający w przestrzeni JavaSpace \textbf{10} obiektów zadań zawierających \textbf{dwa} pola typu całkowitego oraz \textbf{dwa} pola typu łańcuch znakowy (zawartość nieistotna, różna od NULL), podać deklarację klasy zadań. Następnie odebrać z przestrzeni kolejno \textbf{10} obiektów klasy \textit{Odpowiedź} o atrybutach \textit{id} typu \textit{Integer} oraz \textit{wynik} typu \textit{Integer} posiadające w atrybucie id wartość \textbf{15}, a następnie wszystkie z atrybutem \textit{id} = \textbf{110}. Przyjąć, że klasa \textit{Odpowiedź} jest już zdefiniowana zgodnie z powyższym opisem.
+	
+	\subsection{2012, I termin, Adam Duszeńko}
 		\subsubsection{Treść}
 			Napisać program umieszczający w przestrzeni JavaSpace \textbf{1000} obiektów zadań zawierających \textbf{trzy} pola typu całkowitego oraz \textbf{dwa} pola typu łańcuch znakowy (zawartość nieistotna, różna od NULL), podać deklarację klasy zadań. Następnie odebrać z przestrzeni kolejno \textbf{1000} obiektów klasy \textit{Odpowiedź} o atrybutach \textit{id} typu \textit{Integer} oraz \textit{wynik} typu \textit{Integer} posiadające w atrybucie id wartość \textbf{35}, a następnie wszystkie z atrybutem \textit{id} = \textbf{10}. Przyjąć, że klasa \textit{Odpowiedź} jest już zdefiniowana zgodnie z powyższym opisem.
-			
+	
+	\newpage
 	\subsection{2013, I termin}
 		\subsubsection{Treść}
 			Napisać program umieszczający w przestrzeni JavaSpace \textbf{200} obiektów zadań zawierających \textbf{dwa} pola typu całkowitego oraz \textbf{dwa} pola typu łańcuch znakowy (zawartość nieistotna, różna od NULL), podać deklarację klasy zadań. Następnie odebrać z przestrzeni kolejno \textbf{100} obiektów klasy \textit{Odpowiedź} o atrybutach \textit{id} typu \textit{Integer} oraz \textit{wynik} typu \textit{Integer} posiadające w atrybucie id wartość \textbf{35}, a następnie wszystkie z atrybutem \textit{id} = \textbf{10}. Przyjąć, że klasa \textit{Odpowiedź} jest już zdefiniowana zgodnie z powyższym opisem.
 	
-	
-	
+		\subsubsection{Propozycja rozwiązania 1}
+			\begin{lstlisting}
+				public class MessageSend implements Entry {
+					public String s1, s2;
+					public Integer i1, i2;
+					public MessageSend() {
+						s1 = s2 = i1 = i2 = null;
+					}
+					public MessageSend(String s1, String s2, Integer i1, Integer i2) {
+						this(s1, s2, i1, i2)
+					}
+				}
+				
+				public class Producent {
+					Lookup lookup;
+					public Producent() {
+						lookup = new Lookup(JavaSpace.class);
+					}
+					public void produce() {
+						try {
+							JavaSpace space = (JavaSpace) finder.getService();
+							for(int i = 0; i < 200; ++i) {
+								space.write(new MessageSend("a", "a", i, i), null, 100000);
+							}
+							Odpowiedź data;
+							for(int i = 0; i < 100; ++i) {
+								data = new Odpowiedź();
+								data.id = 35;
+								data.wartość = null;
+								space.take(data, null, 100000);
+							}
+							while(true) {
+								data = new Odpowiedź();
+								data.id = 10;
+								data.wartość = null;
+								data = (Odpowiedź) space.takeIfExists(data, null, 100000);
+								if (data == null) break;
+							}
+						catch(Exception e) { }
+						}
+					}
+					public static void main(String[] args) {
+						Producent tmp = new Producent();
+						tmp.Producer();
+					}
+				}
+			\end{lstlisting}
+		\subsubsection{Propozycja rozwiązania 2}
+			\begin{lstlisting}
+				package pl.ak.javaspaces;
+				import net.jini.core.entry.Entry;
+				import net.jini.core.transaction.TransactionException;
+				import net.jini.space.JavaSpace;
+				
+				public class JavaSpaceObject implements Entry {
+					public String s1, s2;
+					public Integer i1, i2;
+					public JavaSpaceObject() {
+						this(null, null, null, null);
+					}
+					public JavaSpaceObject(String s1, String s2, Integer i1, Integer i2) {
+						this(s1, s2, i1, i2)
+					}
+					public String toString() {
+						return data;
+					} 
+				}
+				
+				public class JavaSpaces {
+					public static void main(String[] args) {
+						try {
+							Lookup finder = new Lookup(JavaSpace.class);
+							JavaSpace space = (JavaSpace) finder.getService();
+							for(int i = 0; i < 200; ++i) {
+								space.write(new JavaSpaceObject("a","a",i,i), null, 100000);
+							}
+							Odpowiedź data;
+							for (int i = 0; i < 100; ++i) {
+								data = new Odpowiedź();
+								data.id = 35;
+								data.wartość = null;
+								space.take(data, null, 100000);
+							}
+							while(true) {
+								data = new Odpowiedź();
+								data.id = 10;
+								data.wartość = null;
+								data = (Odpowiedź) space.takeIfExists(data, null, 100000);
+								if (data == null)
+									break;
+							}
+							catch(Exception e) {
+								System.out.println(e.getMessage());
+							}
+						}
+					}
+				}
+			\end{lstlisting}
+	\newpage
+	\subsection{2014, I termin, Adam Duszeńko}
+		\subsubsection{Treść}
+			Napisać kod programu głównego wykonawczego do przetwarzania z wykorzystaniem maszyny JavaSpace przetwarzającego obiekty zadań zawierające dwie wartości całkowite, oraz numer obiektu i flagę logiczną początkowo zawierającą wartość \textit{FALSE}. W momencie pobrania obiektu zadania program wykonawczy ma podmienić w przestrzeni JavaSpace pobrany obiekt na ten sam, ale z flagą ustawioną na wartość \textit{TRUE}. Przetwarzanie obiektu realizowane jest w funkcji \textit{int check(int, int)} do której należy przekazać wartości z obiektu zadania. PO skończeniu przetwarzania zadania, przed zwróceniem wyniku, należy usunąć z przestrzeni JavaSpace obiekt przetwarzanego zadania. Wynik funkcji \textit{check} należy umieścić w obiekcie wynikowym którego strukturę proszę zaproponować. Obsłużyć koniec działania programu przez skonsumowanie "zatrutej pigułki".
+		\subsubsection{Propozycja rozwiązania 1}
 	
 	
 	
