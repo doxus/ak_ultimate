@@ -401,5 +401,229 @@
 					printf("Tekst: %s\n", text2); pvm_exit();
 				}
 			\end{lstlisting}
-
+	
+	\subsection{Egzamin 2012, T1, Hafed Zghidi}
+		\subsection{Treść}
+			Naszym zadaniem jest przeszukiwanie fragmentu obrazu (\textit{wzorzec}) o rozmiarze $ n\times n $ w obrazie \textit{Obraz} o rozmiarze $ m\times n (m>>n) $. Do tego celu służy nam odpowiednia funkcja\\
+			\begin{lstlisting}[language=C]
+			int find_pattern(x, y, n)
+			\end{lstlisting}
+			gdzie x, y to współrzędne w obrazie, a $ n $ rozmiar wzorca. Funkcja zwraca 1, jeśli wzorzec znajduje się w obrazie lub 0 jeśli go nie ma. Wzorzec może się powtarzać w obrazie.\\
+			Napisać w oparciu o środowisko PVM kod programu rodzica zliczającego ile razy wzorzec znajduje się w obrazie. Program powinien zapewnić równoległe rozwiązanie tego zadania z zachowaniem dynamicznego podziału zadań. Dodatkowe punkty można uzyskać za zapewnienie lepsze granulacji podziału zadań.
+		\subsection{Propozycja rozwiązania}
+			\begin{lstlisting}[language=C]
+				#include <stdio.h>
+				#include "pvm3.h"
+				#include <string.h>
+				
+				void parent();
+				void child();
+				/// program główny
+				int main(void) {
+					if(pvm_parent() == PvmNoParent)
+						parent();
+					else
+						child();
+					return 0;
+				}
+				/// rodzic
+				void parent()
+				{
+					//rozmiary obrazu
+					int n = 32;
+					int m = 1024;
+					//aktualna pozycja
+					int x = 0, y = 0;
+					
+					//pvm-owe zmienne
+					int tIdMaster = 0, *tId;
+					int ilHost = 0, ilArch = 0;
+					struct pvmhostinfo *info;
+					
+					//suma zliczen
+					int sum = 0;
+					
+					//dane do przeslania, odpowiednio x y n
+					int dataToSend[3];
+					
+					if( (tIdMaster = pvm_mytid()) < 0 )
+						exit(0);
+					
+					//pobranie konfiguracji
+					pvm_config(&ilHost, &ilArch, &info);
+					
+					//stworzenie tablicy z id dzieci
+					tId = (int*)calloc(ilHost, sizeof(int));
+					
+					//wyslanie poczatkowych danych
+					for(int i = 0; i < ilHost; ++i)
+					{
+						pvm_spawn("/home/pvm/...", 0, PvmTaskHost, info[i].hi_name, 1, &tId[i]);
+						
+						//przygotowanie i wyslanie danych
+						pvm_initsend(PvmDataDefault);
+						
+						dataToSend[0] = x;
+						dataToSend[1] = y;
+						dataToSend[2] = n;
+						
+						pvm_pkint(dataToSend, 3, 1);
+						pvm_send(tId[i], 100);
+						//przesuniecie w obrazie o pixel w prawo
+						++x;
+						
+						//jesli wyjdzie poza prawa strone, zejscie w dol
+						if(x >= (m - n) ) {
+							x = 0;
+							++y;
+						}
+						//sam koniec obrazu - zakoncz
+						if(y >= (m - n) )
+							break;
+					}
+					//jesli zostalo cos jeszcze do wyslania...
+					if(y >= (m - n) )
+						while(true)
+						{
+							int childId = 0;
+							
+							//odbieramy dowolna paczke wyslana przez dzieci
+							int bi = pvm_recv(-1, 100);
+							int rcvdData = 0;
+							
+							//pobieramy jego id
+							pvm_bufinfo(bi, &dlbuf, &msgtag, &childId);
+							
+							//rozpakowujemy dane, dodajemy do sumu
+							pvm_upkint(&rcvdData, 1, 1);
+							
+							suma += rcvdData;
+							
+							//inicjujemy dane
+							dataToSend[0] = x;
+							dataToSend[1] = y;
+							dataToSend[2] = n;
+							
+							pvm_initsend(PvmDataDefault);
+							pvm_pkint(dataToSend, 3, 1);
+							
+							
+							//wysylamy do dziecka, z ktorego aktualnie odebrano rezultat
+							pvm_send(childId, 100);
+							
+							//tak jak poprzednio, przesuniecie w obrazie
+							++x;
+							if(x >= (m - n) ) {
+								x = 0;
+								++y;
+							}
+							if(y >= (m - n) )
+								break;
+						}
+					
+					//w tym momencie wyslalismy juz wszystko
+					//odbieramy wiec ostatnia paczke od kazdego z dzieci
+					for(int i = 0; i < ilHost; ++i)
+					{
+						int tmp;
+						pvm_rcv(masterId, 100);
+						pvm_upkint(&tmp, 1, 1);
+						
+						suma += tmp;
+						pvm_kill(tId[i]);
+					}         
+				}
+				/// Potomek
+				void child()
+				{
+					//id rodzica
+					int masterId = pvm_parent();
+					
+					//tablica do ktorej zapiszemy odebrane dane
+					int points[3];
+					
+					//odbieramy paczke od rodzica
+					pvm_rcv(masterId, 100);
+					pvm_upkint(points, 3, 1);
+					
+					//funkcja z zadania
+					int result = find_pattern(points[0], points[1], points[2]);
+					
+					//odsylamy dane
+					pvm_initsend(PvmDataDefault);
+					pvm_pkint(result, 1, 1);
+					pvm_send(masterId, 100);
+				}
+			\end{lstlisting}
+	
+	\newpage
+	\subsection{Egzamin 2013, T1, Hafed Zghidi}
+		\subsection{Treść}
+			Naszymi danymi wejściowymi są tabela A zawierająca 10000 łańcuchów znakowych i tabela B zawierająca 10000 wartości typu \textit{integer} będących wartościami skrótu łańcuchów tabeli A. Napisać kod programu głównego (rodzic) realizującego w oparciu o środowisko PVM równoległe wykonanie porównywania zgodności łańcuchów z tabeli A ze skrótami z tabeli B. Program potomny ma otrzymywać łańcuch znakowy z tabeli A oraz odpowiadającą mu wartość typu \textit{integer} z tabeli B. Program główny ma zliczyć ile par jest poprawnych, a ile nie zgadza się. Program potomny ma zostać uruchomiony na wszystkich węzłach w maszynie PVM. Rozdział zadania na podzadania dla procesów potomnych ma uwzględniać aspekt równoważenia obciążenia poszczególnych węzłów maszyny PVM (napisać tylko program rodzica).
+		\subsection{Propozycja rozwiązania}
+			\begin{lstlisting}[language=C]
+				#include <stdio.h>
+				#include "pvm3.h"
+				#define SIZE        10000
+				#define STR_SIZE    256
+				#define PATH        "pvm_child"
+				int main()
+				{
+					int tidmaster, *tid, ilhost, ilarch, bufid, a, b, temp, wynik;
+					struct pvmhostinfo *info;
+					char stringi[SIZE][STR_SIZE];
+					int wartosci[SIZE];
+					const int ROZMIAR = 10;
+					WYNIK = 0;
+					tidmaster = pvm_mytid();
+					pvm_config(&ilhost, &ilarch, &info);
+					tid = (int*)malloc(ilhost,sizeof(int));
+					for (a = 0; a < ilhost; a++)
+					{
+						pvm_spawn(PATH, 0, PvmTaskHost, info[a].hi_name, 1, &tid[a]);
+						pvm_initsend(PvmDataDefault);
+						pvm_pkint(&ROZMIAR, 1, 1);
+						temp = STR_SIZE;
+						pvm_pkint(&temp, 1, 1);
+						for(b = 0; b < ROZMIAR; b++)
+						{
+							pvm_pkint(&wartosci[a * ROZMIAR + b], 1, 1);
+							pvm_pkstr(stringi[a * ROZMIAR + b]);
+						}
+						pvm_send(tid[a],100);
+					}
+					a = ilhost;
+					while( a < SIZE/ROZMIAR ) {
+						bufid = pvm_recv(-1, 200);
+						pvm_upkint(&temp, 1, 1);
+						WYNIK += temp;
+						pvm_bufinfo(bufid, &temp, &b, &tmp_id);
+						pvm_initsend(PvmDataDefault);
+						pvm_pkint(&ROZMIAR, 1, 1);
+						temp = STR_SIZE;
+						pvm_pkint(&temp, 1, 1);
+						
+						
+						
+						for(b = 0; b < ROZMIAR; b++)
+						{
+							pvm_pkint(&wartosci[a * ROZMIAR + b], 1, 1);
+							pvm_pkstr(stringi[a * ROZMIAR + b]);
+						}
+						pvm_send(tmp_id, 100);
+						a++;
+					}
+					for(a = 0; a < ilhost; a++)
+					{
+						bufid=pvm_recv(-1, 200);
+						pvm_upkint(&temp, 1, 1);
+						WYNIK += temp;
+						pvm_bufinfo(bufid, &temp, &b, &tmp_id);
+						pvm_kill(tmp_id);
+					}
+					printf("wynik %d",WYNIK);
+					return 0;
+				}
+			\end{lstlisting}
+	
 			

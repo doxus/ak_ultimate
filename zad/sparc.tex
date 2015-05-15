@@ -91,6 +91,63 @@
 					ret
 					restore ; odtworzenie okienka
 			\end{lstlisting}
+			
+	\subsection{Laborka, szukanie min i max}
+		Ocena nieznana.
+		\begin{lstlisting}[language={[sparc]Assembler}]
+			.global _start
+			;' defajny:'
+			define (ilosc, 4)
+			define (delta, 3)
+			;' rejestry:'
+			define (adres, l3)			;' %l3 - przesuniecie tablicy'
+			define (min, l1)			;' %l1 - min'
+			define (max, l2)			; ' %l2 - max'
+			define (indeks, l4)			;' %l4 - indeks'
+			define (pobrane, l5)		;' %l5 - pobrana wartosc'
+			define (tmp, l6)			;' %l6 - pomocniczy'
+			define (rozpietosc, o0)		;' %o1 - zwrocona rozpietosc'
+			;' kod:'
+			_start:
+				save %sp, -96, %sp
+				mov 0, %adres
+				mov 0, %indeks
+				;'zapis wartosci poczatkowych min i max'
+				ld [%adres], %min
+				ld [%adres], %max
+				;'dodajemy delte do pierwszej komorki'
+				add %min, delta, %tmp
+				st %tmp, [%adres]
+			petla:   
+				add %indeks, 1, %indeks		;'indeks++'
+				add %adres, 4, %adres		;'przesuniecie na kolejny element'
+				cmp %indeks, ilosc
+				be end
+				nop
+				;'zwiekszamy o delte'
+				ld [%adres], %pobrane
+				add %pobrane, delta, %pobrane
+				st %pobrane, [%adres]
+			;'sprawdzamy czy pobranma wartosc jest mniejsza niz min'
+				subcc %pobrane, %min, %tmp
+				bg dalej
+				nop
+				mov %pobrane, %min
+				ba petla_end
+				nop
+			dalej:   
+				;'sprawdzamy czy pobrana wartosc jest wieksza niz max'
+				subcc %pobrane, %max, %tmp
+				bl petla_end
+				nop
+				mov %pobrane, %max
+			petla_end:
+				ba petla
+				nop
+				end:
+				sub %max, %min, %rozpietosc    ;'zapisujemy rozpietosc'
+				ret
+		\end{lstlisting}
 	
 	\newpage
 	\subsection{2008, I termin, Jerzy Respondek}
