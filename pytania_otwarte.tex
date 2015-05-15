@@ -4,18 +4,223 @@
 \part{Pytania otwarte}
 	\section{2010, Termin I}
 		\begin{enumerate}
-			\item Które cechy architektury CISC zostały zmienione i w jaki sposób w architekturze RISC?
-			\item Wymień najważniejsze cechy architektury procesorów superskalarnych.
-			\item Wyjaśnij na czym polega problem zależności między danymi przy potokowej realizacji rozkazów. Podaj przykłady rozwiązania tego problemu w jednopotokowych procesorach RISC.
-			\item Omów budowę systemów o niejednorodnym dostępie do pamięci (ccNUMA)
-			\item Wymień i krótko scharakteryzuj rozwiązania konstrukcyjne serwerów używanych do budowy klastrów.
+			\item \textbf{Które cechy architektury CISC zostały zmienione i w jaki sposób w architekturze RISC?}
+			\begin{itemize}
+				\item RISC:
+				\begin{itemize}
+					\item niezbyt duża lista rozkazów, rozkazu wykonywane w zasadzie w 1 cyklu (zmiana)
+					\item  niewielka liczba trybów adresowania (zmiana)
+					\item stała długość i prosty format rozkazu (chyba też zmiana)
+					\item model obliczeń rejestr-rejestr, wszystkie argumenty są w rejestrach (zmiana) 
+					\item dostęp do pamięci jedynie dzięki rozkazom STORE i LOAD
+					\item duża ilość rejestrów uniwersalnych (chyba też zmiana)
+					\item jednostka sterująca zbudowana jako układ
+					\item intensywne wykorzystanie potokowości
+					\item stosowanie kompilatorów o dużych możliwościach optymalizacyjnych
+				\end{itemize}
+				\item Cechy:
+				\begin{itemize}
+					\item duża liczba rozkazów
+					\item duża liczba trybów adresacji (5 – 20, Vax $ \rightarrow $ 20 )
+					\item model obliczeń pamięć – pamięć
+					\item komplikowana struktura sprzętu, przy małym wykorzystaniu rozkazów złożonych
+					\item uży rozrzut cech rozkazów w zakresie: złożoności, długości, czasu wykonania
+				\end{itemize}
+			\end{itemize}
+			\label{itm:risc}
+			
+			\item \textbf{Wymień najważniejsze cechy architektury procesorów superskalarnych.}
+			\label{itm:superskalar}
+			\begin{itemize}
+				\item kilka potokowych jednostek operacyjnych
+				\item wykonywanie kilku rozkazów w 1 takcie
+				\item konieczność pobrania z PaO kilku rozkazów jednym takcie
+			\end{itemize}
+			
+			
+			\item \textbf{Wyjaśnij na czym polega problem zależności między danymi przy potokowej realizacji rozkazów. Podaj przykłady rozwiązania tego problemu w jednopotokowych procesorach RISC.}
+			\begin{itemize}
+				\item $ I1: R3 \leftarrow R3 op R5 $\\
+					$ I2: R4 \leftarrow R3 + 1 $\\
+					$ I3: R3 \leftarrow R5 + 1 $\\
+					$ I4: R7 \leftarrow R3\:op\:R4 $
+				\item 
+				\begin{itemize}
+					\item prawdziwa zależność danych (RAW) - rozkaz I2 musi czekać na wykonanie rozkazu I1, podobnie I4 musi czekać na I3
+					\item zależność wyjściowa (WAW) - gdyby rozkazy I1 oraz I3 były realizowane równolegle (np. w różnych jednostkach funkcjonalnych), to wykonanie I3 musi się zakończyć po I1.
+					\item antyzależność (WAR) - w przypadku równoległej realizacji rozkazów I2 oraz I3 (lub zmiany kolejności tych rozkazów), wykonanie rozkazu I3 nie może być zakończone, dopóki nie nastąpi pobranie argumentu (odczyt) w rozkazie I2.
+				\end{itemize}
+				\newpage
+				\item Rozwiązania:
+				\begin{itemize}
+					\item NOP
+					\item Proces przemianowania rejestrów (może to pomóc; nie jestem pewien)
+					\item Wstrzymanie napełniania potoku
+					\item Optymalizacja kodu na poziomie kompilacji / linkowania (odpowiedzialność zrzucona na kompilator)
+				\end{itemize}
+			\end{itemize}
+			\label{itm:potok}
+			\item \textbf{Omów budowę systemów o niejednorodnym dostępie do pamięci (ccNUMA)}\\
+			Komputery w architekturze NUMA należą do systemów MIMD o niejednolitym dostępie do pamięci. Bierze to się stąd, iż każdy procesor ma własną pamięć; jednak do tej pamięci ma również dostęp każdy inny procesor, ztą tylko różnicą, że czas dostępu do takiej pamięci jest dużo większy niż czas dostępu do pamięci, którą dany procesor posiada. Zaliczenie procesora z pamięcią i jednostką zarządzającą pamięcią nazywa się węzłem. Zadaniem takiej jednostki zarządzającej pamięcią jest odpowiednie kierowanie adresów i danych w zależności o którą pamięć nam chodzi (lokalną dla danego procesora czy też znajdującą się przy innym procesorze). We współczesnych rozwiązaniach praktycznych duży nacisk kładzie się na zgodność (spójność) pamięci podręcznej (są to systemy typu CC-NUMA)\\
+			MIMD typu C.C.-NUMA  (ze spójnością pamięci podręcznej).
+			
+			\item \textbf{Wymień i krótko scharakteryzuj rozwiązania konstrukcyjne serwerów używanych do budowy klastrów.}
+			\begin{itemize}
+				\item Serwery wolnostojące
+				\item Serwery stelażowe
+				\begin{itemize}
+					\item Zalety:
+					\begin{itemize}
+						\item możliwość instalowania obok siebie serwerów różnych dostawców
+					\end{itemize}
+					\item Wady:
+					\begin{itemize}
+						\item kable zasilające
+						\item kable sieciowe
+						\item chłodzenie
+					\end{itemize}
+				\end{itemize}
+				\item Serwery kasetowy
+				\begin{itemize}
+					\item Zalety:
+					\begin{itemize}
+						\item jedna obudowa typu blade
+						\item wspólne zasilanie i chłodzenie - jeden kabel zasilający
+						\item prostsze okablowanie sieciowe 
+						\item proste zarządzanie
+						\item mniejsze wymiary i duża gęstość upakowania
+					\end{itemize}
+					\item Wady:
+					\begin{itemize}
+						\item możliwość instalowania tylko identycznych serwerów
+					\end{itemize}
+				\end{itemize}
+			\end{itemize}
 		\end{enumerate}
+	
+	\newpage
 	\section{2012, Termin I}
-	\begin{enumerate}
-		\item Które cechy architektury CISC zostały zmienione i w jaki sposób w architekturze RISC?
-		\item Porównaj realizację rozkazów wektorowych w komputerach wektorowych, macierzowych i procesorach superskalarnych z rozszerzeniami SIMD.
-		\item Scharakteryzuj ogólnie systemy wieloprocesorowe z rozproszoną pamięcią.
-		\item Wyjaśnij na czym polega problem zależności między danymi przy potokowej realizacji rozkazów. Podaj przykłady rozwiązania tego problemu w jednopotokowych procesorach RISC. Jak komplikuje się ten problem w procesorach superskalarnych?
-		\item Jakie zalety i jakie warunki wykonania ma sprzętowa, współbieżna realizacja wielu wątków w jednym rdzeniu?
-	\end{enumerate}
+		\begin{enumerate}
+			\item \textbf{Które cechy architektury CISC zostały zmienione i w jaki sposób w architekturze RISC?}\\
+			Patrz: \ref{itm:risc}
+			\item \textbf{Porównaj realizację rozkazów wektorowych w komputerach wektorowych, macierzowych i procesorach superskalarnych z rozszerzeniami SIMD.}\\\\
+			W zasadzie komputery wektorowe zaliczane są do architektury SISD gdzie mamy do
+			czynienia z jedną jednostką wykonawczą i dlatego też operacja na kolejnej danej wektora
+			rozpoczyna się pewien czas dalej, związany z wykonaniem jednej części potoku. Komputery
+			macierzowe należą zaś do klasy SIMD, gdzie istnieje wiele jednostek wykonawczych
+			(elementów procesorowych) sterowanych synchronicznie przez jednostkę sterującą oraz
+			każda jednostka wykonawcza korzysta ze swoich własnych danych. Tak więc odpowiednio rozmieszczając dane możemy dokonać operacji na wszystkich danych wektora w jednym
+			czasie. Dodatkową różnicą jest fakt, iż wektoryzacją programu w komputerze wektorowym zajmuje
+			się kompilator, natomiast w komputerze macierzowym nie jest to już takie łatwe, gdyż
+			wszystko zależy od połączeń EP.\\\\
+			Co do komputerów superskalarnych wykonywanie rozkazu odbywa się jednocześnie na wielu "porcjach danych". Ważnym aspektem jest możliwość wystąpienia problem zależności danych przy potokowej ich realizacji (nie jestem pewien czy dobrze ująłem
+			\label{itm:wektor}
+			
+			\item \textbf{Scharakteryzuj ogólnie systemy wieloprocesorowe z rozproszoną pamięcią.}\\\\
+			\textbf{MPP} (\emph{Massively Parallel Processing}) to rozwiązanie bazujące na architekturze MIMD z
+			pamięcią rozproszoną. Komputer MPP zbudowany jest z dużej ilości niezależnych procesorów
+			(niekoniecznie superszybkich – w kupie siła!), wyposażonych we własną pamięć podręczną
+			CACHE i zwykłą pamięć, połączonych ze sobą za pomocą sieci – przez nią wysyła się
+			komunikaty. Takie podejście do sprawy zapewnia dużą i łatwą skalowalność – dołożenie 1000
+			nowych procesorów nie wiąże się z dużym nakładem pracy – nie trzeba budować nowych
+			układów zarządzających dostępem do pamięci. Każdy EP (Element Przetwarzający – procesor )
+			może wykonywać inne zadanie, przez co może być widziany jako osobny komputer (np. przez
+			system operacyjny). Systemy MPP wymagają jednak dużego nakładu pracy z punktu widzenia
+			oprogramowania, aby w pełni wykorzystać moc komputera, trzeba zadbać o odpowiednie
+			rozłożenie zadań między procesory ( np. fork() $ < $rotfl$ > $).
+			
+			\item \textbf{Wyjaśnij na czym polega problem zależności między danymi przy potokowej realizacji rozkazów. Podaj przykłady rozwiązania tego problemu w jednopotokowych procesorach RISC. Jak komplikuje się ten problem w procesorach superskalarnych?}\\
+			Patrz: \ref{itm:potok}
+			
+			\item \textbf{Jakie zalety i jakie warunki wykonania ma sprzętowa, współbieżna realizacja wielu wątków w jednym rdzeniu?}
+			\label{itm:watek}\\\\
+			Cel współbieżnej realizacji dwóch (lub więcej) wątków w jednym procesorze (rdzeniu): 
+			Minimalizacja strat cykli powstałych w trakcie realizacji pojedynczego wątku w wyniku:
+			\begin{itemize}
+				\item chybionych odwołań do pamięci podręcznej, 
+				\item błędów w przewidywaniu rozgałęzień, 
+				\item zależności między argumentami kolejnych rozkazów.
+			\end{itemize}
+			Warunki sprzętowej realizacji wielowątkowości:
+			\begin{itemize}
+				\item powielenie zestawów rejestrów uniwersalnych (lub powielenie tabel mapowania rejestrów)
+				\item powielenie liczników rozkazów
+				\item powielenie układów dostępu do pamięci podręcznej (tabel stron)
+				\item powielenie sterowników przerwań 
+			\end{itemize}
+		\end{enumerate}
+	
+	\section{2012, Termin II}
+		\begin{enumerate}
+			\item \textbf{Scharakteryzuj architekturę RISC.}\\
+			Patrz: \ref{itm:risc}
+			\item W\textbf{yjaśnij na czym polega problem potokowej realizacji rozkazów skoków (rozgałęzień). Podaj przykłady rozwiązań tego problemu we współczesnych procesorach.}\\\\
+			Problem polega na tym, że rozkaz skoku może spowodować problem „przeładowania potoku” czyli jego wyczyszczenia oraz ponownego wypełnienia - zapewnienie stałego dopływu rozkazów do potoku. Pierwsze rozwiązania opierały się na:
+			\begin{itemize}
+				\item wcześniejszym wyznaczeniu adresu rozgałęzienia (skoku) oraz pobraniu razem z rozkazem następnym za rozgałęzieniem również rozkazu docelowego (jeszcze przed rozstrzygnięciem spełnienia warunku rozgałęzienia
+				\item powielenie potoku (pierwszych stopni) i rozpoczęcie równoległego pobierania dwóch strumieni rozkazów (do chwili rozstrzygnięcia rozgałęzienia), później unieważnienie jednego strumienia
+			\end{itemize}
+			Te działania doprowadziły finalnie do aktualnego podejścia czyli przewidywania rozgałęzień. Wyróżniamy następujące strategie przewidywania rozgałęzień:
+			\begin{enumerate}
+				\item Statyczne
+				\begin{itemize}
+					\item przewidywanie, że rozgałęzienie (skok warunkowy) zawsze nastąpi
+					\item przewidywanie, że rozgałęzienie nigdy nie nastąpi (Motorola 68020, VAX 11/780)
+					\item odejmowanie decyzji na podstawie kodu rozkazu rozgałęzienia (specjalny bit ustawiany przez kompilator) (Ultra SPARC III)
+				\end{itemize}
+				\item Dynamiczne
+				\begin{itemize}
+					\item Czyli tablica historii rozgałęzień
+				\end{itemize}
+				\item Inne
+				\begin{itemize}
+					\item przewidywanie, że skok wstecz względem licznika rozkazów zawsze nastąpi
+					\item przewidywanie, że skok do przodu względem licznika rozkazów nigdy nie nastąpi
+					\item przełączanie wątków zamiast prognozowania rozgałęzień w niektórych procesorach ze sprzętowym wsparciem wielowątkowości
+				\end{itemize}
+			\end{enumerate}
+			
+			\item \textbf{Porównaj realizację rozkazów wektorowych w komputerach wektorowych i macierzowych.}\\
+			Patrz: \ref{itm:wektor}
+			
+			\item \textbf{Scharakteryzuj architekturę systemu UMA.}\\\\
+			Jeden z rodzajów systemu wieloprocesorowego, charakteryzuje się wspólną pamięcią operacyjną dla wszystkich procesorów, każdy procesor ma własną pamięć podręczną (cache). Czas dostępu do pamięci jest dla wszystkich procesów identyczny.  Charakterystyczne dla SMP.
+			\item \textbf{Wymień cele sprzętowej, współbieżnej realizacji wielu wątków w jednym rdzeniu.}\\
+			Cel współbieżnej realizacji dwóch (lub więcej) wątków w jednym procesorze (rdzeniu): 
+			Minimalizacja strat cykli powstałych w trakcie realizacji pojedynczego wątku w wyniku:
+			\begin{itemize}
+				\item chybionych odwołań do pamięci podręcznej, 
+				\item błędów w przewidywaniu rozgałęzień, 
+				\item zależności między argumentami kolejnych rozkazów. 
+			\end{itemize}
+		\end{enumerate}
+	
+	\section{2013, Termin I}
+		\begin{enumerate}	
+			\item \textbf{Wymień cechy architektury superskalarnej.}\\
+			Patrz: \ref{itm:superskalar}
+			\item \textbf{Uszereguj systemy wieloprocesorowe i klastry rosnąco wg skalowalności.}\\
+			Według mnie chociaż nie jestem tego pewien to systemy wieloprocesorowe trzeba by uszeregować tak:
+			\begin{itemize}
+				\item komputery macierzowe (jeżeli traktować elementy przetwarzające jako osobne jednostki) - ciężko zwiększać elementy przetwarzające lub układy macierzowe jako peryferia komputera
+				\item UMA - ciężkie do rozbudowy ze względu na pojedynczą magistralę lub przełącznicę
+				\item NUMA - średnie w rozbudowie
+				\item MPP - łatwe w rozbudowie; wystarczy dokładać procesory i zadbać o przepływ danych (wymiana komunikatów)
+				\item Klastry - wydajnościowe i niezawodnościowe; pracujące na wspólnych dyskach; każdy z nich ma osobny, niezależnie utrzymywany system operacyjny
+			\end{itemize}
+			\item \textbf{Scharakteryzuj ogólnie systemy typu klaster.}
+			\begin{itemize}
+				\item Sieci łączące – standardy: Gigabit Ethernet, Infiniband
+				\item Komunikacja między węzłami (procesami) – przesył komunikatów
+				\item Bardzo wysoka skalowalność
+				\item Cele budowy: wysoka wydajność lub/i wysoka niezawodność
+				\item Korzystny wskaźnik: cena/wydajność
+				\item Według mnie jeszcze oprogramowanie, które umożliwi prawidłową pracę tych wszystkich komputerów
+			\end{itemize}
+			\item \textbf{Wyjaśnij, na czym polega problem zależności między danymi przy potokowej realizacji rozkazów. Podaj przykłady rozwiązania tego problemu w jednopotokowych procesorach RISC i w procesorach superskalarnych.}\\
+			Patrz: \ref{itm:potok}
+			
+			\item \textbf{Co jest celem sprzętowego sterowania współbieżną realizacją wielu wątków w jednym rdzeniu? Jakie są metody i jakie warunki sprzętowej realizacji wielowątkowości?}\\
+			Patrz: \ref{itm:watek}
+		\end{enumerate}
 		
