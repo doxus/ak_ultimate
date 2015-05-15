@@ -288,4 +288,118 @@
 					return(0);
 				}
 			\end{lstlisting}
+	\newpage
+	\subsection{Laborki, Szyfr Cezara}
+		\subsubsection{Treść}
+			Szyfr Cezara
+		\subsubsection{Rozwiązanie}
+			Podobno działa, ocena nieznana.
+			\begin{lstlisting}[language=C]
+				/// program główny
+				main()
+				{
+					if(pvm_parent() == PvmNoParent) 
+						rodzic();
+					else 
+						potomek();		
+					return 0;	
+				}
+			\end{lstlisting}
+			\begin{lstlisting}[language=C]
+				/// Potomek
+				void potomek()
+				{
+					int masterid, dlugosc, pozycja;
+					char znak;
+					masterid = pvm_parent();	/*kto mnie stworzyl*/
+					while(1)
+					{
+						pvm_recv(-1,100);
+						pvm_upkbyte(&znak,1,1);
+						pvm_upkint(&pozycja,1,1);
+						if(znak != ' ')
+						{
+							if (((znak >= 'A') && (znak <= 'Z')) ||
+								((znak >= 'a') && (znak <= 'z')))
+							{
+								if (znak == 'x')
+									znak = 'a';
+								if (znak == 'y')
+									znak = 'b';
+								if (znak == 'z')
+									znak = 'c';
+								if (znak == 'X')
+									znak = 'A';
+								if (znak == 'Y')
+									znak = 'B';
+								if (znak == 'Z')
+									znak = 'C';
+							}
+							else
+								znak += 3;
+						}
+						pvm_initsend(PvmDataDefault);
+						pvm_pkbyte(&znak,1,1);
+						pvm_pkint(&pozycja,1,1);
+						pvm_send(masterid,200);
+					}
+				}
+			\end{lstlisting}
+			\begin{lstlisting}[language=C]
+				/// Rodzic
+				void rodzic()
+				{
+					char* text = "ala ma kota";
+					char* text2;
+					int length = strlen(text);
+					int tidmaster, ilhost, ilarch, *tid, i, procesy = 0, budif, temp_id, zm1, zm2;
+					struct pvmhostinfo *info;
+					if ((tidmaster = pvm_mytid()) < 0) exit(1);
+					pvm_config(&ilhost, &ilarch, &info);
+					tid = (int*) calloc (ilhost, sizeof(int));
+					text2 = (char*) calloc (length + 1, 1);
+					text2[length] = '\0';
+					for(i = 0; i < ilhost; ++i) {
+						if(i >= length) break;
+						pvm_spawn("/home/pvm/pvm3/sekcja15/bin/LINUX/hello", 0, PvmTaskHost, info[i].hi_name, 1, &tid[i]);
+						pvm_initsend(PvmDataDefault);
+						pvm_pkbyte((text + i), 1, 1);
+						pvm_pkint(&i, 1, 1);
+						pvm_send(tid[i], 100);
+						++procesy;
+					}
+					i = ilhost;
+					while (1) {
+						budif = pvm_recv(-1, 200);
+						char temp;
+						int recIndex;
+						pvm_upkbyte(&temp, 1, 1);
+						pvm_upkint(&recIndex, 1, 1);
+						text2[recIndex] = temp;
+						if (i >= length) 	break;
+						else {
+							pvm_bufinfo(budif, &zm1, &zm2, &temp_id);
+							printf("Od: %d \n", temp_id);
+							pvm_initsend(PvmDataDefault);
+							pvm_pkbyte((text + i), 1, 1);
+							pvm_pkint(&i, 1, 1);
+							pvm_send(temp_id, 100);
+							++i;
+						}
+					}
+					for (i = 0; i < (ilhost-1); ++i) {
+						budif = pvm_recv(-1, 200);
+						char temp;
+						int recIndex;
+						pvm_upkbyte(&temp, 1, 1);
+						pvm_upkint(&recIndex, 1, 1);
+						text2[recIndex] = temp;
+						pvm_bufinfo(budif, &zm1, &zm2, &temp_id);
+						printf("Od: %d \n", temp_id);
+						pvm_kill(temp_id);		
+					}
+					printf("Tekst: %s\n", text2); pvm_exit();
+				}
+			\end{lstlisting}
+
 			
