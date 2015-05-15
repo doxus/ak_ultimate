@@ -1,2 +1,229 @@
 % !TeX spellcheck = pl_PL
+\newpage
+
 \section{Sparc}
+	Uwagi:
+	\begin{itemize}
+		\item W języku asemblera SPARC komentarze są oznaczane przez znak wykrzyknika (!), a nie średnika (;). W listingach są średniki ze względu na wbudowany listingu asemblera w latexie.
+	\end{itemize}
+
+	\subsection{2008, I termin, Jerzy Respondek}
+		\subsubsection{Treść}
+			Napisz funkcję w asemblerze procesora SPARC obliczającą sumę liczb naturalnych od 1 do danej $ n $ jako argument funkcji. Założyć, że $ n >= 1 $.\\
+			Przykład: f(5) = 1 + 2 + 3 + 4 + 5 = 15
+		\subsubsection{Propozycja rozwiązania 1}
+			\begin{lstlisting}[language={[sparc]Assembler}]
+				.global funkcja
+				.proc 4
+				funkcja:
+					save %sp, -96, %sp		; trzeba tutaj to robić ???
+					mov %i0, %l0			; a
+					mov 1, %l1				; liczba naturalna   
+					mov 0, %l2				; wynik
+				pętla:
+					add %l1, %l2, %l2		; liczba + suma = suma
+					add %l1, 1, %l1			; liczba++
+					subbcc %l0, 1, %l0		; a--
+					bl koneic
+					nop
+					ba pętla
+					nop
+				koniec:
+					mov %l2, %i0			; wynik
+					ret
+					restore
+			\end{lstlisting}
+		\subsubsection{Propozycja rozwiązania 2}
+			\begin{lstlisting}[language={[sparc]Assembler}]
+			    .global sumator
+			    .proc 4
+			    sumator:
+				    save %sp, -96, %sp		! przesunięcie okna
+				    mov %i0, %l1			! a w l1
+				    mov %l1, %l0			! suma = a
+				   petla:
+				    subcc %l1, 1, %l1		! dekrementacja licznika
+				    bneg koniec
+				    add %l0, %l1, %l0		! suma += licznik
+				    ba petla
+			    koniec:
+				    mov %l0, %i0			! zwrócenie sumy
+				    ret
+				    restore					! przywrócenie stanu okna
+			\end{lstlisting}
+			
+	\newpage
+	\subsection{2010, I termin, Jerzy Respondek}
+		\subsubsection{Treść}
+			Napisz w asemblerze procesora SPARC funkcję obliczającą sumę kwadratów wszystkich liczb całkowitych z przedziału \emph{a} do \emph{b}. Założyć $ a < b $, np.\\
+			f(2, 5) = 2 * 2 + 3 * 3 + 4 * 4 + 5 * 5\\
+			Nagłówek funkcji ma mieć postać:
+			\begin{lstlisting}[language=C]
+				int f(int a, int b)
+			\end{lstlisting}
+		\subsubsection{Propozycja rozwiązania}
+	\newpage
+	\subsection{2012, I termin, Jerzy Respondek}
+		\subsubsection{Treść}
+			Napisz w asemblerze procesora SPARC funkcję realizującą dokładnie tę samą operację co jej odpowiednik w języku C:
+			\begin{lstlisting}[language=C]
+				int f(int *tab, int n)
+				{
+					int i, suma = 0;
+					for(i = 0; i < n; i++)
+					{
+						suma -= (2 * i + 1) * tab[i];
+						suma *= suma;
+					}
+					return suma;
+				}
+			\end{lstlisting}
+		\subsubsection{Propozycja rozwiązania 1}
+			\begin{lstlisting}[language={[sparc]Assembler}]
+				.global func
+				.proc 4
+				
+				funkcja:
+					save %sp, -96, %sp
+					mov %i0, %l0			; wskaźnik tablicy, tak podano argument
+					ld [%i0], %l1			; wartość tablicy spod wskaźnika odczytujemy poprzez LD
+					mov %i1, %l2			; rozmiar
+					mov 1, %l3				; i
+					mov 0, %l4				; temp
+					mov 0, %l5				; suma
+				pętla:
+					subcc %l2, 1, %l2		; n--
+					bl koniec				; if n < 0 koniec
+					nop
+					
+					smul %l3, 2, %l4		; temp = 2*i
+					add %l4, 1, %l4			; temp = temp +1 = 2*i+1
+					smul %l1, %l4, %l4		; temp = temp * tab[i] = (2*i+1)*tab[i]
+					subcc %l5, %l4, %l5		; suma = suma - temp = suma - (2*i+1)*tab[i]
+					
+					smul %l5, %l5, %l5		; suma = suma * suma
+					add %l0, 4, %l0			; *tab++ przesuwamy sie o 4 na kolejny element bo tyle ma int
+					ld [%l0], %l1			;pobieramy nowy element
+					ba pętla
+					nop
+				
+				koniec:
+					mov %l5, %i0			; zwracamy wynik w i0 bo po restore zamienia się input na output
+					ret						; ret bo było save
+					restore
+			\end{lstlisting}
+		\newpage
+		\subsubsection{Propozycja rozwiązania 2}
+			\begin{lstlisting}[language={[sparc]Assembler}]
+				.global fun
+				.proc 4
+				
+				;   a(n) = a(n - 1) ^ k + n * k; a(0) = 1
+				fun:
+					save %sp, -96, %sp
+					; %i0 == n
+					; %i1 == k
+				
+					subcc %i0, 1, %o0	; %o0 == n - 1
+					bneg return1
+					nop
+				
+					; trzeba obliczyc a(n - 1)
+					mov %i1, %o1
+					call fun
+					nop
+				
+					; %o0 == a(n - 1)
+					mov %i1, %l1		; %l1 == k
+					mov 1, %l2			; %l2 == 1 (tu bedzie wynik potegowania)
+				power:
+					umul %l2, %o0, %l2
+					subcc %l1, 1, %l1	; dekrementuj licznik petli
+					bg power			; skok, gdy licznik > 0
+					nop
+				
+					; %l2 == a(n - 1) ^ k
+					umul %i0, %i1, %i0
+					; %i0 == n * k
+					add %i0, %l2, %i0
+					; %i0 == a(n - 1) ^ k + n * k == a(n)
+					ba return
+					nop
+				
+				return1:
+					mov 1, %i0
+				return:
+					ret
+					restore
+			\end{lstlisting}
+		
+	\newpage
+	\subsection{2013, I termin, Jerzy Respondek}
+		\subsubsection{Treść}
+			Napisz w asemblerze procesora SPARC funkcję zwracającą \emph{a(n)} wyliczoną z poniższego wzoru rekurencyjnego, a pobierającą dwa argumenty: \emph{n} oraz \emph{k}, obydwa typu \textit{unsigned int}.
+			$$ a(n)=a(n-1)^k+n\cdot k,\;\;\;\;a(0)=1,\;\;\;n=1,2,3,... $$
+		\subsubsection{Rozwiązanie}
+			Podobno otrzymano za to 5, choć rozwiązanie NIE JEST w pełni poprawne.
+			\begin{lstlisting}[language={[sparc]Assembler}]
+				.global fun
+				.proc 4
+				
+				fun:
+					save %sp,-96,%sp
+					
+					mov %i0, %l0			; l0 - n
+					mov %i1, %l1			; l1 - k
+					mov 0, %l2				; power
+					mov 1, %l3				; a(n) = 1
+					
+					subcc %i0, 1, %i0
+					bl theEnd				; if n = 0 then jump to theEnd
+					nop
+					
+					mov %l0, %l2			; power = n
+					smul %l2, %l1, %l2		; power = power * k
+					add %l2, %l1, %l2		; power = power + k
+					
+					call fun				; call recursion
+					mov %i0, %l3			; get score of recursion
+				
+				expo:
+					smul %l3, %l3, %l3
+					subcc %l2, 1, %l2
+					bl theEnd
+					nop
+					ba expo
+					nop
+				theEnd:
+					mov %l3, %i0			; return score
+					ret
+					restore
+				
+				.end
+			\end{lstlisting}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		

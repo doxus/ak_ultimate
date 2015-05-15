@@ -1,3 +1,165 @@
 % !TeX spellcheck = pl_PL
 \newpage
 \section{PVM}
+	\subsection{Wstęp z laborek}
+		\subsubsection{Treść}
+			Napisać program znajdujący minimum i maksimum z macierzy.\\
+			Hello.c - program główny, rodzic; Hello\_other.c - program podrzędny, potomek.
+		\subsubsection{Rozwiązanie}
+			Program przekazuje kolejne wiersze macierzy do programów potomnych, które znajdują lokalne minimum i maksimum. Program zbiera wszystkie minima i maksima do tablicy o rozmiarze wysokości macierzy. Pod koniec sam ręcznie wylicza min i max z tych dwóch tablic.\\
+			Należy pamiętać, że programy potomne muszą fizycznie znajdować się na dyskach innych komputerów w sieci PVM.\\
+			\textbf{Program działający, oceniony na 5.}
+			\begin{lstlisting}[language={C}]
+				/* - Autorzy:
+				   -- Forczu Forczmański
+				   -- Wuda Wudecki
+				*/
+				#include <stdio.h>
+				#include <stdlib.h>
+				#include <math.h>
+				#include "pvm3.h"
+				#define WYSOKOSC 5		// liczba wierszy
+				#define SZEROKOSC 5		// liczba kolumn
+				/// Program rodzica
+				main()
+				{
+					// dane potrzebne do obliczeń
+					int matrix[WYSOKOSC][SZEROKOSC];
+					int min_result[WYSOKOSC], max_result[WYSOKOSC];
+					int minimum, maksimum;
+					// wypełnienie macierzy danymi
+					int i, j;
+					for ( i = 0; i < WYSOKOSC; ++i )
+						for ( j = 0; j < SZEROKOSC; ++j)
+							matrix[i][j] = rand() % 30;
+					// wypisanie macierzy na konsoli
+					for ( i = 0; i < WYSOKOSC; ++i )
+					{
+						for ( j = 0; j < SZEROKOSC; ++j)
+							printf("%d ", matrix[i][j]);
+						printf("\n\n");
+					}
+					// pobranie informacji
+					int ilhost, ilarch;
+					struct pvmhostinfo * info;
+					pvm_config(&ilhost, &ilarch, &info);
+					printf("Liczba hostow: %d\n", ilhost);
+					
+					int id1 = 0;
+					int tid;
+					
+					
+					
+					// Dla każdego hosta - inicjujemy go
+					for ( i = 0; i < ilhost; i++ )
+					{
+						pvm_spawn( "/home/pvm/pvm3/sekcja11/bin/LINUX/hello_other", 0, PvmTaskHost, info[i].hi_name, 1, &tid);
+						if ( tid < 0 )
+						{
+							ilhost--;
+							continue;
+						}
+						printf("tid: %d\n", tid);
+						pvm_initsend(PvmDataDefault);
+						// wysyłamy:
+						// id wiersza
+						pvm_pkint(&id1, 1, 1);
+						// elementy wiersza
+						pvm_pkint(&matrix[id1][0], SZEROKOSC, 1);
+						pvm_send(tid, 100);
+						id1++;
+					}
+					//// Wykonywanie programu aż do przedostatniej pętli
+					int bufid, child_tid, child_id1, tmp;
+					while ( id1 < WYSOKOSC )
+					{
+						bufid = pvm_recv(-1, 200);
+						pvm_bufinfo(bufid, &tmp, &tmp, &child_tid);
+						printf("recv: %d\n", child_tid);
+						// pobranie id wiersza
+						pvm_upkint(&child_id1, 1, 1);
+						// pobranie nowych min / max
+						pvm_upkint(&min_result[child_id1], 1, 1);
+						pvm_upkint(&max_result[child_id1], 1, 1);
+						// wysłanie nowych danych
+						pvm_initsend(PvmDataDefault);
+						// id kolejnego wiersza
+						pvm_pkint(&id1, 1, 1);
+						// nowy wiersz
+						pvm_pkint(&matrix[id1][0], SZEROKOSC, 1);
+						pvm_send(child_tid, 100);
+						id1++;
+					}
+					//// Odebranie ostatnich danych
+					for	(i = 0; i < id1 - ilhost + 1; i++ )
+					{
+						bufid = pvm_recv(-1, 200);
+						pvm_bufinfo(bufid, &tmp, &tmp, &child_tid);
+						printf("recv: %d\n", child_tid);
+						// pobranie id wiersza
+						pvm_upkint(&child_id1, 1, 1);
+						// pobranie nowych min / max
+						pvm_upkint(&min_result[child_id1], 1, 1);
+						pvm_upkint(&max_result[child_id1], 1, 1);
+					}
+					
+					
+					
+					
+					// uzysaknie minimum z wiersza
+					minimum = min_result[0];
+					maksimum = max_result[0];
+					for (j = 1; j < WYSOKOSC; j++)
+					{
+						if ( max_result[j] > maksimum )
+							maksimum = max_result[j];
+						if ( min_result[j] < minimum )
+							minimum = min_result[j];
+					}
+					printf("Uzyskane wartosci:\nMIN: %d, MAX: %d\n", minimum, maksimum);
+					pvm_exit();
+					return 0;
+				}
+			\end{lstlisting}
+			\textbf{Program potomka}
+			\begin{lstlisting}[language={C}]
+				#include <stdio.h>
+				#include <math.h>
+				#include "pvm3.h"
+				#define WYSOKOSC 5		// liczba wierszy
+				#define SZEROKOSC 5		// liczba kolumn
+				/// Program potomka
+				int main()
+				{
+					int masterid, id1, j, curr_row[SZEROKOSC], curr_min, curr_max;
+					// pobierz id rodzica 
+					masterid = pvm_parent();
+					if (masterid == 0)
+						exit(1);
+					while(1)
+					{
+						pvm_recv(masterid, 100);
+						// pobranie wartości:
+						// id wiersza
+						pvm_upkint(&id1, 1, 1);
+						pvm_upkint(&curr_row[0], SZEROKOSC, 1);
+						// uzysaknie minimum z wiersza
+						curr_min = curr_max = curr_row[0];
+						for (j = 1; j < SZEROKOSC; j++)
+						{
+							if ( curr_row[j] > curr_max )
+								curr_max = curr_row[j];
+							if ( curr_row[j] < curr_min )
+								curr_min = curr_row[j];
+						}
+						// wysłanie nowych danych
+						pvm_initsend(PvmDataDefault);
+						pvm_pkint(&id1, 1, 1);
+						pvm_pkint(&curr_min, 1, 1);
+						pvm_pkint(&curr_max, 1, 1);
+						pvm_send(masterid, 200);
+					}
+					pvm_exit();
+					return 0;
+				}
+			\end{lstlisting}

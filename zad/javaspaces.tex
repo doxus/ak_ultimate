@@ -1,41 +1,5 @@
 % !TeX spellcheck = pl_PL
 \newpage
-% --- Opcje listingu kodu Javy
-\lstset{
-	language=Java,
-	frame=single,
-	autogobble=true,
-	commentstyle=\ttfamily\itshape\color{gray},
-	keywordstyle=\color{blue},
-	frameround=ffff,
-	rulecolor=\color{black},
-	tabsize=4,
-	breaklines=true,
-	extendedchars
-}
-
-% --- Polskie znaki w listingu kodu
-\lstset{
-	literate=%
-	{ą}{{\c{a}}}1
-	{ć}{{\'c}}1
-	{ę}{{\c{e}}}1
-	{ł}{{\l{}}}1
-	{ń}{{\'n}}1
-	{ó}{{\'o}}1
-	{ś}{{\'s}}1
-	{ź}{{\'z}}1
-	{ż}{{\.z}}1
-	{Ą}{{\c{A}}}1
-	{Ć}{{\'C}}1
-	{Ę}{{\c{E}}}1
-	{Ł}{{\L{}}}1
-	{Ń}{{\'N}}1
-	{Ó}{{\'O}}1
-	{Ś}{{\'S}}1
-	{Ź}{{\'Z}}1
-	{Ż}{{\.Z}}1
-}
 
 \section{Java Spaces}
 	\subsection{Wstęp z laborek}
@@ -45,7 +9,7 @@
 			Zadanie obliczania sumy tabel dzielimy na dwie części: \textit{Task} oraz \textit{Result}. \textit{Taski} są generowane przez \textit{Nadzorcę} i przekazywane \textit{Pracownikom}, ci zaś wykonują zadanie i tworzą obiekty klasy \textit{Result}, a następnie przekazuję je \textit{Nadzorcy}. \textit{Nadzorca} je odbiera, kompletuje i ew. coś z nimi robi.\\\\
 			\textit{Nadzorca} przydziela tyle zadań, ile potrzebuje, z kolei \textit{Pracownicy} działają w nieskończoność. Aby zakończyć ich pracę, \textit{Nadzorca} musi wysłać zadania z tzw. zatrutą pigułką (ang. \emph{Poisoned Pill}), czyli obiekt zadania z nietypowym parametrem, który sygnalizuje zakończenie pracy. Może to być np. \textit{Boolean} o wartości \textit{false}, \textit{Integer} o wartości -1, itp.
 			Składowymi klas implementujących interfejs Entry nie mogą być typu prostego (int, double itp.), muszą być opakowane (Integer, Double itp.). Najbezpieczniej dawać je wszędzie.\\
-			\begin{lstlisting}
+			\begin{lstlisting}[language=Java]
 				/**
 				* @author Son Mati
 				* @waifu Itsuka Kotori
@@ -71,7 +35,7 @@
 				}
 			\end{lstlisting}
 			\newpage
-			\begin{lstlisting}
+			\begin{lstlisting}[language=Java]
 				/**
 				* @author Son Mati
 				* @waifu Itsuka Kotori
@@ -97,7 +61,7 @@
 					}
 				}
 			\end{lstlisting}
-			\begin{lstlisting}
+			\begin{lstlisting}[language=Java]
 				/**
 				* @author Son Mati
 				* @waifu Itsuka Kotori
@@ -131,7 +95,7 @@
 				}
 			\end{lstlisting}
 			\newpage
-			\begin{lstlisting}
+			\begin{lstlisting}[language=Java]
 				/**
 				* @author Son Mati
 				* @waifu Itsuka Kotori
@@ -197,7 +161,7 @@
 			Napisać kod programu głównego zarządzającego równoległym wykonywaniem zadania w maszynie JavaSpace polegającym na wyznaczeniu zbioru klatek video zawierających ruch. Wykrywanie ruchu ma odbywać się w procesorach wykonawczych na zasadzie porównania różnicowego, czyli wymaga poddania analizie dwóch kolejnych klatek. W tym celu program główny posługując się \textit{byte[] GetImage()} (przyjąć, że jest zdefiniowana i zaimplementowana) ma pobierać kolejne klatki obrazu i umieszczać je w przestrzeni JavaSpace, wraz z jej kolejnym numerem (numerowania ma odbywać się na poziomie programu głównego). Program główny kończy wysyłania zadań gdy funkcja \textit{GetImage} zwróci wartość \textit{NULL}. Jako wynik swojego działania programy wykonawcze zwracają obiekt odpowiedzi zawierający numer pierwszego obrazu z analizowanej pary oraz wartość logiczną czy para była identyczna czy też zawierała wykryty ruch. Na zakończenie działania program główny po zebraniu wszystkich odpowiedzi powinien wypisać numery obrazów dla których wykryto ruch oraz zakończyć procesy wykonawcze rozsyłając "zatrutą pigułkę". Zaproponować strukturę obiektu zadania i odpowiedzi.
 		\subsubsection{Propozycja rozwiązania 1}
 			Nie jest do końca prawidłowa, ponieważ kod nie jest spójny i nie wiadomo czy analizuje pary klatek.
-			\begin{lstlisting}
+			\begin{lstlisting}[language=Java]
 				public class Image implements Entry {
 					//należy pamiętać o tym aby każde pole było publiczne!
 					public byte[] frame;
@@ -210,7 +174,7 @@
 					}
 				}
 			\end{lstlisting}
-			\begin{lstlisting}
+			\begin{lstlisting}[language=Java]
 				//Dane przesyłane jako odpowiedź
 				public class Result implements Entry {
 					public Integer id;
@@ -223,7 +187,7 @@
 				}
 			\end{lstlisting}
 			\newpage
-			\begin{lstlisting}
+			\begin{lstlisting}[language=Java]
 				public class Program {
 					public int defaultLease = 100000;
 					public int id = 1;
@@ -294,7 +258,7 @@
 			Napisać program umieszczający w przestrzeni JavaSpace \textbf{200} obiektów zadań zawierających \textbf{dwa} pola typu całkowitego oraz \textbf{dwa} pola typu łańcuch znakowy (zawartość nieistotna, różna od NULL), podać deklarację klasy zadań. Następnie odebrać z przestrzeni kolejno \textbf{100} obiektów klasy \textit{Odpowiedź} o atrybutach \textit{id} typu \textit{Integer} oraz \textit{wynik} typu \textit{Integer} posiadające w atrybucie id wartość \textbf{35}, a następnie wszystkie z atrybutem \textit{id} = \textbf{10}. Przyjąć, że klasa \textit{Odpowiedź} jest już zdefiniowana zgodnie z powyższym opisem.
 	
 		\subsubsection{Propozycja rozwiązania 1}
-			\begin{lstlisting}
+			\begin{lstlisting}[language=Java]
 				public class MessageSend implements Entry {
 					public String s1, s2;
 					public Integer i1, i2;
@@ -341,7 +305,7 @@
 				}
 			\end{lstlisting}
 		\subsubsection{Propozycja rozwiązania 2}
-			\begin{lstlisting}
+			\begin{lstlisting}[language=Java]
 				package pl.ak.javaspaces;
 				import net.jini.core.entry.Entry;
 				import net.jini.core.transaction.TransactionException;

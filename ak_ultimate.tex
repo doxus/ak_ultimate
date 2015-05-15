@@ -41,6 +41,60 @@
 \titleformat{\part}[display]
 {\normalfont\LARGE\bfseries\centering}{}{0pt}{}
 
+
+% --- Listing dialektu SPARC Assemblera
+\lstdefinelanguage
+[sparc]{Assembler}		%
+[x86masm]{Assembler}	% based on the "x86masm" dialect
+{
+	morekeywords= %
+	{
+		ld, LD, st, ST, %
+		mov, MOV, swap, SWAP, %
+		nop, NOP, %
+		AND, and, ANDcc, andcc, OR, or, ORcc, orcc, XOR, xor, XORcc, xorcc, %
+		ADDX, addx, ADDXcc, addxcc, %
+		SUB, sub, SUBcc, subcc, SUBX, subx, SUBXcc, subxcc, %
+		UMUL, umul, SMUL, smul, UMULcc, umulcc, SMULcc, smulcc, %
+		UDIV, udiv, SDIV, sdiv, UDIVcc, udivcc, SDIVcc, sdivcc, %
+		BA, ba, BNE, bne, BG, bg, BNEG, bneg%
+		CALL, call, RET, ret, RETL, retl, %
+		SAVE, save, RESTORE, restore %
+	}	
+}
+
+% --- Opcje listingu kodu
+\lstset{
+	frame=single,
+	autogobble=true,
+	commentstyle=\ttfamily\itshape\color{gray},
+	keywordstyle=\color{blue},
+	frameround=ffff,
+	rulecolor=\color{black},
+	tabsize=4,
+	breaklines=true, %
+	% --- Polskie znaki w listingu kodu
+	literate=%
+	{ą}{{\c{a}}}1
+	{ć}{{\'c}}1
+	{ę}{{\c{e}}}1
+	{ł}{{\l{}}}1
+	{ń}{{\'n}}1
+	{ó}{{\'o}}1
+	{ś}{{\'s}}1
+	{ź}{{\'z}}1
+	{ż}{{\.z}}1
+	{Ą}{{\c{A}}}1
+	{Ć}{{\'C}}1
+	{Ę}{{\c{E}}}1
+	{Ł}{{\L{}}}1
+	{Ń}{{\'N}}1
+	{Ó}{{\'O}}1
+	{Ś}{{\'S}}1
+	{Ź}{{\'Z}}1
+	{Ż}{{\.Z}}1
+}
+
 \begin{document}
 \bibliographystyle{plain}
 \input{./macrodefs}
