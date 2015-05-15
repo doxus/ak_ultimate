@@ -6,7 +6,93 @@
 	\begin{itemize}
 		\item W języku asemblera SPARC komentarze są oznaczane przez znak wykrzyknika (!), a nie średnika (;). W listingach są średniki ze względu na wbudowany listingu asemblera w latexie.
 	\end{itemize}
-
+	
+	\subsection{Laborka: min, max oraz max - min}
+		Ocena nieznana.
+		\subsubsection{Funkcja w języku C}
+			\begin{lstlisting}[language=C]
+				#include <stdio.h>
+				extern int minmax(int *tab, int n, int *max, int *min);
+				
+				int main()
+				{
+					int i, N, *tab;
+					int max, min, span;
+					scanf("%i", &N);	
+					if (N < 0) {
+						printf("N < 0!\n");
+						return -1;
+					}
+					tab = malloc(N*sizeof(*tab));
+					for(i = 0; i < N; ++i)
+						scanf("%i", tab + i);
+					span = minmax(tab, N, &max, &min);
+					printf("min = %i, max = %i, span = %i\n",
+					min, max, span);
+					free(tab);
+					return 0;
+				}
+			\end{lstlisting}
+		\newpage
+		\subsubsection{Odpowiednik w SPARCu}
+			\begin{lstlisting}[language={[sparc]Assembler}]
+				.global minmax
+				.proc 4
+				; rejestry:
+				; %i0 - adres do tablicy
+				; %i1 - ilosc liczb (N)
+				; %i2 - adres do max
+				; %i3 - adres do min
+				;
+				; %l6 - pomocnicza do przechowania przesuniecia w bajtach
+				; %l7 - pomocnicza do porownywania z min/max
+				; %l1 - max
+				; %l2 - min
+				minmax:
+					save %sp, -96, %sp ; przesuniecie okienka
+					; zaladuj wartosci dla max i min, gdy n <= 0
+					mov 0, %l1
+					mov 0, %l2
+					; sprawdz czy n > 0
+					subcc %i1, 1, %i1
+					blt end
+					nop
+					; zaladuj startowe max (%l1) i min(%l2) z pierwszej liczby
+					ld [%i0], %l1
+					mov %l1, %l2
+				petla:
+					; sprawdz koniec petli
+					blt end
+					; wylicz adres i zaladuj kolejna liczbe
+					smul %i1, 4, %l6
+					ld [%i0+%l6], %l0	; %l0 - obecna liczba
+				
+					; update max
+					subcc %l0, %l1, %l7	; %l1 - max
+					blt next
+					nop
+					mov %l0, %l1
+				next:
+					; update min
+					subcc %l0, %l2, %l7	; %l2 - min
+					bgt next2
+					nop
+					mov %l0, %l2
+				
+				next2:
+					ba petla
+					subcc %i1, 1, %i1
+				
+				end:
+					; zapisz wynik
+					st %l1, [%i2]
+					st %l2, [%i3]
+					sub %l1, %l2, %i0
+					ret
+					restore ; odtworzenie okienka
+			\end{lstlisting}
+	
+	\newpage
 	\subsection{2008, I termin, Jerzy Respondek}
 		\subsubsection{Treść}
 			Napisz funkcję w asemblerze procesora SPARC obliczającą sumę liczb naturalnych od 1 do danej $ n $ jako argument funkcji. Założyć, że $ n >= 1 $.\\

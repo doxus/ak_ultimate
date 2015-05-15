@@ -1,7 +1,7 @@
 % !TeX spellcheck = pl_PL
 \newpage
 \section{PVM}
-	\subsection{Wstęp z laborek}
+	\subsection{Wstęp z laborek, szukanie min i max}
 		\subsubsection{Treść}
 			Napisać program znajdujący minimum i maksimum z macierzy.\\
 			Hello.c - program główny, rodzic; Hello\_other.c - program podrzędny, potomek.
@@ -163,3 +163,129 @@
 					return 0;
 				}
 			\end{lstlisting}
+	\subsection{Laborki, odejmowanie macierzy}
+		\subsubsection{Treść}
+			Odejmowanie macierzy.
+		\subsubsection{Rozwiązanie}
+			Ocena nieznana.
+			\begin{lstlisting}[language=C]
+				/* AK Lab 2 - PVM
+					Anna Kusnierz
+					Tomasz Szoltysek
+					Temat: Odejmowanie dwoch macierzy
+				*/
+				#include <stdio.h>
+				#include <math.h>
+				#include "pvm3.h"
+				#define MATRIX_SIZE 20
+				int main() 
+				{
+					int i,j;
+					int count = 0; 		//licznik wierszy macierzy
+					int rescount;
+					int tidmaster, ilhost, ilarch, bufid,t_id,bytes,msgtag;
+					struct pvmhostinfo info;
+					
+					int a[MATRIX_SIZE][MATRIX_SIZE], b[MATRIX_SIZE][MATRIX_SIZE], r[MATRIX_SIZE][MATRIX_SIZE];
+					FILE *txt = fopen("result.txt","w");
+					
+					for(i=0;i<MATRIX_SIZE;i++)
+					{
+						for(j=0;j<MATRIX_SIZE;j++)
+						{
+							a[i][j] = rand();
+							b[i][j] = rand();
+						}
+					}
+					fprintf(txt,"Macierz A:\n--------------------------------------------------\n\n");
+					for(i=0;i<MATRIX_SIZE;i++)
+					{
+						for(j=0;j<MATRIX_SIZE;j++)
+							fprintf(txt,"%d\t",a[i][j]);
+						fprintf(txt,"\n");
+					}
+					fprintf(txt,"Macierz B:\n--------------------------------------------------\n\n");
+					for(i=0; i<MATRIX_SIZE;i++)
+					{
+						for(j=0;j<MATRIX_SIZE;j++)
+							fprintf(txt,"%d\t",b[i][j]);
+						fprintf(txt,"\n");
+					}
+					
+					
+					
+					tidmaster = pvm_mytid();
+					pvm_config(&ilhost, &ilarch, &info);
+					printf("%d",ilhost);
+					for(i=0; i < (ilhost > MATRIX_SIZE ? MATRIX_SIZE : ilhost) ;i++)
+					{
+						pvm_spawn("/home/pvm3/pvm3/sekcja4/hello_other",0,PvmTaskHost,info[i].hi_name,1,&t_id);
+						pvm_initsend(PvmDataDefault);
+						pvm_pkint(&a[count][0],MATRIX_SIZE,1);
+						pvm_pkint(&b[count][0],MATRIX_SIZE,1);
+						pvm_pkint(&count,1,1);
+						pvm_send(t_id,100);	
+						++count;
+					}
+					while(count<MATRIX_SIZE)
+					{
+						bufid = pvm_recv(-1,200);
+						pvm_bufinfo(bufid,&bytes,&msgtag,&t_id);
+						pvm_upkint(&rescount,1,1);
+						pvm_upkint(&r[rescount][0],MATRIX_SIZE,1);
+						pvm_initsend(PvmDataDefault);
+						pvm_pkint(&a[count][0],MATRIX_SIZE,1);
+						pvm_pkint(&b[count][0],MATRIX_SIZE,1);
+						pvm_pkint(&count,1,1);
+						pvm_send(t_id,100);
+						++count;
+					}
+					for(i = 0; i < (ilhost > MATRIX_SIZE ? MATRIX_SIZE : ilhost); i++)
+					{
+						bufid = pvm_recv(-1,200);
+						pvm_bufinfo(bufid,&bytes,&msgtag,&t_id);
+						pvm_upkint(&rescount,1,1);
+						pvm_upkint(&r[rescount][0],MATRIX_SIZE,1);
+						pvm_kill(t_id);	
+					}
+					fprintf(txt,"Macierz wynikowa:\n--------------------------------------------------\n\n");
+					for(i=0; i<MATRIX_SIZE;i++)
+					{
+						for(j=0;j<MATRIX_SIZE;j++)
+							fprintf(txt,"%d\t",r[i][j]);
+						fprintf(txt,"\n");
+					}
+					fclose(txt);
+					exit(0);
+				}
+			\end{lstlisting}
+			\newpage
+			\textbf{Program potomny}
+			\begin{lstlisting}[language=C]
+				#include <stdio.h>
+				#include "pvm3.h"
+				#define MATRIX_SIZE 20
+				int main()
+				{
+					int masterid, count, i;
+					double vecta[MATRIX_SIZE],vectb[MATRIX_SIZE],vectr[MATRIX_SIZE];
+					masterid = pvm_parent();
+					if(masterid == 0) exit(1);	//zabezpieczenie przed uruchomieniem z poziomu rodzica
+					//OBSŁUGA OBLICZEŃ i WYSYŁANIA WYNIKÓW
+					while(1)
+					{
+						pvm_recv(masterid,100);
+						pvm_upkdouble(&vecta[0],MATRIX_SIZE,1);
+						pvm_upkdouble(&vectb[0],MATRIX_SIZE,1);
+						pvm_upkint(&count,1,1);
+						for(i = 0; i < MATRIX_SIZE; i++)
+							vectr[i] = vecta[i] - vectb[i];
+						pvm_initsend(PvmDataDefault);
+						pvm_pkint(&count,1,1);
+						pvm_pkdouble(&vectr[0],MATRIX_SIZE,1);
+						pvm_send(masterid,200);		
+					}
+					return(0);
+				}
+			\end{lstlisting}
+			
