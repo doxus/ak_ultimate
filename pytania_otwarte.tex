@@ -228,10 +228,23 @@
 		\begin{enumerate}
 			\item \textbf{Omów najważniejsze cechy architektury CUDA w szczególności model pamięci.}
 				\begin{itemize}
-					\item 
+					\item Cała architektura utworzona z wątków, które są grupowane w bloki.
+					\item Wątki niezależnie wykonują tę samą operację.
+					\item Każdy wątek ma swoją lokalną pamięć, dodatkowo mają wspólną pamięć globalną i współdzieloną.
+					\item Za komunikację między wątkami odpowiadają mechanizmy synchronizacji (\emph{barrier synchronization})
 				\end{itemize}
 			\item \textbf{Omów budowę systemów o niejednorodnym dostępie do pamięci (NUMA).}
+			\begin{itemize}
+				\item Systemy NUMA zbudowane są z wielu procesorów, gdzie każdy procesor posiada własną, bardzo szybką pamięć lokalną.
+				\item Dodatkowo procesory posiadają wspólną, ogromną pamięć wspólną.
+			\end{itemize}
 			\item \textbf{Porównaj realizację rozkazów wektorowych w komputerach wektorowych i macierzowych.}
+			\ref{ss:wektor}
+			\begin{itemize}
+				\item W komputerze wektorowym szybkość realizacji rozkazów rośnie logarytmicznie wraz ze zwiększeniem długości wektora.
+				\item Efektywność wykonywania rozkazów w komputerze wektorowym dąży to pewnej stałej wartości, która jest efektywnością idealną.
+				\item Z kolei w komputerze macierzowym ten sam rozkaz może być wykonywany w jednym kroku (jeśli jest wystarczająca liczba jednostek przetwarzających), czyli w stałym czasie.
+			\end{itemize}
 			\item \textbf{Wymień różnice między systemami SMP a MPP.}
 			\item \textbf{Omów rozwiązania stosowane w klastrach o wysokiej niezawodności.}
 		\end{enumerate}
