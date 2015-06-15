@@ -5,8 +5,6 @@
 %*** Opracowanie wykładów *****************************
 %===============================================================================
 \part{Teoria}
-
-
 %========================================
 %*** Historia rozwoju komputerów ********
 %========================================
@@ -35,7 +33,6 @@
 %========================================
 %*** Architektura CISC ******************
 %========================================
-\newpage
 \section{Architektura CISC}
 	\subsection{Znaczenie} \noindent
 		\emph{Complex Instruction Set Computers}
@@ -68,7 +65,6 @@
 %========================================
 %*** Architektura RISC ******************
 %========================================
-\newpage
 \section{Architektura RISC}
 	\subsection{Znaczenie} \noindent
 		\emph{Reduced Instruction Set Computers}.
@@ -106,7 +102,6 @@
    			\item Kompilatory o dużych możliwościach optymalizacji potoku rozkazów
    		\end{enumerate}
   		
-	\newpage
 	\subsection{Format rozkazu procesora RISC I}
    		\begin{table}[h]
    			\begin{tabular}{clclll}
@@ -144,7 +139,6 @@
 	       	\end{itemize}
        		Tryb absolutny oraz tryb rejestrowy pośredni są przypadkami szczególnymi.
 
-	\newpage
     \subsection{Logiczna organizacja rejestrów procesora RISC I}
 	    \begin{table}[htbp]
 	    	\centering
@@ -206,7 +200,6 @@
 %========================================
 %*** Mechanizmy potokowe ****************
 %========================================
-\newpage
 \section{Mechanizmy potokowe}
 	\subsection{Realizacja rozkazów w procesorze niepotokowym}
 		Rozkazy wykonywane są liniowo w czasie - jeden po drugim, w takiej kolejności w jakiej przyjdą do procesora.
@@ -249,7 +242,6 @@
 	   	\end{enumerate}
 	   	Zasada działania jest dokładnie taka sama jak w przypadku podziału na dwie fazy. Załóżmy, że jeden rozkaz wykonuje się w 7iu taktach zegarowych. 1 T = 7 F. Wówczas w momencie gdy rozkaz numer 1 znajduje się w 5tym takcie wykonania rozkaz numer 5 może zostać pobrany.
    	
-	\newpage
    	\subsection{Analiza czasowa potokowej realizacji ciągu rozkazów}
 	   	\begin{wrapfigure}[5]{r}{0.4\textwidth}
 	   		\includegraphics[width=0.38\textwidth]{./images/potok03}
@@ -284,7 +276,6 @@
 	   		\item Przewidywanie rozgałęzień
 	   	\end{itemize}
 	   	
-	\newpage
    	\subsection{Skoki opóźnione}
 	   	\subsubsection{Założenia}
 		   	\begin{itemize}
@@ -320,7 +311,6 @@
 	   			\item Tablica historii rozgałęzień.
 	   		\end{itemize}
 	   	\end{enumerate}
-\newpage
 	   	\subsubsection{Tablica historii rozgałęzień}
 	   		Składa się z:
 	   		\begin{itemize}
@@ -359,7 +349,6 @@
 	   		\begin{center}
 	   			\includegraphics[width=0.7\textwidth]{./images/potok05}
 	   		\end{center}
-	\newpage
 	\subsection{Metody rozwiązywania hazardu danych}
 		\subsubsection{Co to jest?}
 			\textit{Hazard danych} - zależności między argumentami kolejnych rozkazów wykonywanych potokowo.
@@ -389,7 +378,6 @@
           	\item Kilku jednostek potokowych
          	\item Załadowania kilku rozkazów z pamięci operacyjnej w jednym takcie procesora
 		\end{itemize}
-	\newpage
     \subsection{Zależności między rozkazami}
     	\subsubsection{Prawdziwa zależność danych}
     		\emph{Read After Write (RAW)}\\
@@ -534,7 +522,6 @@
 %========================================
 %*** Klasyfikacja komputerów równoległych
 %========================================
-\newpage
 \section{Klasyfikacja komputerów równoległych}
 	\subsection{Formy równoległości w architekturze komputerów}
 		\subsubsection{Równoległość na poziomie rozkazów}
@@ -567,7 +554,6 @@
 			\item \textbf{Równoległość poziomu zleceń} (RLP - Request Level Parallelism) - odnosi się do równoległości zadań określonych przez programistę lub system operacyjny. Ta forma równoległości jest wykorzystywana w systemach luźno połączonych (z pamięcią rozproszoną) i klastrach.
 		\end{itemize}
 	
-	\newpage
 	\subsection{Klasyfikacja Flynna}
 		M. Flynn, 1966
 		\subsubsection{Kryterium klasyfikacji}
@@ -598,8 +584,6 @@
 			\end{itemize}
 		\subsubsection{Klasyfikacja opisowa}
 			\includegraphics[width=16cm]{klasyfikacja}
-\newpage
-
 
 %========================================
 %*** Architektura SIMD ******************
@@ -672,7 +656,6 @@
 			\end{itemize}
 	
 	% ******* MACIERZOWE *********************************
-	\newpage
 	\subsection{Komputery macierzowe}
 		\subsubsection{Co to jest?}
 			Architektura komputerów macierzowych - model SIMD w dwóch wariantach:
@@ -772,7 +755,6 @@
 			\item Ulepszona realizacja operacji zmp FMA (fused multiply-add) dla pojedynczej i podwójnej precyzji
 		\end{itemize}
 
-	\newpage
 	\section{Wątki}
 		\subsection{Co to jest?}
 			\begin{itemize}
@@ -807,7 +789,6 @@
 %========================================
 %*** Rodzaje pamięci multiprocesora *****
 %========================================
-\newpage
 \section{Rodzaje pamięci multiprocesora}
 	\subsection{Pamięć globalna}
 		Duża pamięć, o czasie życia aplikacji (dane umieszczone w tej pamięci są usuwane po zakończeniu aplikacji), dostępna dla każdego wątku w dowolnym bloku, ale o dość długim czasie dostępu wynoszącym ok. 400-600 taktów zegara.
@@ -823,7 +804,6 @@
 %========================================
 %*** Systemy wieloprocesorowe ***********
 %========================================
-\newpage
 \section{Systemy wieloprocesorowe (UMA)}
 	\subsection{Rodzaje}
 		\begin{itemize}
@@ -936,7 +916,6 @@
 			\end{itemize}
 		\end{itemize}
 		
-
 %========================================
 %*** Systemy NUMA ***********************
 %========================================	
@@ -959,7 +938,6 @@
 		\begin{center}
 			\includegraphics[width=0.45\textwidth]{./images/NUMA01}
 		\end{center}
-	\newpage
 	\subsection{Katalog}
 		\subsubsection{Najprostsza postać katalogu}
 		\begin{center}
@@ -1069,7 +1047,6 @@
 		\begin{center}
 			\includegraphics[width=0.5\textwidth]{./images/MMP02}
 		\end{center}
-\newpage
 		\subsection{Topologia}
 			Sieci łączące węzły MPP.
 			\begin{itemize}
@@ -1249,27 +1226,3 @@
 			\item Cele budowy: wysoka wydajność lub/i wysoka niezawodność, równoważenie obciążenia
 			\item Korzystny wskaźnik: cena/wydajność
 		\end{itemize}
-		
-			
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
