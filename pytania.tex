@@ -272,483 +272,482 @@
 	}{%
 		isTrue1={Nie},%
 		answer1={Spójność pamięci podręcznej wszystkich węzłów},%
-		explain1={},%
+		explain1={Spójność wręcz nie powinna być zapewniana, każdy element są swoją własną, odrębną pamięć.},%
 		isTrue2={Tak},%
 		answer2={Fizycznie rozproszona PaO},%
-		explain2={},%
+		explain2={Tak, jest fizycznie i logicznie rozproszona.},%
 		isTrue3={Nie},%
 		answer3={Fizycznie rozproszona PaO, ale logicznie wspólna},%
-		explain3={},%
+		explain3={Nie, taka jest cecha systemów NUMA.},%
 		isTrue4={Tak},%
 		answer4={Przesył komunikatów między procesorami},%
-		explain4={},%
+		explain4={Tak, to metoda synchronizacji wykonywania zadań.},%
 		isTrue5={Nie},%
 		answer5={Niska skalowalność}, %
-		explain5={}, %
+		explain5={Nie, jest przeogromna.}, %
 		isTrue6={Nie}, %
 		answer6={Jednorodny dostęp do pamięci wszystkich węzłów}, %
-		explain6={}, %
+		explain6={Nie, pamięć jest rozproszona.}, %
 	}
 \end{minipage}
-
-% --- PTYTANIE 15
-\question{%
-	question={Jak można ominąć hazard danych}%
-}{%
-isTrue1={Nie},%
-answer1={Poprzez rozgałęzienia},%
-explain1={Nie, rozgałęzienie to po prostu instrukcje typu IF, które tworzą takie rozgałęzienia. Mechanizm przewidywania rozgałęzień jest stosowany do usuwania hazardu sterowania związanego ze skokami i rozgałęzieniami.},%
-isTrue2={Nie},%
-answer2={Poprzez uproszczenie adresowania - adresowanie bezpośrednie.},%
-explain2={Bullshit. Nie wiem w czym miało by pomóc uproszczenia adresowania, poza pójściem w stronę RISCu, ale na hazard to nie pomoże. Tym można tylko skrócić czas odwołania się do danych.},%
-isTrue3={Tak},%
-answer3={Przez zamianę rozkazów},%
-explain3={Tak, i na tym polega mechanizm skoków opóźnionych, które mogą program zmodyfikować (dodać rozkaz NOP) albo zoptymalizować, właśnie zamieniają rozkazy kolejnością.},%
-}
-
-
-\question{%
-	question={Cechy architektury CISC}%
-}{%
-isTrue1={Nie},%
-answer1={Czy może być wykonana w VLIW},%
-explain1={Nie, architektura VLIW dotyczy mikroprocesorów i miała na celu jak największe zmniejszenie jednostki centralnej i jej rozkazów (RISC).},%
-isTrue2={Tak},%
-answer2={Czy występuje model wymiany danych typu pamięć - pamięć},%
-explain2={Tak, posiada również niewielką ilość rejestrów.},%
-isTrue3={Nie},%
-answer3={Jest mała liczba rozkazów},%
-explain3={Nie, w tej architekturze jest PEŁNA (complex) lista rozkazów. Niektóre z zaawansowanych pleceń nawet nie były wykorzystywane, i bum! tak powstał RISC.},%
-}
-
-
-\question{%
-	question={Cechy architektury RISC}%
-}{%
-isTrue1={Tak},%
-answer1={Czy występuje model wymiany danych typu rej-rej},%
-explain1={Tak, a komunikacja z pamięcią operacyjną odbywa się wyłącznie za pomocą rozkazów LOAD i STORE.},%
-isTrue2={Tak},%
-answer2={Jest mała liczba trybów adresowania},%
-explain2={Tak, raptem 4 w procesorze RISC I podczas gdy CISCi mogą mieć ich kilkanaście, w tym takie bardzo złożone.},%
-isTrue3={Nie},%
-answer3={Jest wykonywanych kilka rozkazów w jednym takcie},%
-explain3={Fałsz. Prawdziwe wykonywanie wielu rozkazów w jednym takcie wymaga superskalarnosci - wielu jednostek potokowych. Cechą architektury RISC jest potokowość, ale pojedyncza.},%
-isTrue4={Tak},%
-answer4={Jest wykonywanych kilka rozkazów w jednym takcie (w danej chwili czasu)},%
-explain4={Chodzi o przetwarzanie potokowe. Tu jest haczyk - pierwszy procesor RISC I (1980) stawiał sobie za cel wykonanie \emph{jednego rozkazu w jednym takcie} i dokładnie tak brzmiało jego założenie projektowe. Jednak jego fizyczna realizacja (1982) posiadała dwustopniowy potok. Również w wykładach jako cecha tej architektury jest napisane "Intensywne wykorzystanie przetwarzania potokowego", co odnosi się do faktu, że obecnie nie ma procesora typu RISC, który go nie ma. Wg mnie prawda.},%
-isTrue5={Nie},%
-answer5={Jest wykonywanych kilka instrukcji procesora w jednym rozkazie asemblerowym}, %
-explain5={Nic mi na ten temat nie wiadomo. Brzmi jednak zbyt hardo i odlegle od tematu zmniejszania ilości rozkazów.}, %
-isTrue6={Tak}, %
-answer6={Układ sterowania w postaci logiki szytej}, %
-explain6={Tak.}, %
-}
-
-
-\question{%
-	question={Przepustowość (moc obliczeniowa) dużych komputerów jest podawana w:}%
-}{%
-isTrue1={Tak},%
-answer1={GFLOPS},%
-explain1={},%
-isTrue2={Nie},%
-answer2={Liczbie instrukcji wykonywanych na sekundę},%
-explain2={},%
-isTrue3={Tak},%
-answer3={Liczbie operacji zmiennoprzecinkowych na sekundę},%
-explain3={},%
-isTrue4={Nie},%
-answer4={Mb/sek},%
-explain4={To jest do zapamiętania na prostu - takie są standardy},%
-}
-
-
-\question{%
-	question={Podstawą klasyfikacji Flynna jest}%
-}{%
-isTrue1={Nie},%
-answer1={Liczba jednostek przetwarzających i sterujących w systemach komputerowych},%
-explain1={},%
-isTrue2={Nie},%
-answer2={Protokół dostępu do pamięci operacyjnej},%
-explain2={},%
-isTrue3={Nie},%
-answer3={Liczba modułów pamięci operacyjnej w systemach komputerowych},%
-explain3={},%
-isTrue4={Tak},%
-answer4={Liczba strumieni rozkazów i danych w systemach komputerowych},%
-explain4={To po prostu należy zapamiętać. \textbf{Kryterium klasyfikacji Flynna jest \emph{liczba strumieni rozkazów} oraz \emph{liczba strumieni danych} w systemie komputerowym. NIC WIĘCEJ, NIC MNIEJ.\\Albo inaczej: \emph{$Liczba\_strumieni\times(rozkazow+danych)$}}},%
-}
-
-
+\begin{minipage}{\textwidth}
+	% --- PTYTANIE 15
+	\question{%
+		question={Jak można ominąć hazard danych}%
+	}{%
+		isTrue1={Nie},%
+		answer1={Poprzez rozgałęzienia},%
+		explain1={Nie, rozgałęzienie to po prostu instrukcje typu IF, które tworzą takie rozgałęzienia. Mechanizm przewidywania rozgałęzień jest stosowany do usuwania hazardu sterowania związanego ze skokami i rozgałęzieniami.},%
+		isTrue2={Nie},%
+		answer2={Poprzez uproszczenie adresowania - adresowanie bezpośrednie.},%
+		explain2={Bullshit. Nie wiem w czym miało by pomóc uproszczenia adresowania, poza pójściem w stronę RISCu, ale na hazard to nie pomoże. Tym można tylko skrócić czas odwołania się do danych.},%
+		isTrue3={Tak},%
+		answer3={Przez zamianę rozkazów},%
+		explain3={Tak, i na tym polega mechanizm skoków opóźnionych, które mogą program zmodyfikować (dodać rozkaz NOP) albo zoptymalizować, właśnie zamieniają rozkazy kolejnością.},%
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={Cechy architektury CISC}%
+	}{%
+		isTrue1={Nie},%
+		answer1={Czy może być wykonana w VLIW},%
+		explain1={Nie, architektura VLIW dotyczy mikroprocesorów i miała na celu jak największe zmniejszenie jednostki centralnej i jej rozkazów (RISC).},%
+		isTrue2={Tak},%
+		answer2={Czy występuje model wymiany danych typu pamięć - pamięć},%
+		explain2={Tak, posiada również niewielką ilość rejestrów.},%
+		isTrue3={Nie},%
+		answer3={Jest mała liczba rozkazów},%
+		explain3={Nie, w tej architekturze jest PEŁNA (complex) lista rozkazów. Niektóre z zaawansowanych pleceń nawet nie były wykorzystywane, i bum! tak powstał RISC.},%
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={Cechy architektury RISC}%
+	}{%
+		isTrue1={Tak},%
+		answer1={Czy występuje model wymiany danych typu rej-rej},%
+		explain1={Tak, a komunikacja z pamięcią operacyjną odbywa się wyłącznie za pomocą rozkazów LOAD i STORE.},%
+		isTrue2={Tak},%
+		answer2={Jest mała liczba trybów adresowania},%
+		explain2={Tak, raptem 4 w procesorze RISC I podczas gdy CISCi mogą mieć ich kilkanaście, w tym takie bardzo złożone.},%
+		isTrue3={Nie},%
+		answer3={Jest wykonywanych kilka rozkazów w jednym takcie},%
+		explain3={Fałsz. Prawdziwe wykonywanie wielu rozkazów w jednym takcie wymaga superskalarnosci - wielu jednostek potokowych. Cechą architektury RISC jest potokowość, ale pojedyncza.},%
+		isTrue4={Tak},%
+		answer4={Jest wykonywanych kilka rozkazów w jednym takcie (w danej chwili czasu)},%
+		explain4={Chodzi o przetwarzanie potokowe. Tu jest haczyk - pierwszy procesor RISC I (1980) stawiał sobie za cel wykonanie \emph{jednego rozkazu w jednym takcie} i dokładnie tak brzmiało jego założenie projektowe. Jednak jego fizyczna realizacja (1982) posiadała dwustopniowy potok. Również w wykładach jako cecha tej architektury jest napisane "Intensywne wykorzystanie przetwarzania potokowego", co odnosi się do faktu, że obecnie nie ma procesora typu RISC, który go nie ma. Wg mnie prawda.},%
+		isTrue5={Nie},%
+		answer5={Jest wykonywanych kilka instrukcji procesora w jednym rozkazie asemblerowym}, %
+		explain5={Nic mi na ten temat nie wiadomo. Brzmi jednak zbyt hardo i odlegle od tematu zmniejszania ilości rozkazów.}, %
+		isTrue6={Tak}, %
+		answer6={Układ sterowania w postaci logiki szytej}, %
+		explain6={Tak.}, %
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={Przepustowość (moc obliczeniowa) dużych komputerów jest podawana w:}%
+	}{%
+		isTrue1={Tak},%
+		answer1={GFLOPS},%
+		explain1={},%
+		isTrue2={Nie},%
+		answer2={Liczbie instrukcji wykonywanych na sekundę},%
+		explain2={},%
+		isTrue3={Tak},%
+		answer3={Liczbie operacji zmiennoprzecinkowych na sekundę},%
+		explain3={},%
+		isTrue4={Nie},%
+		answer4={Mb/sek},%
+		explain4={To jest do zapamiętania na prostu - takie są standardy},%
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={Podstawą klasyfikacji Flynna jest}%
+	}{%
+		isTrue1={Nie},%
+		answer1={Liczba jednostek przetwarzających i sterujących w systemach komputerowych},%
+		explain1={},%
+		isTrue2={Nie},%
+		answer2={Protokół dostępu do pamięci operacyjnej},%
+		explain2={},%
+		isTrue3={Nie},%
+		answer3={Liczba modułów pamięci operacyjnej w systemach komputerowych},%
+		explain3={},%
+		isTrue4={Tak},%
+		answer4={Liczba strumieni rozkazów i danych w systemach komputerowych},%
+		explain4={To po prostu należy zapamiętać. \textbf{Kryterium klasyfikacji Flynna jest \emph{liczba strumieni rozkazów} oraz \emph{liczba strumieni danych} w systemie komputerowym. NIC WIĘCEJ, NIC MNIEJ.\\Albo inaczej: \emph{$Liczba\_strumieni\times(rozkazow+danych)$}}},%
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
 % --- PYTANIE 20
 \question{%
 	question={Rozkazy wektorowe mogą być realizowane przy wykorzystaniu}%
 }{%
-isTrue1={Tak},%
-answer1={Macierzy elementów przetwarzających},%
-explain1={Tak, komputery macierzowe operują na rozkazach wektorowych.},%
-isTrue2={Nie},%
-answer2={Zestawu procesorów superskalarnych},%
-explain2={Procesory superskalarne w założeniu nie posiadają rozkazów wektorowych.},%
-isTrue3={Tak},%
-answer3={Technologii MMX},%
-explain3={Tak, jest to pochodna technologia modelu SIMD, wykonuje operacje na krótkich wektorach (64-bit)},%
-isTrue4={Nie},%
-answer4={Sieci połączeń typu krata},%
-explain4={Jest to sieć połączeń, która łączy jednostki przetwarzające w komputerze macierzowym. Raczej na wektorach na częsć komputera nie działa.},%
-isTrue5={Tak},%
-answer5={Potokowych jednostek arytmetycznych}, %
-explain5={Tak, takie znajdują się w komputerach wektorowych.}, %
+	isTrue1={Tak},%
+	answer1={Macierzy elementów przetwarzających},%
+	explain1={Tak, komputery macierzowe operują na rozkazach wektorowych.},%
+	isTrue2={Nie},%
+	answer2={Zestawu procesorów superskalarnych},%
+	explain2={Procesory superskalarne w założeniu nie posiadają rozkazów wektorowych.},%
+	isTrue3={Tak},%
+	answer3={Technologii MMX},%
+	explain3={Tak, jest to pochodna technologia modelu SIMD, wykonuje operacje na krótkich wektorach (64-bit)},%
+	isTrue4={Nie},%
+	answer4={Sieci połączeń typu krata},%
+	explain4={Jest to sieć połączeń, która łączy jednostki przetwarzające w komputerze macierzowym. Raczej na wektorach na częsć komputera nie działa.},%
+	isTrue5={Tak},%
+	answer5={Potokowych jednostek arytmetycznych}, %
+	explain5={Tak, takie znajdują się w komputerach wektorowych.}, %
 }
-
-
-\question{%
-	question={Architektura superskalarna}%
-}{%
-isTrue1={Nie},%
-answer1={Dotyczy systemów SMP},%
-explain1={Zdecydowanie nie tylko. Architektura superskalarna wymaga mechanizmu potokowego, czyli dotyczy głównie architektury RISC.},%
-isTrue2={Nie},%
-answer2={Wymaga zastosowania protokołu MESI},%
-explain2={Nie, architektura superskalarna wymaga jedynie zastosowania co najmniej dwóch jednostek potokowych.},%
-isTrue3={Tak},%
-answer3={Umożliwia równoległe wykonywanie kilku rozkazów w jednym procesorze},%
-explain3={Tak, i taki jest cel jej istnienia. Umożliwia to mechanizm potokowy.},%
-isTrue4={Nie},%
-answer4={Wywodzi się z architektury VLIW},%
-explain4={Wręcz odwrotnie, to VLIW wykorzystuje architekturę superskalarną na której opiera swój podział rozkazów na paczki.},%
-}
-
-
-\question{%
-	question={Klastry}%
-}{%
-isTrue1={Nie},%
-answer1={Mają średnią skalowalność},%
-explain1={},%
-isTrue2={Nie},%
-answer2={Wykorzystują model wspólnej pamięci},%
-explain2={},%
-isTrue3={Tak},%
-answer3={W węzłach mogą wykorzystywać systemy SMP},%
-explain3={},%
-isTrue4={Tak},%
-answer4={Do komunikacji między procesami wykorzystują przesył komunikatów},%
-explain4={},%
-isTrue5={Nie},%
-answer5={Wykorzystują przełącznicę krzyżową jako sieć łączącą węzły}, %
-explain5={}, %
-isTrue6={Tak}, %
-answer6={W każdym węźle posiadają pełną instalację systemu operacyjnego}, %
-explain6={}, %
-}
-
-
-\question{%
-	question={Pojęcie równoległości na poziomie rozkazów}%
-}{%
-isTrue1={Nie},%
-answer1={Dotyczy architektury MIMD},%
-explain1={Nie, ten rodzaj równoległości dotyczy mechanizmów potokowych (CISC i RISC), architektury superskalarnej oraz VLIW.},%
-isTrue2={Tak},%
-answer2={Odnosi się m.in. do przetwarzania potokowego},%
-explain2={Tak, ideą mechanizmu potoków jest zrównoleglenie rozkazów i możliwość wykonywania wielu z nich w tej samej chwili czasu.},%
-isTrue3={Nie},%
-answer3={Dotyczy architektury MPP},%
-explain3={Nie, patrz wyżej.},%
-isTrue4={Tak},%
-answer4={Dotyczy m.in. architektury superskalarnej},%
-explain4={Tak, patrz wyżej.},%
-}
-
-
-\question{%
-	question={Systemy wieloprocesorowe z pamięcią wspólną}%
-}{%
-isTrue1={Nie},%
-answer1={Zapewniają jednorodny dostęp do pamięci},%
-explain1={},%
-isTrue2={Tak},%
-answer2={Mogą wykorzystywać procesory CISC},%
-explain2={},%
-isTrue3={Tak},%
-answer3={Są wykorzystywane w klastrach},%
-explain3={},%
-isTrue4={Nie},%
-answer4={Wykorzystują przesył komunikatów między procesorami},%
-explain4={},%
-isTrue5={Tak},%
-answer5={Wykorzystują katalog do utrzymania spójności pamięci podręcznych}, %
-explain5={}, %
-}
-
-
-% --- PYTANIE 25
-\question{%
-	question={Hazard danych}%
-}{%
-isTrue1={Tak},%
-answer1={Czasami może być usunięty przez zmianę kolejności wykonania rozkazów},%
-explain1={Tak, służy do tego mechanizm skoków opóźnionych, który odbywa się na poziomie kompilacji programu.},%
-isTrue2={Nie},%
-answer2={Nie występuje w architekturze superskalarnej},%
-explain2={Występuje wszędzie tam gdzie jest potokowe przetwarzania rozkazów.},%
-isTrue3={Nie},%
-answer3={Jest eliminowany przez zastosowanie specjalnego bitu w kodzie program},%
-explain3={Nic mi o tym nie wiadomo. Pewne dodatkowe bity są wykorzystywane w mechanizmie przewidywania rozgałęzień, który służy do eliminacji hazardu, jednak on to odbywa się PRZED realizacją programu i sprowadza się do zmiany kolejnosci wykonywania rozkazów przez kompilator. Nic nie dodaje do treści programu.},%
-isTrue4={Nie},%
-answer4={Może wymagać wyczyszczenia potoku i rozpoczęcia nowej (...)},%
-explain4={Nie wiem jak hazard danych może czegokolwiek wymagać skoro jest zjawiskiem ubocznym i je eliminujemy. Sprzętowa i programowa eliminacja hazardu jedynie może doprowadzić do \textbf{wstrzymania} napełniania potoku.},%
-}
-
-
-\question{%
-	question={Przetwarzanie wielowątkowe}%
-}{%
-isTrue1={Tak},%
-answer1={Zapewnia lepsze wykorzystanie potoków},%
-explain1={Tak, ma na celu minimalizację strat cykli w trakcie realizacji wątku, jakie mogą powstać na wskutek:\\ - chybionych odwołań do pamięci podręcznej;\\- błędów w przewidywaniu rozgałęzień;\\- zależności między argumentami},%
-isTrue2={Tak},%
-answer2={Minimalizuje straty wynikające z chybionych odwołań do pamięci podręcznej},%
-explain2={Tak, patrz wyżej.},%
-isTrue3={Tak},%
-answer3={Wymaga zwielokrotnienia zasobów procesora (rejestry, liczniki rozkazów, itp.)},%
-explain3={Niestety tak, jest to warunek sprzętowej realizacji wielowątkowości.},%
-isTrue4={Nie},%
-answer4={Nie może być stosowane w przypadku hazardu danych},%
-explain4={Nie, hazard danych wynika z zależności między argumentami, które są naturalnym ryzykiem przy stosowaniu mechanizmu potokowego. Nie powinny być blokowane z tego powodu, tym bardziej, że wielowątkowość ma dodatkowo chronić liczbę cykli przed zgubnym wpływem hazardu.}, %
-}
-
-
-\question{%
-	question={Okna rejestrów}%
-}{%
-isTrue1={Nie},%
-answer1={Chronią przez hazardem danych},%
-explain1={Lolnope, od tego są mechanizmy skoków opóźnionych i przewidywania rozgałęzień. Okno rejestrów zapewnia ciągłe i optymalne wykonywanie procedur.},%
-isTrue2={Tak},%
-answer2={Minimalizują liczbę odwołań do pamięci operacyjnej przy operacjach wywołania procedur},%
-explain2={Tak, dokładnie do tego one służą. Rejestr niski procedury A staje się rejestrem wysokim procedury B itd. Innymi słowy, procedura A wywołuje procedurę B, i tak dalej. I po coś w tym wszystkim są rejestry globalne.},%
-isTrue3={Nie},%
-answer3={Są charakterystyczne dla architektury CISC},%
-explain3={Nie, zostały zaprojektowane specjalnie dla architektury RISC. Jako pierwszy posiadał je procesor RISC I.},%
-isTrue4={Nie},%
-answer4={Są zamykane po błędnym przewidywaniu wykonania skoków warunkowych.},%
-explain4={W mechanizmie prognozowania rozgałęzień jest możliwość błędnego przewidywania. Jednak błędna prognoza powoduje tylko zmianę strategii (przewidywanie wykonania lub niewykonania), a nie zamykanie okna.},%
-isTrue5={Tak},%
-answer5={Są przesuwane przy operacjach wywołania procedur}, %
-explain5={Tak, z każdą nową wywołaną procedurą okno rejestrów przesuwane jest w dół (ze 137 do 0)}, %
-}
-
-
-\question{%
-	question={Tablica historii rozgałęzień}%
-}{%
-isTrue1={Tak},%
-answer1={Zawiera m.in. adresy rozkazów rozgałęzień},%
-explain1={Tak, tablica ta zawiera bit ważności, \emph{adres rozkazu rozgałęzienia}, bity historii oraz \emph{adres docelowy rozgałęzienia}.},%
-isTrue2={Tak},%
-answer2={Pozwala zminimalizować liczbę błędnych przewidywań rozgałęzień w zagnieżdżonej pętli},%
-explain2={Tak, z tego co wiem jest strategią dynamiczną i najbardziej optymalną ze wszystkich - skończony automat przewidywania rozgałęzień oparty na tej tablicy (z dwoma bitami historii) może być zrealizowany na dwóch bitach.},%
-isTrue3={Nie},%
-answer3={Nie może być stosowana w procesorach CISC},%
-explain3={Ten mechanizm służy zabezpieczeniu przed hazardem, który występuje w przetwarzaniu potokowym, a z tego korzystają zarówno CISC jak i RISC.},%
-isTrue4={Nie},%
-answer4={Jest obsługiwana przez jądro systemu operacyjnego},%
-explain4={Chyba nie, ten mechanizm znajduje się w sprzęcie procesora.},%
-}
-
-
-
-\question{%
-	question={Rozkazy wektorowe}%
-}{%
-isTrue1={Nie},%
-answer1={Nie mogą być wykonywane bez użycia potokowych jednostek arytmetycznych},%
-explain1={Mogą. Komputery macierzowe ich nie posiadają i wykonują rozkazy wektorowe sprawnie.},%
-isTrue2={Tak},%
-answer2={W komputerach wektorowych ich czas wykonania jest wprost proporcjonalny do długości wektora},%
-explain2={Tak, na przykładzie rozkazu dodawania wektorów widać, że czas rośnie równomiernie wraz z ilością elementów wektora.\\$t_{w}=t_{start}+(n-1)\times\tau$},%
-isTrue3={Tak},%
-answer3={Są charakterystyczne dla architektury SIMD},%
-explain3={Tak, z niej się zrodziły, tak samo jak m.in. technologie MMX i SSE.},%
-isTrue4={Nie},%
-answer4={Są rozkazami dwuargumentowymi i w wyniku zawsze dają wektor},%
-explain4={Nie, mogą operować na 1 argumencie na przykład. Rozkaz może być też 3 argumentowy, jak rozkaz dodawania VADD. Pierwszym argumentem jest rejestr docelowy, zawartość pozostałych dwóch jest dodana.},%
-}
-
-
-% --- PYTANIE 30
-\question{%
-	question={Model SIMD}%
-}{%
-isTrue1={Nie},%
-answer1={Był wykorzystywany tylko w procesorach macierzowych},%
-explain1={Nie, o niego oparte są również m.in. procesory wektorowe, GPU, technologie MMX oraz SSE. Nie, był również wykorzystywany w komputerach wektorowych, rozszerzeniach SIMD oraz GPU.},%
-isTrue2={Tak},%
-answer2={Jest wykorzystywany w multimedialnych rozszerzeniach współczesnych procesorów},%
-explain2={},%
-isTrue3={Tak},%
-answer3={Jest wykorzystywany w heterogenicznej architekturze PowerXCell},%
-explain3={},%
-isTrue4={Tak},%
-answer4={Zapewnia wykonanie tej samej operacji na wektorach argumentów},%
-explain4={},%
-}
-
-
-\question{%
-	question={Przesył komunikatów}%
-}{%
-isTrue1={Tak},%
-answer1={Ma miejsce w systemach MPP},%
-explain1={},%
-isTrue2={Nie},%
-answer2={W systemach MPP II-giej generacji angażuje wszystkie procesory na drodze przesyłu},%
-explain2={},%
-isTrue3={Tak},%
-answer3={Ma miejsce w klastrach},%
-explain3={},%
-}
-
-
-\question{%
-	question={Cechami wyróżniającymi klastry są}%
-}{%
-isTrue1={Tak},%
-answer1={Niezależność programowa każdego węzła},%
-explain1={},%
-isTrue2={Nie},%
-answer2={Fizycznie rozproszona, ale logicznie wspólna pamięć operacyjna},%
-explain2={},%
-isTrue3={Nie},%
-answer3={Nieduża skalowalność},%
-explain3={},%
-isTrue4={Tak},%
-answer4={Na ogół duża niezawodność},%
-explain4={},%
-}
-
-
-\question{%
-	question={Systemy wieloprocesorowe z pamięcią rozproszoną}%
-}{%
-isTrue1={Nie},%
-answer1={Wyróżniają się bardzo dużą skalowalnością},%
-explain1={},%
-isTrue2={Nie},%
-answer2={Są budowane z węzłów, którymi są klastry},%
-explain2={},%
-isTrue3={Tak},%
-answer3={Realizują synchronicznie jeden wspólny program},%
-explain3={},%
-isTrue4={Nie},%
-answer4={Wymagają zapewnienia spójności pamięci podręcznych pomiędzy węzłami},%
-explain4={},%
-}
-
-
-\question{%
-	question={Problemy z potokowym wykonywaniem rozkazów skoków (rozgałęzień) mogą być wyeliminowane lub ograniczone przy pomocy}%
-}{%
-isTrue1={Nie},%
-answer1={Zapewnienia spójności pamięci podręcznej},%
-explain1={Nie, to problem komputerów wieloprocesorowych.},%
-isTrue2={Tak},%
-answer2={Tablicy historii rozgałęzień},%
-explain2={Tak, to najprawdopodobniej najlepszy służący ku temu mechanizm. Stara się przewidywać czy skok będzie wykonany bądź nie, wykorzystuje do tego kilka strategii.},%
-isTrue3={Nie},%
-answer3={Techniki wyprzedzającego pobrania argumentu},%
-explain3={Nie, ten mechanizm służy do eliminacji hazardu danych - zależności między argumentami.},%
-isTrue4={Tak},%
-answer4={Wystawienia do programu rozkazów typu „nic nie rób”},%
-explain4={Tak, tym rozkazem jest \emph{NOP} i jest wstawiany przez mechanizm skoków opóźnionych, który służy do zabezpieczania potoku.},%
-isTrue5={Nie},%
-answer5={Protokołu MESI}, %
-explain5={Nie, on jest od zapewnienia spójności pamięci wspólnej czy jakoś tak.}, %
-isTrue6={Tak}, %
-answer6={Wykorzystania techniki skoków opóźniających}, %
-explain6={Tak, umożliwiają ona modyfikację programu (wstawienie rozkazu NOP), albo jego optymalizację (zamiana kolejności wykonywania rozkazów.) Mechanizm ten opóźnia efekt skoku o jeden rozkaz, co zapewnia, że rozkaz po skoku będzie w całości wykonany.}, %
-isTrue7={Nie}, %
-answer7={Technologii MMX}, %
-explain7={}, %
-}
-
-
-% --- PYTANIE 35
-\question{%
-	question={W architekturze ccNUMA}%
-}{%
-isTrue1={Tak},%
-answer1={Każdy procesor ma dostęp do pamięci operacyjnej każdego węzła},%
-explain1={},%
-isTrue2={Nie},%
-answer2={Spójność pamięci pomiędzy węzłami jest utrzymywana za pomocą protokołu MESI},%
-explain2={},%
-isTrue3={Tak},%
-answer3={Dane są wymieniane między węzłami w postaci linii pamięci podręcznej},%
-explain3={},%
-isTrue4={Tak},%
-answer4={Pamięć operacyjna jest fizycznie rozproszona pomiędzy węzłami, ale wspólna logicznie},%
-explain4={},%
-}
-
-
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={Architektura superskalarna}%
+	}{%
+		isTrue1={Nie},%
+		answer1={Dotyczy systemów SMP},%
+		explain1={Zdecydowanie nie tylko. Architektura superskalarna wymaga mechanizmu potokowego, czyli dotyczy głównie architektury RISC.},%
+		isTrue2={Nie},%
+		answer2={Wymaga zastosowania protokołu MESI},%
+		explain2={Nie, architektura superskalarna wymaga jedynie zastosowania co najmniej dwóch jednostek potokowych.},%
+		isTrue3={Tak},%
+		answer3={Umożliwia równoległe wykonywanie kilku rozkazów w jednym procesorze},%
+		explain3={Tak, i taki jest cel jej istnienia. Umożliwia to mechanizm potokowy.},%
+		isTrue4={Nie},%
+		answer4={Wywodzi się z architektury VLIW},%
+		explain4={Wręcz odwrotnie, to VLIW wykorzystuje architekturę superskalarną na której opiera swój podział rozkazów na paczki.},%
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={Klastry}%
+	}{%
+		isTrue1={Nie},%
+		answer1={Mają średnią skalowalność},%
+		explain1={Mają największą skalowalność ze wszystkich poznanych systemów. Łatwiej go rozszerzać niż MPP, ponieważ jest jednym wielkim systemem komputerowym.},%
+		isTrue2={Nie},%
+		answer2={Wykorzystują model wspólnej pamięci},%
+		explain2={Nie, jest rozproszona fizycznie i logicznie.},%
+		isTrue3={Tak},%
+		answer3={W węzłach mogą wykorzystywać systemy SMP},%
+		explain3={Tak, serwery SMP są jednymi z dopuszczalnych węzłów. Drugimi są pełne komputery PC. Patrz: węzły w klastrach \ref{subsubsec:wezlyKlastry}},%
+		isTrue4={Tak},%
+		answer4={Do komunikacji między procesami wykorzystują przesył komunikatów},%
+		explain4={Tak, bo jest efektownym rozwiązaniem, i tylko go wykorzystują.},%
+		isTrue5={Nie},%
+		answer5={Wykorzystują przełącznicę krzyżową jako sieć łączącą węzły}, %
+		explain5={Nie, ona jest wykorzystywana tylko w systemach UMA, gdzie pamięć wspólna jest fizycznie jednorodna.}, %
+		isTrue6={Tak}, %
+		answer6={W każdym węźle posiadają pełną instalację systemu operacyjnego}, %
+		explain6={Tak, węzłem musi być albo serwer SMP, albo PC, które muszą mieć swoje systemy operacyjne.}, %
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={Pojęcie równoległości na poziomie rozkazów}%
+	}{%
+		isTrue1={Nie},%
+		answer1={Dotyczy architektury MIMD},%
+		explain1={Nie, ten rodzaj równoległości dotyczy mechanizmów potokowych (CISC i RISC), architektury superskalarnej oraz VLIW.},%
+		isTrue2={Tak},%
+		answer2={Odnosi się m.in. do przetwarzania potokowego},%
+		explain2={Tak, ideą mechanizmu potoków jest zrównoleglenie rozkazów i możliwość wykonywania wielu z nich w tej samej chwili czasu.},%
+		isTrue3={Nie},%
+		answer3={Dotyczy architektury MPP},%
+		explain3={Nie, patrz wyżej.},%
+		isTrue4={Tak},%
+		answer4={Dotyczy m.in. architektury superskalarnej},%
+		explain4={Tak, patrz wyżej.},%
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={Systemy wieloprocesorowe z pamięcią wspólną}%
+	}{%
+		isTrue1={Nie},%
+		answer1={Zapewniają jednorodny dostęp do pamięci},%
+		explain1={Nie, bo NUMA nie zapewnia. Jednorodny dostęp występuje wtedy, gdy procesor ma dostęp wyłącznie do swojej pamięci podręcznej. Niejednorodny wtedy, gdy ma dostęp również do pamięci nielokalnej (pamięci podręcznej innych procesorów.)},%
+		isTrue2={Tak},%
+		answer2={Mogą wykorzystywać procesory CISC},%
+		explain2={Nie ma takiego ograniczenia.},%
+		isTrue3={Tak},%
+		answer3={Są wykorzystywane w klastrach},%
+		explain3={Tak, węzły w postaci serwerów SMP.},%
+		isTrue4={Nie},%
+		answer4={Wykorzystują przesył komunikatów między procesorami},%
+		explain4={Nie, wykorzystują protokół MESI do \emph{snoopingu} oraz katalogi w celu zapewnienia spójności pamięci podręcznej.},%
+		isTrue5={Tak},%
+		answer5={Wykorzystują katalog do utrzymania spójności pamięci podręcznych}, %
+		explain5={Patrz wyżej.}, %
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	% --- PYTANIE 25
+	\question{%
+		question={Hazard danych}%
+	}{%
+		isTrue1={Tak},%
+		answer1={Czasami może być usunięty przez zmianę kolejności wykonania rozkazów},%
+		explain1={Tak, służy do tego mechanizm skoków opóźnionych, który odbywa się na poziomie kompilacji programu.},%
+		isTrue2={Nie},%
+		answer2={Nie występuje w architekturze superskalarnej},%
+		explain2={Występuje wszędzie tam gdzie jest potokowe przetwarzania rozkazów.},%
+		isTrue3={Nie},%
+		answer3={Jest eliminowany przez zastosowanie specjalnego bitu w kodzie program},%
+		explain3={Nic mi o tym nie wiadomo. Pewne dodatkowe bity są wykorzystywane w mechanizmie przewidywania rozgałęzień, który służy do eliminacji hazardu, jednak on to odbywa się PRZED realizacją programu i sprowadza się do zmiany kolejnosci wykonywania rozkazów przez kompilator. Nic nie dodaje do treści programu.},%
+		isTrue4={Nie},%
+		answer4={Może wymagać wyczyszczenia potoku i rozpoczęcia nowej (...)},%
+		explain4={Nie wiem jak hazard danych może czegokolwiek wymagać skoro jest zjawiskiem ubocznym i je eliminujemy. Sprzętowa i programowa eliminacja hazardu jedynie może doprowadzić do \textbf{wstrzymania} napełniania potoku.},%
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={Przetwarzanie wielowątkowe}%
+	}{%
+		isTrue1={Tak},%
+		answer1={Zapewnia lepsze wykorzystanie potoków},%
+		explain1={Tak, ma na celu minimalizację strat cykli w trakcie realizacji wątku, jakie mogą powstać na wskutek:\\ - chybionych odwołań do pamięci podręcznej;\\- błędów w przewidywaniu rozgałęzień;\\- zależności między argumentami},%
+		isTrue2={Tak},%
+		answer2={Minimalizuje straty wynikające z chybionych odwołań do pamięci podręcznej},%
+		explain2={Tak, patrz wyżej.},%
+		isTrue3={Tak},%
+		answer3={Wymaga zwielokrotnienia zasobów procesora (rejestry, liczniki rozkazów, itp.)},%
+		explain3={Niestety tak, jest to warunek sprzętowej realizacji wielowątkowości.},%
+		isTrue4={Nie},%
+		answer4={Nie może być stosowane w przypadku hazardu danych},%
+		explain4={Nie, hazard danych wynika z zależności między argumentami, które są naturalnym ryzykiem przy stosowaniu mechanizmu potokowego. Nie powinny być blokowane z tego powodu, tym bardziej, że wielowątkowość ma dodatkowo chronić liczbę cykli przed zgubnym wpływem hazardu.}, %
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={Okna rejestrów}%
+	}{%
+		isTrue1={Nie},%
+		answer1={Chronią przez hazardem danych},%
+		explain1={Lolnope, od tego są mechanizmy skoków opóźnionych i przewidywania rozgałęzień. Okno rejestrów zapewnia ciągłe i optymalne wykonywanie procedur.},%
+		isTrue2={Tak},%
+		answer2={Minimalizują liczbę odwołań do pamięci operacyjnej przy operacjach wywołania procedur},%
+		explain2={Tak, dokładnie do tego one służą. Rejestr niski procedury A staje się rejestrem wysokim procedury B itd. Innymi słowy, procedura A wywołuje procedurę B, i tak dalej. I po coś w tym wszystkim są rejestry globalne.},%
+		isTrue3={Nie},%
+		answer3={Są charakterystyczne dla architektury CISC},%
+		explain3={Nie, zostały zaprojektowane specjalnie dla architektury RISC. Jako pierwszy posiadał je procesor RISC I.},%
+		isTrue4={Nie},%
+		answer4={Są zamykane po błędnym przewidywaniu wykonania skoków warunkowych.},%
+		explain4={W mechanizmie prognozowania rozgałęzień jest możliwość błędnego przewidywania. Jednak błędna prognoza powoduje tylko zmianę strategii (przewidywanie wykonania lub niewykonania), a nie zamykanie okna.},%
+		isTrue5={Tak},%
+		answer5={Są przesuwane przy operacjach wywołania procedur}, %
+		explain5={Tak, z każdą nową wywołaną procedurą okno rejestrów przesuwane jest w dół (ze 137 do 0)}, %
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={Tablica historii rozgałęzień}%
+	}{%
+		isTrue1={Tak},%
+		answer1={Zawiera m.in. adresy rozkazów rozgałęzień},%
+		explain1={Tak, tablica ta zawiera bit ważności, \emph{adres rozkazu rozgałęzienia}, bity historii oraz \emph{adres docelowy rozgałęzienia}.},%
+		isTrue2={Tak},%
+		answer2={Pozwala zminimalizować liczbę błędnych przewidywań rozgałęzień w zagnieżdżonej pętli},%
+		explain2={Tak, z tego co wiem jest strategią dynamiczną i najbardziej optymalną ze wszystkich - skończony automat przewidywania rozgałęzień oparty na tej tablicy (z dwoma bitami historii) może być zrealizowany na dwóch bitach.},%
+		isTrue3={Nie},%
+		answer3={Nie może być stosowana w procesorach CISC},%
+		explain3={Ten mechanizm służy zabezpieczeniu przed hazardem, który występuje w przetwarzaniu potokowym, a z tego korzystają zarówno CISC jak i RISC.},%
+		isTrue4={Nie},%
+		answer4={Jest obsługiwana przez jądro systemu operacyjnego},%
+		explain4={Chyba nie, ten mechanizm znajduje się w sprzęcie procesora.},%
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={Rozkazy wektorowe}%
+	}{%
+		isTrue1={Nie},%
+		answer1={Nie mogą być wykonywane bez użycia potokowych jednostek arytmetycznych},%
+		explain1={Mogą. Komputery macierzowe ich nie posiadają i wykonują rozkazy wektorowe sprawnie.},%
+		isTrue2={Tak},%
+		answer2={W komputerach wektorowych ich czas wykonania jest wprost proporcjonalny do długości wektora},%
+		explain2={Tak, na przykładzie rozkazu dodawania wektorów widać, że czas rośnie równomiernie wraz z ilością elementów wektora.\\$t_{w}=t_{start}+(n-1)\times\tau$},%
+		isTrue3={Tak},%
+		answer3={Są charakterystyczne dla architektury SIMD},%
+		explain3={Tak, z niej się zrodziły, tak samo jak m.in. technologie MMX i SSE.},%
+		isTrue4={Nie},%
+		answer4={Są rozkazami dwuargumentowymi i w wyniku zawsze dają wektor},%
+		explain4={Nie, mogą operować na 1 argumencie na przykład. Rozkaz może być też 3 argumentowy, jak rozkaz dodawania VADD. Pierwszym argumentem jest rejestr docelowy, zawartość pozostałych dwóch jest dodana.},%
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	% --- PYTANIE 30
+	\question{%
+		question={Model SIMD}%
+	}{%
+		isTrue1={Nie},%
+		answer1={Był wykorzystywany tylko w procesorach macierzowych},%
+		explain1={Nie, o niego oparte są również m.in. procesory wektorowe, GPU, technologie MMX oraz SSE. Nie, był również wykorzystywany w komputerach wektorowych, rozszerzeniach SIMD oraz GPU.},%
+		isTrue2={Tak},%
+		answer2={Jest wykorzystywany w multimedialnych rozszerzeniach współczesnych procesorów},%
+		explain2={Tak, multimedialne rozszerzenie służą do działania na wielu rejestrach jednocześnie, co umożliwiają m.in. technologie MMX i SSE.},%
+		isTrue3={Tak},%
+		answer3={Jest wykorzystywany w heterogenicznej architekturze PowerXCell},%
+		explain3={Być może XD},%
+		isTrue4={Tak},%
+		answer4={Zapewnia wykonanie tej samej operacji na wektorach argumentów},%
+		explain4={Znaczenie: \emph{Single Instruction Multiple Device}. Wykonuje jedną instrukcję na wielu urządzeniach.},%
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={Przesył komunikatów}%
+	}{%
+		isTrue1={Tak},%
+		answer1={Ma miejsce w systemach MPP},%
+		explain1={Tak, w MPP oraz w klastrach.},%
+		isTrue2={Nie},%
+		answer2={W systemach MPP II-giej generacji angażuje wszystkie procesory na drodze przesyłu},%
+		explain2={Nie, bo w II generacji są routery węzłów pośredniczących, które nie angażują procesorów. W I generacji wszystkie komputery były zaangażowane, ponieważ rolę routera pełnił sam procesor.},%
+		isTrue3={Tak},%
+		answer3={Ma miejsce w klastrach},%
+		explain3={Tak, patrz wyżej.},%
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={Cechami wyróżniającymi klastry są}%
+	}{%
+		isTrue1={Tak},%
+		answer1={Niezależność programowa każdego węzła},%
+		explain1={Tak, bo każdy węzeł na swój osobny system operacyjny.},%
+		isTrue2={Nie},%
+		answer2={Fizycznie rozproszona, ale logicznie wspólna pamięć operacyjna},%
+		explain2={Jest fizycznie i logicznie rozproszona.},%
+		isTrue3={Nie},%
+		answer3={Nieduża skalowalność},%
+		explain3={Kurwa, nie XD Klastry mają arcydupną skalowalność.},%
+		isTrue4={Tak},%
+		answer4={Na ogół duża niezawodność},%
+		explain4={Tak, po to się je buduje i na ogół ją mają. Redundancja węzłów, mirroring dysków, kontrola funkcjonowania węzłów. Patrz: Niezawodność klastrów \ref{subsec:niezawodnoscKlastrow}},%
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={Systemy wieloprocesorowe z pamięcią rozproszoną}%
+	}{%
+		isTrue1={Tak},%
+		answer1={Wyróżniają się bardzo dużą skalowalnością},%
+		explain1={Posiadają ogromną skalowalność, tylko klastry mają lepszą.},%
+		isTrue2={Nie},%
+		answer2={Są budowane z węzłów, którymi są klastry},%
+		explain2={Węzłami mogą być tylko systemy UMA i NUMA oraz zwykłe pojedyncze procesory.},%
+		isTrue3={Nie},%
+		answer3={Realizują synchronicznie jeden wspólny program},%
+		explain3={Nie muszą być synchronicznie wykonywane (są synchronizacje, ale jeden węzeł może realizować szybciej pewne części programu)},%
+		isTrue4={Nie},%
+		answer4={Wymagają zapewnienia spójności pamięci podręcznych pomiędzy węzłami},%
+		explain4={Wręcz nie powinny jej zapewniać, każdy węzeł pracuje osobno.},%
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={Problemy z potokowym wykonywaniem rozkazów skoków (rozgałęzień) mogą być wyeliminowane lub ograniczone przy pomocy}%
+	}{%
+		isTrue1={Nie},%
+		answer1={Zapewnienia spójności pamięci podręcznej},%
+		explain1={Nie, to problem komputerów wieloprocesorowych.},%
+		isTrue2={Tak},%
+		answer2={Tablicy historii rozgałęzień},%
+		explain2={Tak, to najprawdopodobniej najlepszy służący ku temu mechanizm. Stara się przewidywać czy skok będzie wykonany bądź nie, wykorzystuje do tego kilka strategii.},%
+		isTrue3={Nie},%
+		answer3={Techniki wyprzedzającego pobrania argumentu},%
+		explain3={Nie, ten mechanizm służy do eliminacji hazardu danych - zależności między argumentami.},%
+		isTrue4={Tak},%
+		answer4={Wystawienia do programu rozkazów typu „nic nie rób”},%
+		explain4={Tak, tym rozkazem jest \emph{NOP} i jest wstawiany przez mechanizm skoków opóźnionych, który służy do zabezpieczania potoku.},%
+		isTrue5={Nie},%
+		answer5={Protokołu MESI}, %
+		explain5={Nie, on jest od zapewnienia spójności pamięci wspólnej czy jakoś tak.}, %
+		isTrue6={Tak}, %
+		answer6={Wykorzystania techniki skoków opóźniających}, %
+		explain6={Tak, umożliwiają ona modyfikację programu (wstawienie rozkazu NOP), albo jego optymalizację (zamiana kolejności wykonywania rozkazów.) Mechanizm ten opóźnia efekt skoku o jeden rozkaz, co zapewnia, że rozkaz po skoku będzie w całości wykonany.}, %
+		isTrue7={Nie}, %
+		answer7={Technologii MMX}, %
+		explain7={Polega zupełnie na czym innym.}, %
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	% --- PYTANIE 35
+	\question{%
+		question={W architekturze ccNUMA}%
+	}{%
+		isTrue1={Tak},%
+		answer1={Każdy procesor ma dostęp do pamięci operacyjnej każdego węzła},%
+		explain1={Tak, ponieważ architektura NUMA opiera się o niejednorodny dostęp do pamięci - każdy procesor ma pełny dostęp do pamięci lokalnej oraz nielokalnej, czyli pamięci podręcznych wszystkich innych procesorów.},%
+		isTrue2={Nie},%
+		answer2={Spójność pamięci pomiędzy węzłami jest utrzymywana za pomocą protokołu MESI},%
+		explain2={Nie, nie jest potrzebna spójność pamięci, ponieważ każdy procesor odczytuje potrzebne mu zmienne itp. pośrednio przez katalog.},%
+		isTrue3={Tak},%
+		answer3={Dane są wymieniane między węzłami w postaci linii pamięci podręcznej},%
+		explain3={Każda linia posiada pewną liczbę bajtów, które inne procesory mogą pobierać. Możliwe, że i katalogi korzystają z wymiany danych poprzez linie.},%
+		isTrue4={Tak},%
+		answer4={Pamięć operacyjna jest fizycznie rozproszona pomiędzy węzłami, ale wspólna logicznie},%
+		explain4={Dokładnie tak.},%
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
 \question{%
 	question={Dla sieci systemowych (SAN) są charakterystyczne}%
 }{%
-isTrue1={Tak},%
-answer1={Przesył komunikatów w trybie zdalnego DMA},%
-explain1={},%
-isTrue2={Tak},%
-answer2={Bardzo małe czasy opóźnień},%
-explain2={},%
-isTrue3={Nie},%
-answer3={Topologia typu hipersześcian},%
-explain3={},%
-isTrue4={Nie},%
-answer4={Niska przepustowość},%
-explain4={},%
+	isTrue1={Tak},%
+	answer1={Przesył komunikatów w trybie zdalnego DMA},%
+	explain1={Tak, bo przesyłamy dane między prockami, a DMA wykonuje to najszybciej.},%
+	isTrue2={Tak},%
+	answer2={Bardzo małe czasy opóźnień},%
+	explain2={Tak, rzędu pojedynczych mikrosekund.},%
+	isTrue3={Nie},%
+	answer3={Topologia typu hipersześcian},%
+	explain3={Bullshit, sieć jest taka jak topologia systemu, nie buduje się osobnej topologii.},%
+	isTrue4={Nie},%
+	answer4={Niska przepustowość},%
+	explain4={Noelonie, do pamięci potrzebna jest duża przepustowość, bo przechodzi przez nią dużo danych.},%
 }
-
-
-\question{%
-	question={W systemach wieloprocesorowych katalog służy do}%
-}{%
-isTrue1={Nie},%
-answer1={Śledzenia adresów w protokole MESI},%
-explain1={},%
-isTrue2={Nie},%
-answer2={Sterowania przesyłem komunikatów},%
-explain2={},%
-isTrue3={Tak},%
-answer3={Utrzymania spójności pamięci w systemach o niejednorodnym dostępie do pamięci},%
-explain3={},%
-isTrue4={Tak},%
-answer4={Realizacji dostępu do nielokalnych pamięci w systemach NUMA},%
-explain4={},%
-}
-
-
-\question{%
-	question={W procesorach superskalarnych}%
-}{%
-isTrue1={Tak},%
-answer1={Jest możliwe równoległe wykonywanie kilku rozkazów w jednym procesorze (rdzeniu)},%
-explain1={Tak, własnie taka jest idea stworzenia procesorów superskalaranych, by móc w jednym takcie wykonać $>1$ liczby instrukcji. Zapewnia to niepojedyncza liczba jednostek potokowych.},%
-isTrue2={Tak},%
-answer2={Rozszerzenia architektury wykorzystujące model SIMD umożliwiają wykonanie rozkazów wektorowych},%
-explain2={},%
-isTrue3={Nie},%
-answer3={Nie występuje prawdziwa zależność danych},%
-explain3={Niestety występuje, i prawdę mówiąc, występuje tutaj każdy rodzaj zależności między rozkazami: prawdziwa zależność danych, zależność wyjściowa oraz antyzależność.},%
-isTrue4={Tak},%
-answer4={Mogą wystąpić nowe formy hazardu danych: zależności wyjściowe między rozkazami oraz antyzależności},%
-explain4={Tak, patrz wyżej.},%
-}
-
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={W systemach wieloprocesorowych katalog służy do}%
+	}{%
+		isTrue1={Nie},%
+		answer1={Śledzenia adresów w protokole MESI},%
+		explain1={},%
+		isTrue2={Nie},%
+		answer2={Sterowania przesyłem komunikatów},%
+		explain2={},%
+		isTrue3={Tak},%
+		answer3={Utrzymania spójności pamięci w systemach o niejednorodnym dostępie do pamięci},%
+		explain3={},%
+		isTrue4={Tak},%
+		answer4={Realizacji dostępu do nielokalnych pamięci w systemach NUMA},%
+		explain4={},%
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={W procesorach superskalarnych}%
+	}{%
+		isTrue1={Tak},%
+		answer1={Jest możliwe równoległe wykonywanie kilku rozkazów w jednym procesorze (rdzeniu)},%
+		explain1={Tak, własnie taka jest idea stworzenia procesorów superskalaranych, by móc w jednym takcie wykonać $>1$ liczby instrukcji. Zapewnia to niepojedyncza liczba jednostek potokowych.},%
+		isTrue2={Tak},%
+		answer2={Rozszerzenia architektury wykorzystujące model SIMD umożliwiają wykonanie rozkazów wektorowych},%
+		explain2={},%
+		isTrue3={Nie},%
+		answer3={Nie występuje prawdziwa zależność danych},%
+		explain3={Niestety występuje, i prawdę mówiąc, występuje tutaj każdy rodzaj zależności między rozkazami: prawdziwa zależność danych, zależność wyjściowa oraz antyzależność.},%
+		isTrue4={Tak},%
+		answer4={Mogą wystąpić nowe formy hazardu danych: zależności wyjściowe między rozkazami oraz antyzależności},%
+		explain4={Tak, patrz wyżej.},%
+	}
+\end{minipage}
 
 \question{%
 	question={Efektywne wykorzystanie równoległości na poziomie danych umożliwiają}%

@@ -590,11 +590,14 @@
 %========================================	
 \section{Architektura SIMD}
 	\subsection{Co to jest?}
-		Cecha wyróżniająca dla programisty - rozkazy wektorowe (rozkazy z argumentami wektorowymi).\\
-		Dwa różne podejścia do sprzętowej realizacji rozkazów wektorowych:
 		\begin{itemize}
-			\item Komputery (procesory) macierzowe
-			\item Komputery wektorowe
+			\item Tłumaczenie \emph{Single Instruction Multiple Device}
+			\item Cecha wyróżniająca dla programisty - rozkazy wektorowe (rozkazy z argumentami wektorowymi).
+			\item Dwa różne podejścia do sprzętowej realizacji rozkazów wektorowych:
+			\begin{itemize}
+				\item Komputery (procesory) macierzowe
+				\item Komputery wektorowe
+			\end{itemize}
 		\end{itemize}
 		Idee realizacji obu (macierzowy i wektorowy):\\
 		\includegraphics[width=16cm]{wektor_macierz}\\
@@ -1095,7 +1098,7 @@
 			\includegraphics[width=0.5\textwidth]{./images/klastry01}
 		\end{center}
 	\subsection{Ogólna charakterystyka klastrów}
-		\subsubsection{Węzły}
+		\subsubsection{Węzły} \label{subsubsec:wezlyKlastry}
 			\begin{itemize}
 				\item Serwery SMP
 				\item Pełne komputery: PC, stacje robocze
@@ -1170,7 +1173,7 @@
 				\item Sieci specjalizowane – sieć przełączników (\textit{switched fabric}) – popularna topologia „grubego drzewa”
 			\end{itemize}
 		\end{itemize}
-	\subsection{Klastry o wysokiej niezawodności}
+	\subsection{Klastry o wysokiej niezawodności} \label{subsec:niezawodnoscKlastrow}
 		\subsubsection{Czynniki tworzące wysoką niezawodność klastrów}
 			\begin{enumerate}
 				\item Redundancja węzłów (mocy obliczeniowej)
