@@ -5,99 +5,102 @@
 %===============================================================================
 \part{Pytania zamknięte}
 \begin{enumerate}
-\question{%
-	question={Moc obliczeniowa komputerów wektorowych}%
-}{%
-	isTrue1={Nie},%
-	answer1={Zależy od liczby stopni potoku.},%
-	explain1={Moc obliczeniowa nie jest zależna od liczby stopni potoku. Ta jedynie wpływa na ilosć rozkazów jakie mogą być wykonane w chwili czasu w jednostce potokowej.},%
-	isTrue2={Tak},%
-	answer2={Jest odwrotnie proporcjonalna do długości taktu zegarowego},%
-	explain2={Tak, obliczamy ją wzorem $Przep=lim_{n\to\infty}\frac{n}{t_{start}+(n-1)\times\tau}=\frac{1}{\tau}$},%
-	isTrue3={Nie},%
-	answer3={Jest wprost proporcjonalna do długości taktu zegarowego},%
-	explain3={Nie, patrz wyżej.},%
-	isTrue4={Nie},%
-	answer4={Zależy odwrotnie proporcjonalnie od liczby jednostek potokowych połączonych łańcuchowo.},%
-	explain4={Nie, idea operacji wektorowej na komputerze wektorowym zakłada jedną jednostkę potokową. Ich zwiększenie nie powinno wpłynąć bezpośrednio na moc.},%
-	isTrue5={Tak},%
-	answer5={Zmierza asymptotycznie do wartości maksymalnej wraz ze wzrostem długości wektora}, %
-	explain5={Tak, istnieje pewna wartość maksymalna do której moc dąży logarytmicznie wraz ze wzrostem długości wektora.}, %
-	isTrue6={Nie}, %
-	answer6={Nie zależy od długości wektora}, %
-	explain6={Bzdura, patrz wyżej.}, %
-	isTrue7={Nie}, %
-	answer7={Zależy liniowo od długości wektora}, %
-	explain7={Bzdura, patrz wyżej.}, %
-}
+	\question{%
+		question={Moc obliczeniowa komputerów wektorowych}%
+	}{%
+		isTrue1={Nie},%
+		answer1={Zależy od liczby stopni potoku.},%
+		explain1={Moc obliczeniowa nie jest zależna od liczby stopni potoku. Ta jedynie wpływa na ilosć rozkazów jakie mogą być wykonane w chwili czasu w jednostce potokowej.},%
+		isTrue2={Tak},%
+		answer2={Jest odwrotnie proporcjonalna do długości taktu zegarowego},%
+		explain2={Tak, obliczamy ją wzorem $Przep=lim_{n\to\infty}\frac{n}{t_{start}+(n-1)\times\tau}=\frac{1}{\tau}$},%
+		isTrue3={Nie},%
+		answer3={Jest wprost proporcjonalna do długości taktu zegarowego},%
+		explain3={Nie, patrz wyżej.},%
+		isTrue4={Nie},%
+		answer4={Zależy odwrotnie proporcjonalnie od liczby jednostek potokowych połączonych łańcuchowo.},%
+		explain4={Nie, idea operacji wektorowej na komputerze wektorowym zakłada jedną jednostkę potokową. Ich zwiększenie nie powinno wpłynąć bezpośrednio na moc.},%
+		isTrue5={Tak},%
+		answer5={Zmierza asymptotycznie do wartości maksymalnej wraz ze wzrostem długości wektora}, %
+		explain5={Tak, istnieje pewna wartość maksymalna do której moc dąży logarytmicznie wraz ze wzrostem długości wektora.}, %
+		isTrue6={Nie}, %
+		answer6={Nie zależy od długości wektora}, %
+		explain6={Bzdura, patrz wyżej.}, %
+		isTrue7={Nie}, %
+		answer7={Zależy liniowo od długości wektora}, %
+		explain7={Bzdura, patrz wyżej.}, %
+	}
+	\question{%
+		question={Komputery macierzowe}%
+	}{%
+		isTrue1={Tak},%
+		answer1={Mają w liście rozkazów m.in. rozkazy operujące na wektorach danych},%
+		explain1={Tak, te komputery są rozwinięciem komputerów wektorowych i muszą mieć rozkazy wektorowe. Komputery macierzowe posiadają po \emph{n} jednostek przetwarzających, które potrafią razem obliczyć \emph{n} składowych wektora.},%
+		isTrue2={Nie},%
+		answer2={Mają macierzowe potokowe układy arytmetyczne},%
+		explain2={Nie, posiadają natomiast jednostki przetwarzające. Z kolei potokową jednostkę arytmetyczną posiadają komputery wektorowe.},%
+		isTrue3={Nie},%
+		answer3={Mają w typowych rozwiązaniach zestaw pełnych procesów połączonych siecią połączeń},%
+		explain3={Nie, w typowym rozwiązaniu jest jeden pełny procesor z wieloma jednostkami potokowymi, które są połączone siecią łączącą (statyczną lub dynamiczną). Sieć połączeń pełnych procków posiadają superkomputery z top500 (Nie jestem pewien tej odpowiedzi).},%
+		isTrue4={Tak},%
+		answer4={Wykonują synchroniczną operację wektorową w sieci elementów przetwarzających},%
+		explain4={Tak właśnie działają.},%
+	}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={Czy poniższa lista jest rosnąco uporządkowana według skalowalności:}%
+	}{%
+		isTrue1={Nie},%
+		answer1={Systemy ściśle połączone, systemy ze wspólną pamięcią, systemy SMP},%
+		explain1={Systemy SMP to cała kategoria systemów z pamięcią wspólną, z kolei systemy ściśle połączone i systemy ze wspólną pamięcią są \textbf{równoznaczne} - są przeciwieństwem do systemów luźno powiązanych (z pamięcią rozproszoną).},%
+		isTrue2={Tak},%
+		answer2={Systemy ze wspólną magistralą, systemy wielomagistralowe, systemy z przełącznicą krzyżową},%
+		explain2={Są to systemy wieloprocesorowe (UMA) z pamięcią wspólną, patrz: Klasyfikacja  \ref{subsubsec:klasyfikacjaUMA}\\
+			- \emph{Systemy ze wspólna magistralą} - najprostsze i najmniej skalowalne\\
+			- \emph{Systemy wielomagistralowe} - szybsze i bardziej złożone, wciąż kiepsko skalowalne\\
+			- \emph{Systemy z przełącznicą krzyżową} - duża szybkość i złożoność obliczeniowa, trudne w rozbudowie\\
+			Ogółem jest to dolna półka tych systemów.},%
+		isTrue3={Nie},%
+		answer3={Systemy SMP, systemy z pamięcią wieloportową, systemy z przełącznicą krzyżową},%
+		explain3={SMP to rodzaj architektury, z kolei w systemach UMA systemy z przełącznicą krzyżową są mniej skalowalne niż systemy z pamięcią wieloportową, patrz: Klasyfikacja  \ref{subsubsec:klasyfikacjaUMA}.},%
+		isTrue4={Nie},%
+		answer4={NUMA, MPP, SMP},%
+		explain4={MPP jest znacznie bardziej skalowalny niż SMP (pamięć rozproszona $ > $ pamięć wspólna). NUMA to systemy SMP z niejednorodnym dostępem do pamięć - są bardziej skalowalne niż zwykłe SMP (dzięki szybkiej pamięci lokalnej \emph{cache}), ale mniej niż MPP.},%
+		isTrue5={Tak},%
+		answer5={Systemy z pamięcią wspólną, systemy o niejednorodnym dostępie do pamięci, z pamięcią rozproszoną}, %
+		explain5={Dwa pierwsze to rodzaje systemów SMP. Najmniej skalowalne są systemy z pamięcią wspólną, domyślnie o jednorodnym dostępie do pamięci (UMA). Niejednorodny dostęp do pamięci wspólnej (NUMA) jest szybszy, ponieważ wykorzystuje pamięć lokalną procesora, węzły i katalogi. Mechanizm katalogów jest o wiele bardziej skalowalny niż mechanizm "\emph{snoopingu}", wykorzystywany w UMA. Następnie system z pamięcią rozproszoną to MPP - system masywnie równoległy. Jest najbardziej skalowalny ze wszystkich.}, %
+		isTrue6={Nie}, %
+		answer6={SMP, NUMA, klastry, UMA}, %
+		explain6={SMP jest najmniej skalowalny z wymienionych. UMA ma jednorodny dostęp do pamięci i jest mniej skalowalna od NUMA. Klastry są najbardziej skalowalne (nie wiem czy mniej lub bardziej do MPP).}, %
+		isTrue7={Tak}, %
+		answer7={Systemy symetryczne, o niejednorodnym dostępie do pamięci, systemy z przesyłem komunikatów}, %
+		explain7={Systemy symetryczne to SMP z jednorodnym dostępem do pamięci. Systemy SMP z niejednorodnym dostępem są bardziej skalowalne. Z kolei systemy z przesyłem komunikatów sugerują system MPP, z pamięcią rozproszoną - jest on najbardziej skalowalny.}, %
+	}
+\end{minipage}
 
-
-\question{%
-	question={Czy poniższa lista jest rosnąco uporządkowana według skalowalności:}%
-}{%
-	isTrue1={Nie},%
-	answer1={Systemy ściśle połączone, systemy ze wspólną pamięcią, systemy SMP},%
-	explain1={},%
-	isTrue2={Tak},%
-	answer2={Systemy ze wspólna magistralą, systemy wielomagistralowe, systemy z przełącznicą krzyżową},%
-	explain2={},%
-	isTrue3={Nie},%
-	answer3={Systemy SMP, systemy z pamięcią wieloportową, systemy z przełącznicą krzyżową},%
-	explain3={},%
-	isTrue4={Nie},%
-	answer4={NUMA, MPP, SMP},%
-	explain4={},%
-	isTrue5={Tak},%
-	answer5={Systemy z pamięcią wspólną, systemy o niejednorodnym dostępie do pamięci, z pamięcią rozproszoną}, %
-	explain5={}, %
-	isTrue6={Nie}, %
-	answer6={Systemy SMP, NUMA, klastry, UMA}, %
-	explain6={}, %
-	isTrue7={Tak}, %
-	answer7={Systemy symetryczne, o niejednorodnym dostępie do pamięci, systemy z przesyłem komunikatów}, %
-	explain7={}, %
-}
-
-
-\question{%
-	question={Komputery macierzowe}%
-}{%
-	isTrue1={Tak},%
-	answer1={Mają w liście rozkazów m.in. rozkazy operujące na wektorach danych},%
-	explain1={Tak, te komputery są rozwinięciem komputerów wektorowych i muszą mieć rozkazy wektorowe. Komputery macierzowe posiadają po \emph{n} jednostek przetwarzających, które potrafią razem obliczyć \emph{n} składowych wektora.},%
-	isTrue2={Nie},%
-	answer2={Mają macierzowe potokowe układy arytmetyczne},%
-	explain2={Nie, posiadają natomiast jednostki przetwarzające. Z kolei potokową jednostkę arytmetyczną posiadają komputery wektorowe.},%
-	isTrue3={Nie},%
-	answer3={Mają w typowych rozwiązaniach zestaw pełnych procesów połączonych siecią połączeń},%
-	explain3={Nie, w typowym rozwiązaniu jest jeden pełny procesor z wieloma jednostkami potokowymi, które są połączone siecią łączącą (statyczną lub dynamiczną). Sieć połączeń pełnych procków posiadają superkomputery z top500 (Nie jestem pewien tej odpowiedzi).},%
-	isTrue4={Tak},%
-	answer4={Wykonują synchroniczną operację wektorową w sieci elementów przetwarzających},%
-	explain4={Tak właśnie działają.},%
-}
-
-
-\question{%
-	question={Przetwarzanie potokowe}%
-}{%
-	isTrue1={Nie},%
-	answer1={Nie jest realizowane dla operacji zmiennoprzecinkowych},%
-	explain1={Nie ma takiego ograniczenia. Przetwarzanie potokowe dotyczy optymalizacji czasu wykonywania rozkazów - podziału realizacji rozkazu na fazy. Owszem, dla argumentów zmiennoprzecinkowych mogą wystąpić problemy związane z czasem obliczeń (uniemożliwienie wykonania rozkazu w jednym takcie), co może zablokować napełnianie potoku, jednak nie uniemożliwia to zastosowania potoku.},%
-	isTrue2={Nie},%
-	answer2={Nie jest realizowane w procesorach CISC},%
-	explain2={Przetwarzanie potokowe znalazło zastosowanie głównie w architekturze RISC, jednak CISC też z niej korzysta. Przykłady: VAX 11/780 (CISC), Ultra SPARC III (RISC)},%
-	isTrue3={Tak},%
-	answer3={Daje przyspieszenie nie większe od liczby segmentów (stopni) jednostki potokowej},%
-	explain3={Tak, przyspieszenie jest stosunkiem czasu wykonywania \emph{n} rozkazów dla procesora niepotokowego oraz czasu dla procesora potokowego. W idealnym przypadku, gdy każdy stopień dzieli okres rozkazu po równo, a liczba rozkazów dąży do nieskończoności, stosunek ten jest równy P - ilości stopni.},%
-	isTrue4={Nie},%
-	answer4={W przypadku wystąpienia zależności między danymi wywołuje błąd i przerwanie wewnętrzne.},%
-	explain4={Hm, dobre pytanie. Tak, zależności danych mogą wystąpić (zjawisko hazardu) i rozdupić program, ale po to właśnie istnieją mechanizmy by temu zapobiegać. Każda szanująca się architektura to potrafi: albo sprzętowo, albo na etapie kompilacji, która modyfikuje i optymalizuje program. A jeżeli po modyfikacji pewien rozkaz nie wykona się w jednym takcie, napełnianie potoku jest przerywane (ale błędu chyba nie wywala), patrz wyżej.},%
-	isTrue5={Nie},%
-	answer5={Jest realizowane tylko dla operacji zmiennoprzecinkowych}, %
-	explain5={Pfff, no chyba nie XD Jest realizowane dla każdego rodzaju rozkazu.} %
-}
-
+\begin{minipage}{\textwidth}
+	\question{%
+		question={Przetwarzanie potokowe}%
+	}{%
+		isTrue1={Nie},%
+		answer1={Nie jest realizowane dla operacji zmiennoprzecinkowych},%
+		explain1={Nie ma takiego ograniczenia. Przetwarzanie potokowe dotyczy optymalizacji czasu wykonywania rozkazów - podziału realizacji rozkazu na fazy. Owszem, dla argumentów zmiennoprzecinkowych mogą wystąpić problemy związane z czasem obliczeń (uniemożliwienie wykonania rozkazu w jednym takcie), co może zablokować napełnianie potoku, jednak nie uniemożliwia to zastosowania potoku.},%
+		isTrue2={Nie},%
+		answer2={Nie jest realizowane w procesorach CISC},%
+		explain2={Przetwarzanie potokowe znalazło zastosowanie głównie w architekturze RISC, jednak CISC też z niej korzysta. Przykłady: VAX 11/780 (CISC), Ultra SPARC III (RISC)},%
+		isTrue3={Tak},%
+		answer3={Daje przyspieszenie nie większe od liczby segmentów (stopni) jednostki potokowej},%
+		explain3={Tak, przyspieszenie jest stosunkiem czasu wykonywania \emph{n} rozkazów dla procesora niepotokowego oraz czasu dla procesora potokowego. W idealnym przypadku, gdy każdy stopień dzieli okres rozkazu po równo, a liczba rozkazów dąży do nieskończoności, stosunek ten jest równy P - ilości stopni.},%
+		isTrue4={Nie},%
+		answer4={W przypadku wystąpienia zależności między danymi wywołuje błąd i przerwanie wewnętrzne.},%
+		explain4={Hm, dobre pytanie. Tak, zależności danych mogą wystąpić (zjawisko hazardu) i rozdupić program, ale po to właśnie istnieją mechanizmy by temu zapobiegać. Każda szanująca się architektura to potrafi: albo sprzętowo, albo na etapie kompilacji, która modyfikuje i optymalizuje program. A jeżeli po modyfikacji pewien rozkaz nie wykona się w jednym takcie, napełnianie potoku jest przerywane (ale błędu chyba nie wywala), patrz wyżej.},%
+		isTrue5={Nie},%
+		answer5={Jest realizowane tylko dla operacji zmiennoprzecinkowych}, %
+		explain5={Pfff, no chyba nie XD Jest realizowane dla każdego rodzaju rozkazu.} %
+	}
+\end{minipage}
 % --- PYTANIE 5
+\begin{minipage}{\textwidth}
 \question{%
 	question={W procesorach superskalarnych}%
 }{%
@@ -114,179 +117,179 @@
 	answer4={Liczba rozkazów, które procesor może wykonać w taktach zależy od liczby jednostek potokowych w procesorze},%
 	explain4={Tak, patrz pierwsza odpowiedź.},%
 }
-
-
-\question{%
-	question={Systemy SMP (odpowiedzi ?? do sprawdzenia)}%
-}{%
-isTrue1={Nie},%
-answer1={Wykorzystują protokół MESI do sterowania dostępem do wspólnej magistrali},%
-explain1={},%
-isTrue2={Nie},%
-answer2={Posiadają skalowalne procesory},%
-explain2={},%
-isTrue3={Nie},%
-answer3={Posiadają pamięć fizycznie rozproszoną, ale logicznie wspólną},%
-explain3={},%
-}
-
-
-\question{%
-	question={Komputery wektorowe}%
-}{%
-isTrue1={Nie},%
-answer1={Posiadają jednostki potokowe o budowie wektorowej},%
-explain1={Nie, posiadają potokowe jednostki arytmetyczne, które nie są wektorowe.},%
-isTrue2={Tak},%
-answer2={Posiadają w liście rozkazów m.in. rozkazy operujące na wektorach danych},%
-explain2={Jak najbardziej, nie mogłyby się bez tego obejść.},%
-isTrue3={Tak},%
-answer3={Wykorzystują od kilku do kilkunastu potokowych jednostek arytmetycznych},%
-explain3={Tak, tych jednostek może być wiele, można to zauważyć na przykładzie komputera Cray-1 (wykład 7-8, slajd 31)},%
-isTrue4={Nie},%
-answer4={Posiadają listę rozkazów operujących wyłącznie na wektorach},%
-explain4={Zdecydowanie nie. Owszem, te komputery posiadają rejestry wektorowe i wektorowe jednostki zmiennoprzecinkowe, ale nie jest to wszystko. Mają również normalne rejestry, adresację, jednostki skalarne i możliwość wykonywania na nich operacji.},%
-}
-
-
-\question{%
-	question={Procesory wektorowe}%
-}{%
-isTrue1={Tak},%
-answer1={Mogą być stosowane w systemach wieloprocesorowych},%
-explain1={Domyślnie procesory wektorowe mogą pracować pojedynczo, ale mogą być częścią takiego systemu. Poza tym nie znalazłem nic, co by temu przeczyło. Jest też np. CUDA - architektura wielordzeniowych procesorów graficznych. Sama architektura SIMD działa na wielu procesorach.},%
-isTrue2={Nie},%
-answer2={Mają listę rozkazów operującą jedynie na wektorach},%
-explain2={Nie, posiadają też m.in. potokowe jednostki arytmetyczne oraz jednostki skalarne, do operowania na zwykłych liczbach.},%
-isTrue3={Tak},%
-answer3={Mają moc kilka razy większą od procesorów skalarnych},%
-explain3={Tak, przyspieszenie jest ilorazem czasu wykonywania na procesorze niewektorowym do czasu wykonywania na procesorze wektorowym. Np. dla rozkazu dodawania \emph{n} wektorów przyspieszenie wyliczane jest wg wzoru $ a=\frac{15\tau n}{t_{start}+(n-1)\tau} $, gdzie przy \emph{n} dążącym do nieskończoności \emph{a} jest równe 15.},%
-}
-
-
-\question{%
-	question={Systemy MPP są zbudowane z węzłów którymi mogą być}%
-}{%
-isTrue1={Tak},%
-answer1={Systemy SMP},%
-explain1={},%
-isTrue2={Nie},%
-answer2={Klastry},%
-explain2={},%
-isTrue3={Nie},%
-answer3={Konstelacje},%
-explain3={},%
-isTrue4={Tak},%
-answer4={Systemy NUMA},%
-explain4={},%
-isTrue5={Tak},%
-answer5={Procesory}, %
-explain5={}, %
-}
-
-
-% --- PYTANIE 10
-\question{%
-	question={W architekturze NUMA}%
-}{%
-isTrue1={Tak},%
-answer1={Dane są wymieniane między węzłami w postaci linii pamięci podręcznej (PaP)},%
-explain1={},%
-isTrue2={Nie},%
-answer2={Spójność PaP węzłów jest utrzymywana za pomocą protokołu MESI},%
-explain2={},%
-isTrue3={Nie},%
-answer3={Czas dostępu do pamięci lokalnej w węźle jest podobny do czasu dostępu do pamięci nielokalnej},%
-explain3={},%
-isTrue4={Tak},%
-answer4={Czas zapisu danych do pamięci nielokalnej może być znacznie dłuższy od czasu odczytu z tej pamięci},%
-explain4={},%
-isTrue5={Tak},%
-answer5={Każdy procesor ma dostęp do pamięci operacyjnej każdego węzła}, %
-explain5={}, %
-isTrue6={Nie}, %
-answer6={Procesy komunikują się poprzez przesył komunikatów}, %
-explain6={}, %
-isTrue7={Tak}, %
-answer7={Pamięć operacyjna jest rozproszona fizycznie pomiędzy węzłami, ale wspólna logicznie}, %
-explain7={}, %
-}
-
-
-\question{%
-	question={Mechanizmy potokowe stosowane są w celu}%
-}{%
-isTrue1={Nie},%
-answer1={Uszeregowania ciągu wykonywanych rozkazów},%
-explain1={Nie, zupełnie nie o to chodzi. Ciąg może zostać uszeregowany przez kompilator w celu optymalizacji. Jednak celem tego mechanizmu jest zrównoleglenie wykonywania rozkazów $ \rightarrow $ zmiana kolejności ich realizacji nie jest założeniem.},%
-isTrue2={Tak},%
-answer2={Uzyskania równoległej realizacji rozkazów},%
-explain2={No tyć. Potoki umożliwiają realizację wielu rozkazów jednocześnie dzieląc jednostkę centralną na wg stopni, jak np. pobranie rozkazu i wykonania rozkazu. Dzięki temu dwa rozkazy mogą wykonywać się jednocześnie, oba w innych fazach (jednostkach czasu).},%
-isTrue3={Tak},%
-answer3={Przyspieszenia realizacji rozkazów},%
-explain3={Tak, to główny cel. Umożliwienie wykonania rozkazów umożliwia przyspieszenie, które oblicza się jako stosunek czasu wykonywania rozkazów w procesorze niepotokowym do czasu realizacji w procesorze potokowym. W idealnym przypadku jest ono równe \emph{P} - ilości podziałów / stopni / faz / zwał jak zwał.},%
-}
-
-
-\question{%
-	question={Protokół MESI}%
-}{%
-isTrue1={Nie},%
-answer1={Jest wykorzystywany do sterowania dostępem do magistrali w systemie SMP},%
-explain1={},%
-isTrue2={Tak},%
-answer2={Zapewnia spójność pamięci cache w systemie SMP},%
-explain2={},%
-isTrue3={Nie},%
-answer3={Służy do wymiany komunikatów w systemie MPP},%
-explain3={},%
-isTrue4={Nie},%
-answer4={Chroni przed hazardem w proc superskalarnych},%
-explain4={},%
-}
-
-
-\question{%
-	question={Mechanizm skoków opóźnionych}%
-}{%
-isTrue1={Tak},%
-answer1={Polega na opóźnianiu wykonywania skoku do czasu wykonania rozkazu następnego za skokiem},%
-explain1={Tak, cały ten mechanizm sprowadza się do opóźnienia efektu skoku o jeden rozkaz. Zapewnia to, że rozkaz następny po skoku zawsze będzie wykonywany w całości.},%
-isTrue2={Nie},%
-answer2={Wymaga wstrzymania potoku na jeden takt.},%
-explain2={Nie, mechanizm potoków nie musi być wstrzymywany. Mechanizm ten zmienia postać programu w trakcie kompilacji, ale na samą realizację potoku nie ma wpływu (afaik, not sure).},%
-isTrue3={Nie},%
-answer3={Powoduje błąd na końcu pętli},%
-explain3={Pfff, jak programista ssie pałę to tak, jednak w założeniu tak się nie dzieje.},%
-isTrue4={Tak},%
-answer4={Wymaga umieszczenia rozkazu NOP za rozkazem skoku lub reorganizacje programu},%
-explain4={Tak, mechanizm sprowadza się do tego, i tylko do tego, patrz pierwsza odpowiedź.},%
-}
-
-
-\question{%
-	question={Charakterystyczne cechy architektury MPP}%
-}{%
-isTrue1={Nie},%
-answer1={Spójność pamięci podręcznej wszystkich węzłów},%
-explain1={},%
-isTrue2={Tak},%
-answer2={Fizycznie rozproszona PaO},%
-explain2={},%
-isTrue3={Nie},%
-answer3={Fizycznie rozproszona PaO, ale logicznie wspólna},%
-explain3={},%
-isTrue4={Tak},%
-answer4={Przesył komunikatów między procesorami},%
-explain4={},%
-isTrue5={Nie},%
-answer5={Niska skalowalność}, %
-explain5={}, %
-isTrue6={Nie}, %
-answer6={Jednorodny dostęp do pamięci wszystkich węzłów}, %
-explain6={}, %
-}
-
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={Systemy SMP}%
+	}{%
+		isTrue1={Nie},%
+		answer1={Wykorzystują protokół MESI do sterowania dostępem do wspólnej magistrali},%
+		explain1={Ten protokół wykorzystują systemy \textbf{UMA} (podkategoria systemów SMP) ze wspólną magistralą w celu zapewnienia spójności pamięci podręcznych (\emph{snooping}). Mogą też używać katalogów, ale podkategoria \textbf{NUMA} wykorzystuje wyłącznie katalogi.},%
+		isTrue2={Nie},%
+		answer2={Posiadają skalowalne procesory},%
+		explain2={SMP należy do systemów wieloprocesorowych, ale te nie muszą być skalowalne.},%
+		isTrue3={Nie},%
+		answer3={Posiadają pamięć fizycznie rozproszoną, ale logicznie wspólną},%
+		explain3={Nie, pamięć jest fizycznie wspólna. Fizycznie rozproszoną pamięć posiadają systemy MPP.},%
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={Komputery wektorowe}%
+	}{%
+		isTrue1={Nie},%
+		answer1={Posiadają jednostki potokowe o budowie wektorowej},%
+		explain1={Nie, posiadają potokowe jednostki arytmetyczne, które nie są wektorowe.},%
+		isTrue2={Tak},%
+		answer2={Posiadają w liście rozkazów m.in. rozkazy operujące na wektorach danych},%
+		explain2={Jak najbardziej, nie mogłyby się bez tego obejść.},%
+		isTrue3={Tak},%
+		answer3={Wykorzystują od kilku do kilkunastu potokowych jednostek arytmetycznych},%
+		explain3={Tak, tych jednostek może być wiele, można to zauważyć na przykładzie komputera Cray-1 (wykład 7-8, slajd 31)},%
+		isTrue4={Nie},%
+		answer4={Posiadają listę rozkazów operujących wyłącznie na wektorach},%
+		explain4={Zdecydowanie nie. Owszem, te komputery posiadają rejestry wektorowe i wektorowe jednostki zmiennoprzecinkowe, ale nie jest to wszystko. Mają również normalne rejestry, adresację, jednostki skalarne i możliwość wykonywania na nich operacji.},%
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={Procesory wektorowe}%
+	}{%
+		isTrue1={Tak},%
+		answer1={Mogą być stosowane w systemach wieloprocesorowych},%
+		explain1={Domyślnie procesory wektorowe mogą pracować pojedynczo, ale mogą być częścią takiego systemu. Poza tym nie znalazłem nic, co by temu przeczyło. Jest też np. CUDA - architektura wielordzeniowych procesorów graficznych. Sama architektura SIMD działa na wielu procesorach.},%
+		isTrue2={Nie},%
+		answer2={Mają listę rozkazów operującą jedynie na wektorach},%
+		explain2={Nie, posiadają też m.in. potokowe jednostki arytmetyczne oraz jednostki skalarne, do operowania na zwykłych liczbach.},%
+		isTrue3={Tak},%
+		answer3={Mają moc kilka razy większą od procesorów skalarnych},%
+		explain3={Tak, przyspieszenie jest ilorazem czasu wykonywania na procesorze niewektorowym do czasu wykonywania na procesorze wektorowym. Np. dla rozkazu dodawania \emph{n} wektorów przyspieszenie wyliczane jest wg wzoru $ a=\frac{15\tau n}{t_{start}+(n-1)\tau} $, gdzie przy \emph{n} dążącym do nieskończoności \emph{a} jest równe 15.},%
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={Systemy MPP są zbudowane z węzłów którymi mogą być}%
+	}{%
+		isTrue1={Tak},%
+		answer1={Systemy SMP},%
+		explain1={Węzłami mogą być zarówno systemy UMA, jak i NUMA. Ponadto dopuszcza się zwykłe procesory z pamięcią operacyjną. Patrz: organizacja MPP \ref{subsec:organizacjaMPP}. Są to \textbf{jedyne} możliwe rodzaje węzłów.},%
+		isTrue2={Nie},%
+		answer2={Klastry},%
+		explain2={Patrz wyżej.},%
+		isTrue3={Nie},%
+		answer3={Konstelacje},%
+		explain3={Patrz wyżej.},%
+		isTrue4={Tak},%
+		answer4={Systemy NUMA},%
+		explain4={Patrz wyżej.},%
+		isTrue5={Tak},%
+		answer5={Procesory}, %
+		explain5={Patrz wyżej.}, %
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	% --- PYTANIE 10
+	\question{%
+		question={W architekturze NUMA}%
+	}{%
+		isTrue1={Tak},%
+		answer1={Dane są wymieniane między węzłami w postaci linii pamięci podręcznej (PaP)},%
+		explain1={Tak, każdy procesor / węzeł posiada swoją własną szybką pamięć podręczną. Pamięć ta jest publiczna - inne procesory mają do niej dostęp, ale wymiana informacji na linii \emph{moja pamięć - inny procesor} jest znacznie wolniejsza niż \emph{procesor - jego pamięć}.},%
+		isTrue2={Nie},%
+		answer2={Spójność PaP węzłów jest utrzymywana za pomocą protokołu MESI},%
+		explain2={Protokół MESI jest wykorzystywany w architekturze \textbf{UMA} do \emph{snoopingu} - zapewnienia spójności pamięci podręcznych procków.},%
+		isTrue3={Nie},%
+		answer3={Czas dostępu do pamięci lokalnej w węźle jest podobny do czasu dostępu do pamięci nielokalnej},%
+		explain3={Odwołanie do nielokalnej pamięci są znacznie wolniejsze niż do lokalnej, ok. 10-krotnie bardziej. Dotyczy to głównie architektury NC-NUMA, patrz: rodzaje systemów NUMA \ref{subsec:rodzajeNUMA}},%
+		isTrue4={Tak},%
+		answer4={Czas zapisu danych do pamięci nielokalnej może być znacznie dłuższy od czasu odczytu z tej pamięci},%
+		explain4={Patrz wyżej.},%
+		isTrue5={Tak},%
+		answer5={Każdy procesor ma dostęp do pamięci operacyjnej każdego węzła}, %
+		explain5={Patrz wyżej.}, %
+		isTrue6={Nie}, %
+		answer6={Procesy komunikują się poprzez przesył komunikatów}, %
+		explain6={Przesył komunikatów występuje w systemach MPP, gdzie pamięć jest rozproszona fizycznie i logicznie. W NUMA jest fizycznie rozproszona między węzłami (do przesyłu informacji wykorzystywana jest sieć łączącą węzły), ale stanowi logicznie jedną całość.}, %
+		isTrue7={Tak}, %
+		answer7={Pamięć operacyjna jest rozproszona fizycznie pomiędzy węzłami, ale wspólna logicznie}, %
+		explain7={Patrz wyżej.}, %
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={Mechanizmy potokowe stosowane są w celu}%
+	}{%
+		isTrue1={Nie},%
+		answer1={Uszeregowania ciągu wykonywanych rozkazów},%
+		explain1={Nie, zupełnie nie o to chodzi. Ciąg może zostać uszeregowany przez kompilator w celu optymalizacji. Jednak celem tego mechanizmu jest zrównoleglenie wykonywania rozkazów $ \rightarrow $ zmiana kolejności ich realizacji nie jest założeniem.},%
+		isTrue2={Tak},%
+		answer2={Uzyskania równoległej realizacji rozkazów},%
+		explain2={No tyć. Potoki umożliwiają realizację wielu rozkazów jednocześnie dzieląc jednostkę centralną na wg stopni, jak np. pobranie rozkazu i wykonania rozkazu. Dzięki temu dwa rozkazy mogą wykonywać się jednocześnie, oba w innych fazach (jednostkach czasu).},%
+		isTrue3={Tak},%
+		answer3={Przyspieszenia realizacji rozkazów},%
+		explain3={Tak, to główny cel. Umożliwienie wykonania rozkazów umożliwia przyspieszenie, które oblicza się jako stosunek czasu wykonywania rozkazów w procesorze niepotokowym do czasu realizacji w procesorze potokowym. W idealnym przypadku jest ono równe \emph{P} - ilości podziałów / stopni / faz / zwał jak zwał.},%
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={Protokół MESI}%
+	}{%
+		isTrue1={Nie},%
+		answer1={Jest wykorzystywany do sterowania dostępem do magistrali w systemie SMP},%
+		explain1={Protokół MESI wykorzystywany jest do zapewniania spójności pamięci podręcznych \emph{cache} w architekturze SMP (\emph{snooping}), a dokładniej w UMA. NUMA korzysta tylko z katalogów.},%
+		isTrue2={Tak},%
+		answer2={Zapewnia spójność pamięci cache w systemie SMP},%
+		explain2={Do tego właśnie służy.},%
+		isTrue3={Nie},%
+		answer3={Służy do wymiany komunikatów w systemie MPP},%
+		explain3={Patrz wyżej.},%
+		isTrue4={Nie},%
+		answer4={Chroni przed hazardem w procesorach superskalarnych},%
+		explain4={Patrz wyżej.},%
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={Mechanizm skoków opóźnionych}%
+	}{%
+		isTrue1={Tak},%
+		answer1={Polega na opóźnianiu wykonywania skoku do czasu wykonania rozkazu następnego za skokiem},%
+		explain1={Tak, cały ten mechanizm sprowadza się do opóźnienia efektu skoku o jeden rozkaz. Zapewnia to, że rozkaz następny po skoku zawsze będzie wykonywany w całości.},%
+		isTrue2={Nie},%
+		answer2={Wymaga wstrzymania potoku na jeden takt.},%
+		explain2={Nie, mechanizm potoków nie musi być wstrzymywany. Mechanizm ten zmienia postać programu w trakcie kompilacji, ale na samą realizację potoku nie ma wpływu (afaik, not sure).},%
+		isTrue3={Nie},%
+		answer3={Powoduje błąd na końcu pętli},%
+		explain3={Pfff, jak programista ssie pałę to tak, jednak w założeniu tak się nie dzieje.},%
+		isTrue4={Tak},%
+		answer4={Wymaga umieszczenia rozkazu NOP za rozkazem skoku lub reorganizacje programu},%
+		explain4={Tak, mechanizm sprowadza się do tego, i tylko do tego, patrz pierwsza odpowiedź.},%
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={Charakterystyczne cechy architektury MPP}%
+	}{%
+		isTrue1={Nie},%
+		answer1={Spójność pamięci podręcznej wszystkich węzłów},%
+		explain1={},%
+		isTrue2={Tak},%
+		answer2={Fizycznie rozproszona PaO},%
+		explain2={},%
+		isTrue3={Nie},%
+		answer3={Fizycznie rozproszona PaO, ale logicznie wspólna},%
+		explain3={},%
+		isTrue4={Tak},%
+		answer4={Przesył komunikatów między procesorami},%
+		explain4={},%
+		isTrue5={Nie},%
+		answer5={Niska skalowalność}, %
+		explain5={}, %
+		isTrue6={Nie}, %
+		answer6={Jednorodny dostęp do pamięci wszystkich węzłów}, %
+		explain6={}, %
+	}
+\end{minipage}
 
 % --- PTYTANIE 15
 \question{%

@@ -816,7 +816,7 @@
 			\item Systemy z jednorodnym dostępem do pamięci (UMA – \emph{Uniform Memory Access})
 			\item Systemy z niejednorodnym dostępem do pamięci (NUMA – Non 	- \emph{Uniform Memory Access})
 		\end{itemize}
-		\subsubsection{Klasyfikacja}
+		\subsubsection{Klasyfikacja} \label{subsubsec:klasyfikacjaUMA}
 			\begin{itemize}
 				\item Systemy ze wspólną magistralą
 				\item Systemy wielomagistralowe
@@ -835,16 +835,14 @@
 			\item Ograniczona złożoność magistrali (jej szybkość jest barierą)
 			\item Niska skalowalność
 		\end{itemize}
-	\subsection{Systemy ze wspólną magistralą}
-		Problem zapewnienia spójności pamięci podręcznych (\emph{snooping}).
-		
-	\subsection{Protokół MESI}
-		\begin{itemize}
-			\item I - invalid
-			\item S - shared
-			\item E - exclusive
-			\item M - modified
-		\end{itemize}
+		\subsubsection{Protokół MESI}
+			Ten rodzaj systemu posiada problem zapewnienia spójności pamięci podręcznych (\emph{snooping}). W celu rozwiązania go wykorzystuje w tym celu protokół MESI:
+			\begin{itemize}
+				\item I - invalid
+				\item S - shared
+				\item E - exclusive
+				\item M - modified
+			\end{itemize}
 	\subsection{Systemy wielomagistralowe}
 		\includegraphics[width=0.3\textwidth]{./images/wieloproc01}
 		\begin{itemize}
@@ -923,7 +921,7 @@
 \section{Systemy NUMA}
 	Systemy wieloprocesorowe z niejednorodnym dostępem do pamięci.\\
 	NUMA (\emph{Non-Uniform Memory Access}).
-	\subsection{Rodzaje}
+	\subsection{Rodzaje} \label{subsec:rodzajeNUMA}
 		\begin{itemize}
 			\item NC-NUMA (\emph{Non-cached NUMA})
 			\begin{itemize}
@@ -1038,7 +1036,7 @@
 		\begin{center}
 			\includegraphics[width=0.3\textwidth]{./images/MMP01}
 		\end{center}
-	\subsection{Hierarchiczna organizacja}
+	\subsection{Hierarchiczna organizacja}\label{subsec:organizacjaMPP}
 		\subsubsection{Rodzaje węzłów}
 		\begin{itemize}
 			\item Procesor + PaO
