@@ -402,7 +402,7 @@
 				}
 			\end{lstlisting}
 	
-	\subsection{Egzamin 2012, T1, Hafed Zghidi}
+	\section{Egzamin 2012, T1, Hafed Zghidi}
 		\subsection{Treść}
 			Naszym zadaniem jest przeszukiwanie fragmentu obrazu (\textit{wzorzec}) o rozmiarze $ n\times n $ w obrazie \textit{Obraz} o rozmiarze $ m\times n (m>>n) $. Do tego celu służy nam odpowiednia funkcja\\
 			\begin{lstlisting}[language=C]
@@ -555,12 +555,93 @@
 					pvm_send(masterId, 100);
 				}
 			\end{lstlisting}
-	
 	\newpage
-	\subsection{Egzamin 2013, T1, Hafed Zghidi}
+	\section{Egzamin 2013, T1, Hafed Zghidi}
 		\subsection{Treść}
 			Naszymi danymi wejściowymi są tabela A zawierająca 10000 łańcuchów znakowych i tabela B zawierająca 10000 wartości typu \textit{integer} będących wartościami skrótu łańcuchów tabeli A. Napisać kod programu głównego (rodzic) realizującego w oparciu o środowisko PVM równoległe wykonanie porównywania zgodności łańcuchów z tabeli A ze skrótami z tabeli B. Program potomny ma otrzymywać łańcuch znakowy z tabeli A oraz odpowiadającą mu wartość typu \textit{integer} z tabeli B. Program główny ma zliczyć ile par jest poprawnych, a ile nie zgadza się. Program potomny ma zostać uruchomiony na wszystkich węzłach w maszynie PVM. Rozdział zadania na podzadania dla procesów potomnych ma uwzględniać aspekt równoważenia obciążenia poszczególnych węzłów maszyny PVM (napisać tylko program rodzica).
-		\subsection{Propozycja rozwiązania}
+		\subsection{Rozwiązanie}
+			\begin{lstlisting}[language=C]
+			#include "pvm3.h"
+			#include <stdio.h>
+			const int RECORD_NUMBER = 10000
+			void fill_tables(char* input[RECORD_NUMBER], int output[RECORD_NUMBER]);
+			
+			int main_pvm()
+			{
+				// dane wejściowe
+				char* input[RECORD_NUMBER];
+				int output[RECORD_NUMBER];
+				// zakładamy, że ta funkcja wypełnia tablice jak należy
+				fill_tables(input, output);
+				// liczniki wystąpień
+				unsigned int true_count = 0;
+				// pobranie informacji
+				int ilhost, ilarch;
+				struct pvmhostinfo * info;
+				pvm_config(&ilhost, &ilarch, &info);
+				printf("Liczba hostow: %d\n", ilhost);
+				
+				int id, tid;
+				id = 0;
+				int i;
+				// dla każdego hosta
+				for (i = 0; i < ilhost; i++, id++)
+				{
+					pvm_spawn("/egzamin/dziecko", 0, PvmTaskHost, info[i].hi_name, 1, &tid);
+					if (tid < 0)
+					{
+						ilhost--;
+						continue;
+					}
+					pvm_initsend(PvmDataDefault);
+					// wysyłamy:
+					pvm_pkint(&id, 1, 1);			// id wiersza
+					pvm_pkstr(input[id]);			// łańcuch
+					pvm_pkint(&output[id], 1, 1);	// suma kontrolna
+					pvm_send(tid, 100);
+				}
+			\end{lstlisting}
+			\newpage
+			\begin{lstlisting}[language=C]
+			{	// ...
+				int bufid, child_tid, child_id, tmp, result;
+				while (id < RECORD_NUMBER)
+				{
+					bufid = pvm_recv(-1, 200);
+					pvm_bufinfo(bufid, &tmp, &tmp, &child_tid);
+					// pobranie danych
+					pvm_upkint(&child_id, 1, 1);	// id wiersza
+					pvm_upkint(&result, 1, 1);		// wynik
+					// dziecko zwraca 0, jeśli suma nie była poprawna
+					// lub 1, jeśli była poprawna
+					true_count = true_count + result;
+					// wysłanie nowych danych
+					pvm_initsend(PvmDataDefault);
+					pvm_pkint(&id, 1, 1);			// id kolejnego wiersza
+					pvm_pkstr(input[id]);			// łańcuch
+					pvm_pkint(&output[id], 1, 1);	// suma kontrolna
+					pvm_send(child_tid, 100);
+					id++;
+				}
+				// odbieranie ostatnich wyników od potomków
+				for (i = 0; i < ilhost; i++)
+				{
+					bufid = pvm_recv(-1, 200);
+					pvm_bufinfo(bufid, &tmp, &tmp, &child_tid);
+					pvm_upkint(&child_id, 1, 1);	// pobranie id wiersza
+					pvm_upkint(&result, 1, 1);		// wynik
+					true_count = true_count + result;
+				}
+				// wypisanie wyniku
+				printf("Liczba poprawnych sum kontrolnych = %d\n", true_count);
+				printf("Liczba niepoprawnych sum kontrolnych = %d", RECORD_NUMBER - true_count);
+				pvm_exit();
+				
+				return 0;
+			}
+			\end{lstlisting}
+		\newpage
+		\subsection{Propozycja rozwiązania z forum - dlaczego jest źle i możesz ujebać bezmyślnie przepisując}
 			\begin{lstlisting}[language=C]
 				#include <stdio.h>
 				#include "pvm3.h"
@@ -571,41 +652,48 @@
 				{
 					int tidmaster, *tid, ilhost, ilarch, bufid, a, b, temp, wynik;
 					struct pvmhostinfo *info;
+					// idea jest taka, by porównać rozmiar stringi, zapisany w drugim wymiarze, z wartością w 'wartosci'. Treść zadania mówi o dwóch tabelach w jednym wymierze, więc średnie to.
+					// Porównywanie stringów na char* z liczbami boli bez gotowych funkcji, co? :P
+					// A nas to nawet nie interesuje, bo za to odpowiada potomek, zatem mamy przykład popieprzenia z poplątaniem XD
 					char stringi[SIZE][STR_SIZE];
 					int wartosci[SIZE];
 					const int ROZMIAR = 10;
-					WYNIK = 0;
-					tidmaster = pvm_mytid();
+					wynik = 0;
+					tidmaster = pvm_mytid();		// zupełnie zbędne
 					pvm_config(&ilhost, &ilarch, &info);
+					// tid nie musi być tablicą, bo nigdy nie korzystamy z innego, niż aktualnie wykorzystywany
 					tid = (int*)malloc(ilhost,sizeof(int));
 					for (a = 0; a < ilhost; a++)
 					{
 						pvm_spawn(PATH, 0, PvmTaskHost, info[a].hi_name, 1, &tid[a]);
 						pvm_initsend(PvmDataDefault);
 						pvm_pkint(&ROZMIAR, 1, 1);
-						temp = STR_SIZE;
+						temp = STR_SIZE;		// chujowe konsekwencje trzymania stałej przez define - brak adresu, hłehłe
 						pvm_pkint(&temp, 1, 1);
-						for(b = 0; b < ROZMIAR; b++)
+						for (b = 0; b < ROZMIAR; b++)
 						{
+							// zabawa z dwoma wymiarami, kiedy wystarczy jeden
+							// dziwna idea, raczej nieintuicyjna
 							pvm_pkint(&wartosci[a * ROZMIAR + b], 1, 1);
 							pvm_pkstr(stringi[a * ROZMIAR + b]);
 						}
-						pvm_send(tid[a],100);
+						pvm_send(tid[a], 100);	// tid jest wykorzystywany tylko w tej pętli, tabela nie sensu
 					}
-					a = ilhost;
+					a = ilhost;		// nikt nie zauważył, że ma tę wartość po wyjściu z pętli?
+			\end{lstlisting}
+			\newpage
+			\begin{lstlisting}[language=C]
+				{ // ...
 					while( a < SIZE/ROZMIAR ) {
 						bufid = pvm_recv(-1, 200);
 						pvm_upkint(&temp, 1, 1);
-						WYNIK += temp;
+						wynik += temp;		// w ANSI C nie ma tego operatora
 						pvm_bufinfo(bufid, &temp, &b, &tmp_id);
 						pvm_initsend(PvmDataDefault);
 						pvm_pkint(&ROZMIAR, 1, 1);
-						temp = STR_SIZE;
+						temp = STR_SIZE;	// ZNOWU XD
 						pvm_pkint(&temp, 1, 1);
-						
-						
-						
-						for(b = 0; b < ROZMIAR; b++)
+						for (b = 0; b < ROZMIAR; b++)
 						{
 							pvm_pkint(&wartosci[a * ROZMIAR + b], 1, 1);
 							pvm_pkstr(stringi[a * ROZMIAR + b]);
@@ -615,9 +703,9 @@
 					}
 					for(a = 0; a < ilhost; a++)
 					{
-						bufid=pvm_recv(-1, 200);
+						bufid = pvm_recv(-1, 200);
 						pvm_upkint(&temp, 1, 1);
-						WYNIK += temp;
+						wynik += temp;		// co cóż
 						pvm_bufinfo(bufid, &temp, &b, &tmp_id);
 						pvm_kill(tmp_id);
 					}
@@ -636,82 +724,81 @@
 			\subsubsection{Rozwiązanie}
 				\begin{lstlisting}[language=C]
 				#include "pvm3.h"
-				
 				extern int m;				// wymiar obraz
 				extern int n;				// wymiar wzorca
 				
 				int main()
 				{
-				int liczbaWystapien = 0;
-				int obraz[m][m];		// tablica pikseli, zakladamy ze tak reprezentowany jest obraz
-				
-				int ilhost, ilarch;			//parametry z PVMa
-				struct pvmhostinfo * info;
-				pvm_config(&ilhost, &ilarch, &info);
-				printf("Liczba hostow: %d\n", ilhost);
-				
-				int id_wiersza = 0;
-				int tid;
-				
-				// Dla każdego hosta - inicjujemy go
-				for ( i = 0; i < ilhost; i++ )
-				{
-				pvm_spawn( "/potomek", 0, PvmTaskHost, info[i].hi_name, 1, &tid);	//powołanie potomka
-				if ( tid < 0 )
-				{
-				ilhost--;	//jeśli nie udało się powołać potomka, zmniejszamy liczbę hostów i kontynuujemy
-				continue;
-				}
-				printf("tid: %d\n", tid);
-				pvm_initsend(PvmDataDefault);
-				// wysyłamy:
-				// elementy obrazu
-				for (int i = 0; i < n; i++)
-				{
-				pvm_pkint(&obraz[id_wiersza + i][0], m, 1);		//pakowanie całego wiersza
-				}
-				pvm_send(tid, 100);		//wysłanie wiersza
-				id_wiersza++;
-				}
-				
-				//// Wykonywanie programu aż do przedostatniej pętli
-				int bufid, child_tid, child_liczba_wystapien, tmp;
-				while ( id_wiersza < (m - n) )
-				{
-				// odebranie info o zakończeniu pracy
-				bufid = pvm_recv(-1, 200);
-				pvm_bufinfo(bufid, &tmp, &tmp, &child_tid);
-				// pobranie liczby wystapien
-				pvm_upkint(&child_liczba_wystapien, 1, 1);
-				// zwiekszenie wystapien wzorca
-				liczbaWystapien += child_liczba_wystapien;
-				
-				// wysłanie nowych danych
-				pvm_initsend(PvmDataDefault);
-				// nowa czesc obrazu
-				for (int i = 0; i < n; i++)
-				{
-				pvm_pkint(&obraz[id_wiersza + i][0], m, 1);
-				}
-				pvm_send(child_tid, 100);
-				id_wiersza++;
-				}
-				
-				//// Odebranie ostatnich danych
-				for	(i = 0; i < id_wiersza - ilhost + 1; i++ )
-				{
-				bufid = pvm_recv(-1, 200);
-				pvm_bufinfo(bufid, &tmp, &tmp, &child_tid);
-				// pobranie liczby wystapien
-				pvm_upkint(&child_liczba_wystapien, 1, 1);
-				// zwiekszenie wystapien wzorca
-				liczbaWystapien += child_liczba_wystapien;
-				}
-				
-				printf("Liczba wystapien wzorca: %d", liczbaWystapien);
-				pvm_exit();
-				return 0;
-				};
-				
+					int liczbaWystapien = 0;
+					// tablica pikseli, zakladamy ze tak reprezentowany jest obraz
+					int obraz[m][m];		
+					int ilhost, ilarch;			//parametry z PVMa
+					struct pvmhostinfo * info;
+					pvm_config(&ilhost, &ilarch, &info);
+					printf("Liczba hostow: %d\n", ilhost);
+					
+					int id_wiersza = 0;
+					int tid;
+					// Dla każdego hosta - inicjujemy go
+					for ( i = 0; i < ilhost; i++ )
+					{
+						//powołanie potomka
+						pvm_spawn( "/potomek", 0, PvmTaskHost, info[i].hi_name, 1, &tid);
+						//jeśli nie udało się powołać potomka, zmniejszamy liczbę hostów i kontynuujemy	
+						if ( tid < 0 )
+						{
+							ilhost--;	
+							continue;
+						}
+						pvm_initsend(PvmDataDefault);
+						// wysyłamy:
+						// elementy obrazu
+						for (int i = 0; i < n; i++)
+						{
+							//pakowanie całego wiersza
+							pvm_pkint(&obraz[id_wiersza + i][0], m, 1);
+						}
+						pvm_send(tid, 100);		//wysłanie wiersza
+						id_wiersza++;
+					}
+					\end{lstlisting}
+					\newpage
+					\begin{lstlisting}[language=C]
+					{ 	// ...
+						//// Wykonywanie programu aż do przedostatniej pętli
+						int bufid, child_tid, child_liczba_wystapien, tmp;
+						while ( id_wiersza < (m - n) )
+						{
+							// odebranie info o zakończeniu pracy
+							bufid = pvm_recv(-1, 200);
+							pvm_bufinfo(bufid, &tmp, &tmp, &child_tid);
+							// pobranie liczby wystapien
+							pvm_upkint(&child_liczba_wystapien, 1, 1);
+							// zwiekszenie wystapien wzorca
+							liczbaWystapien += child_liczba_wystapien;
+							// wysłanie nowych danych
+							pvm_initsend(PvmDataDefault);
+							// nowa czesc obrazu
+							for (int i = 0; i < n; i++)
+							{
+								pvm_pkint(&obraz[id_wiersza + i][0], m, 1);
+							}
+							pvm_send(child_tid, 100);
+							id_wiersza++;
+						}
+						//// Odebranie ostatnich danych
+						for	(i = 0; i < id_wiersza - ilhost + 1; i++ )
+						{
+							bufid = pvm_recv(-1, 200);
+							pvm_bufinfo(bufid, &tmp, &tmp, &child_tid);
+							// pobranie liczby wystapien
+							pvm_upkint(&child_liczba_wystapien, 1, 1);
+							// zwiekszenie wystapien wzorca
+							liczbaWystapien += child_liczba_wystapien;
+						}
+						printf("Liczba wystapien wzorca: %d", liczbaWystapien);
+						pvm_exit();
+						return 0;
+					};
 				\end{lstlisting}
 		\newpage

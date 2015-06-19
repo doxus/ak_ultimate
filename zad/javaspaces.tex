@@ -257,112 +257,360 @@
 		\subsubsection{Treść}
 			Napisać program umieszczający w przestrzeni JavaSpace \textbf{200} obiektów zadań zawierających \textbf{dwa} pola typu całkowitego oraz \textbf{dwa} pola typu łańcuch znakowy (zawartość nieistotna, różna od NULL), podać deklarację klasy zadań. Następnie odebrać z przestrzeni kolejno \textbf{100} obiektów klasy \textit{Odpowiedź} o atrybutach \textit{id} typu \textit{Integer} oraz \textit{wynik} typu \textit{Integer} posiadające w atrybucie id wartość \textbf{35}, a następnie wszystkie z atrybutem \textit{id} = \textbf{10}. Przyjąć, że klasa \textit{Odpowiedź} jest już zdefiniowana zgodnie z powyższym opisem.
 	
-		\subsubsection{Propozycja rozwiązania 1}
+		\subsubsection{Rozwiązanie}
+			\textbf{Klasa Zadanie}
 			\begin{lstlisting}[language=Java]
-				public class MessageSend implements Entry {
-					public String s1, s2;
-					public Integer i1, i2;
-					public MessageSend() {
-						s1 = s2 = i1 = i2 = null;
-					}
-					public MessageSend(String s1, String s2, Integer i1, Integer i2) {
-						this(s1, s2, i1, i2)
-					}
+			// deklaracja klasy, muszą być widoczne:
+			// implementacja interfejsu Entry
+			public class Zadanie implements Entry {
+				// publiczne składowe, opakowujące typy zmiennych
+				public Integer liczba;
+				public String napis1;
+				public String napis2;
+				public Boolean poisonPill;
+				// konstruktor domyślny, obowiązkowy
+				public Zadanie() {
+					Random rand = new Random();
+					this.liczba = rand.nextInt();
+					this.napis1 = Integer.toString(rand.nextInt());
+					this.napis2 = Integer.toString(rand.nextInt());
+					this.poisonPill = false;
 				}
+				public Zadanie(Integer liczba, String napis1, String napis2, Boolean poisonPill) {
+					this.liczba = liczba;
+					this.napis1 = napis1;
+					this.napis2 = napis2;
+					this.poisonPill = poisonPill;
+				}
+			}
+			\end{lstlisting}
+			\textbf{Nadrzędna klasa Klienta}
+			\begin{lstlisting}[language=Java]
+			/**
+			 * @author Son Mati & Doxus
+			 */
+			public class Client {
+				protected Integer defaultLease = 100000;
+				protected JavaSpace space;
+				protected Lookup lookup;
+				public Client() {
+					lookup = new Lookup(JavaSpace.class);
+				}
+			}
+			\end{lstlisting}
+			\newpage
+			\textbf{Klasa Nadzorcy}
+			\begin{lstlisting}[language=Java]
+			/**
+			* @author Son Mati & Doxus
+			*/
+			public class Boss extends Client {
+				// domyślne wartości dla zadania
+				static final int DEFAULT_TASK_NUMBER = 200;
+				static final int DEFAULT_MAX_MISSES = 100;
 				
-				public class Producent {
-					Lookup lookup;
-					public Producent() {
-						lookup = new Lookup(JavaSpace.class);
-					}
-					public void produce() {
-						try {
-							JavaSpace space = (JavaSpace) finder.getService();
-							for(int i = 0; i < 200; ++i) {
-								space.write(new MessageSend("a", "a", i, i), null, 100000);
-							}
-							Odpowiedź data;
-							for(int i = 0; i < 100; ++i) {
-								data = new Odpowiedź();
-								data.id = 35;
-								data.wartość = null;
-								space.take(data, null, 100000);
-							}
-							while(true) {
-								data = new Odpowiedź();
-								data.id = 10;
-								data.wartość = null;
-								data = (Odpowiedź) space.takeIfExists(data, null, 100000);
-								if (data == null) break;
-							}
-						catch(Exception e) { }
+				Integer taskNumber;
+				Integer maxMisses;
+				
+				public Integer getTaskNumber() {
+					return taskNumber;
+				}
+				public Integer getMaxMisses() {
+					return maxMisses;
+				}
+				// obowiązkowy domyślny konstruktor
+				public Boss() {
+					taskNumber = DEFAULT_TASK_NUMBER;
+					maxMisses = DEFAULT_MAX_MISSES;
+				}
+				public Boss(Integer taskNumber, Integer maxMisses) {
+					this.taskNumber = taskNumber;
+					this.maxMisses = maxMisses;
+				}
+				/**
+				 * Wygenerowanie zadania z losowymi wartościami
+				 * @param id identyfikator
+				 * @param poisonPill pigułka, tak czy nie
+				 */
+				public Zadanie generateTask(int id, boolean poisonPill) {
+					Random rand = new Random();
+					return new Zadanie(id, Integer.toString(rand.nextInt(1000)),
+					Integer.toString(rand.nextInt(1000)), poisonPill);
+				}
+				/**
+				 * Utworzenie zadaniów
+				 * @param count ilość zadaniów
+				 */
+				public void createTasksInJavaSpace(int count) {
+					try {
+						this.space = (JavaSpace)lookup.getService();
+						for (int i = 0; i < count; ++i) {
+							Zadanie zad = this.generateTask(i, false);
+							space.write(zad, null, defaultLease);
+							System.out.println("Wygenerowałem zad " + i + " o stringach " + zad.napis1 + " i " + zad.napis2);
 						}
 					}
-					public static void main(String[] args) {
-						Producent tmp = new Producent();
-						tmp.Producer();
+					catch(RemoteException | TransactionException ex) {
+						System.out.println("Dupa XD");
 					}
 				}
 			\end{lstlisting}
-		\subsubsection{Propozycja rozwiązania 2}
+			\newpage
 			\begin{lstlisting}[language=Java]
-				package pl.ak.javaspaces;
-				import net.jini.core.entry.Entry;
-				import net.jini.core.transaction.TransactionException;
-				import net.jini.space.JavaSpace;
-				
-				public class JavaSpaceObject implements Entry {
-					public String s1, s2;
-					public Integer i1, i2;
-					public JavaSpaceObject() {
-						this(null, null, null, null);
+			public class Boss extends Client {
+				/**
+				* Uzyskanie odpowiedzi
+				* @param id odpowiedzi, ktora nas interesuje
+				* @param costam interesujący nas wynik
+				* @param count liczba odpowiedzi do odbioru
+				*/
+				public Integer receiveData(Integer id, Integer costam, Integer count) {
+					Integer found = 0;
+					try {
+						this.space = (JavaSpace)lookup.getService();
+						Odpowiedz wzor = new Odpowiedz(id, costam);
+						for (int i = 0; i < count; i++) {
+							// odczyt blokujący, zatrzymuje przepływ dopóki odp się nie pojawi
+							Odpowiedz wynik = (Odpowiedz) space.takeIfExists(wzor, null, defaultLease);
+							if (wynik != null) {
+								System.out.println("Odpowiedz: id = " + wynik.getId() + ", wynik = " + wynik.getWynik());
+								found++;
+							}
+						}
+					} catch (UnusableEntryException | TransactionException | InterruptedException | RemoteException ex) {
 					}
-					public JavaSpaceObject(String s1, String s2, Integer i1, Integer i2) {
-						this(s1, s2, i1, i2)
+					return found;
+				}
+				/**
+				* ZATRUJ DZIECIACZKI XD
+				*/
+				public void poisonKids() {
+					// utworzenie zatrutej pigulki
+					Zadanie poisonPill = new Zadanie(null, null, null, true);
+					try {
+						space.write(poisonPill, null, defaultLease);
+					} catch (TransactionException | RemoteException ex) {
 					}
-					public String toString() {
-						return data;
-					} 
 				}
 				
-				public class JavaSpaces {
-					public static void main(String[] args) {
+				public static void main(String[] args) {
+					Integer misses = 0;
+					Boss boss = new Boss();
+					boss.createTasksInJavaSpace(boss.getTaskNumber());
+					boss.receiveData(35, null, 100);
+					// boss odbiera pozostałe odpowiedzi, o id 10, dopóki nie trafi na pewną liczbę chybień
+					while(misses < boss.getMaxMisses()) {
+						if (boss.receiveData(10, null, 1) == 0)
+						misses++;
+					}
+					boss.poisonKids();
+				}
+			}
+			\end{lstlisting}
+			\newpage
+			\textbf{Klasa Pracownika}
+			\begin{lstlisting}[language=Java]
+			/**
+			* @author Son Mati & Doxus
+			*/
+			public class Sidekick extends Client {
+				// obowiązkowy domyślny konstruktor
+				public Sidekick() {
+				}
+				// praca
+				public void zacznijMurzynic() {
+					while(true) {
 						try {
-							Lookup finder = new Lookup(JavaSpace.class);
-							JavaSpace space = (JavaSpace) finder.getService();
-							for(int i = 0; i < 200; ++i) {
-								space.write(new JavaSpaceObject("a","a",i,i), null, 100000);
+							Random rand = new Random();
+							this.space = (JavaSpace)lookup.getService();
+							Zadanie zad = new Zadanie(null, null, null, null);
+							zad = (Zadanie) space.takeIfExists(zad, null, defaultLease);
+							if (zad != null) {
+								if (zad.poisonPill == true) {
+									space.write(zad, null, defaultLease);
+									return;
+								}
+								System.out.println("Odebrałem zadanie o id " + zad.liczba
+								+ " i napisach " + zad.napis1 + " i " + zad.napis2);
 							}
-							Odpowiedź data;
-							for (int i = 0; i < 100; ++i) {
-								data = new Odpowiedź();
-								data.id = 35;
-								data.wartość = null;
-								space.take(data, null, 100000);
-							}
-							while(true) {
-								data = new Odpowiedź();
-								data.id = 10;
-								data.wartość = null;
-								data = (Odpowiedź) space.takeIfExists(data, null, 100000);
-								if (data == null)
-									break;
-							}
-							catch(Exception e) {
-								System.out.println(e.getMessage());
-							}
+							Odpowiedz odp = new Odpowiedz(rand.nextInt(51), rand.nextInt(1000));
+							space.write(odp, null, defaultLease);
+						} catch (TransactionException | RemoteException | UnusableEntryException | InterruptedException ex) {
+							Logger.getLogger(Sidekick.class.getName()).log(Level.SEVERE, null, ex);
 						}
 					}
 				}
+				// obowiązkowy Run
+				public static void main(String[] args) {
+					Sidekick murzyn = new Sidekick();
+					murzyn.zacznijMurzynic();
+				}
+			}
 			\end{lstlisting}
 	\newpage
 	\subsection{2014, I termin, Adam Duszeńko}
 		\subsubsection{Treść}
 			Napisać kod programu głównego wykonawczego do przetwarzania z wykorzystaniem maszyny JavaSpace przetwarzającego obiekty zadań zawierające dwie wartości całkowite, oraz numer obiektu i flagę logiczną początkowo zawierającą wartość \textit{FALSE}. W momencie pobrania obiektu zadania program wykonawczy ma podmienić w przestrzeni JavaSpace pobrany obiekt na ten sam, ale z flagą ustawioną na wartość \textit{TRUE}. Przetwarzanie obiektu realizowane jest w funkcji \textit{int check(int, int)} do której należy przekazać wartości z obiektu zadania. PO skończeniu przetwarzania zadania, przed zwróceniem wyniku, należy usunąć z przestrzeni JavaSpace obiekt przetwarzanego zadania. Wynik funkcji \textit{check} należy umieścić w obiekcie wynikowym którego strukturę proszę zaproponować. Obsłużyć koniec działania programu przez skonsumowanie "zatrutej pigułki".
 		\subsubsection{Propozycja rozwiązania 1}
-	
-	
-	
+	\newpage
+	\subsection{2015, 0 termin, Adam Duszeńko}
+		\subsubsection{Treść}
+			Napisać program umieszczający w przestrzeni JavaSpace \textbf{1000} obiektów zadań zawierających \textbf{dwa} pola typu całkowitego oraz \textbf{dwa} pola typu łańcuch znakowy (zawartość nieistotna, różna od NULL), podać deklarację klasy zadań. Następnie odebrać z przestrzeni \textbf{20} obiektów klasy \textit{Odpowiedź} o atrybutach \textit{id} typu \textit{Integer} oraz \textit{wynik} typu \textit{Integer} posiadające w atrybucie id wartość \textbf{50} (przyjąć, że klasa \textit{Odpowiedź} jest już zdefiniowana zgodnie z powyższym opisem).
+		\subsubsection{Rozwiązanie}
+			Działające i przetestowane w warunkach domowych na Jini.\\\\
+			\textbf{Klasa Zadanie}
+			\begin{lstlisting}[language=Java]
+			/**
+			* @author Son Mati & Doxus
+			*/
+			// deklaracja klasy, muszą być widoczne:
+			// implementacja interfejsu Entry
+			public class Zadanie implements Entry {
+				// publiczne składowe, muszą być wielkich typów opakowujących
+				public Integer liczba;
+				public String napis1;
+				public String napis2;
+				public Boolean poisonPill;
+				// konstruktor domyślny, wymagany
+				public Zadanie() {
+					Random rand = new Random();
+					this.liczba = rand.nextInt();
+					this.napis1 = Integer.toString(rand.nextInt());
+					this.napis2 = Integer.toString(rand.nextInt());
+					this.poisonPill = false;
+				}
+				// konstruktor z parametrami
+				public Zadanie(Integer liczba, String napis1, String napis2, Boolean poisonPill) {
+					this.liczba = liczba;
+					this.napis1 = napis1;
+					this.napis2 = napis2;
+					this.poisonPill = poisonPill;
+				}
+			}
+			\end{lstlisting}
+			\newpage
+			\textbf{Klasa nadzorcy}
+			\begin{lstlisting}[language=Java]
+					/**
+					 * @author Son Mati & Doxus
+					 */
+					public class Boss extends Client {
+						// liczba zadań do wykonania
+						static final int TASK_NUMBER = 1000;
+						// obowiązkowy domyślny konstruktor
+						public Boss() {
+						}
+						/**
+						 * Wygenerowanie zadania z losowymi wartościami
+						 * @param count ilość zadaniów
+						 */
+						public Zadanie generateTask(int id, boolean poisonPill) {
+							Random rand = new Random();
+							return new Zadanie(id, Integer.toString(rand.nextInt(1000)), Integer.toString(rand.nextInt(1000)), poisonPill);
+						}
+						/**
+						 * Utworzenie zadaniów
+						 * @param count ilość zadaniów
+						 */
+						public void createTasksInJavaSpace(int count) {
+							try {
+								this.space = (JavaSpace)lookup.getService();
+								for (int i = 0; i < count; ++i) {
+									Zadanie zad = this.generateTask(i, false);
+									space.write(zad, null, defaultLease);
+									System.out.println("Wtgenerowałem zad " + i + " o stringach " + zad.napis1 + " i " + zad.napis2);
+								}
+							}
+							catch(RemoteException | TransactionException ex) {
+								System.out.println("Dupa XD");
+							}
+						}
+			\end{lstlisting}
+			\newpage
+			\begin{lstlisting}[language=Java]
+					public class Boss extends Client {
+						/**
+						* Uzyskanie odpowiedzi
+						* @param id odpowiedzi, ktora nas interesuje
+						* @param costam interesujący nas wynik
+						* @param count liczba odpowiedzi do odbioru
+						*/
+						public void receiveData(Integer id, Integer costam, Integer count) {
+							try {
+								this.space = (JavaSpace)lookup.getService();
+								Odpowiedz wzor = new Odpowiedz(id, costam);
+								for (int i = 0; i < count; i++) {
+									// odczyt blokujący, zatrzymuje przepływ dopóki odp się nie pojawi
+									Odpowiedz wynik = (Odpowiedz) space.take(wzor, null, defaultLease);
+									System.out.println("Odpowiedz: id = " + wynik.getId() + ", wynik = " + wynik.getWynik());
+								}
+							} catch (UnusableEntryException | TransactionException | InterruptedException | RemoteException ex) {
+								Logger.getLogger(Boss.class.getName()).log(Level.SEVERE, null, ex);
+							}
+						}
+						/**
+						 * ZATRUJ DZIECIACZKI XD
+						 */
+						public void poisonKids() {
+							// utworzenie zatrutej pigulki
+							Zadanie poisonPill = new Zadanie(null, null, null, true);
+							try {
+								space.write(poisonPill, null, defaultLease);
+							} catch (TransactionException | RemoteException ex) {
+								Logger.getLogger(Boss.class.getName()).log(Level.SEVERE, null, ex);
+							}
+						}
+						/**
+						 * Obowiązkowy Run dla nadzorcy
+						 */
+						public static void main(String[] args) {
+							Boss boss = new Boss();
+							boss.createTasksInJavaSpace(TASK_NUMBER);
+							boss.receiveData(50, null, 20);
+							boss.poisonKids();
+						}
+					}
+			\end{lstlisting}
+			\newpage
+			\textbf{Klasa Pracownika}
+			\begin{lstlisting}[language=Java]
+				/**
+				 * @author Son Mati & Doxus
+				 */
+				public class Sidekick extends Client {
+					// obowiązkowy domyślny konstruktor
+					public Sidekick() {
+					}
+					// rozpoczęcie pracy
+					public void zacznijMurzynic() {
+						while(true) {
+							try {
+								Random rand = new Random();
+								this.space = (JavaSpace)lookup.getService();
+								Zadanie zad = new Zadanie(null, null, null, null);
+								zad = (Zadanie) space.takeIfExists(zad, null, defaultLease);
+								if (zad != null) {
+									if (zad.poisonPill == true) {
+										space.write(zad, null, defaultLease);
+										return;
+									}
+									System.out.println("Odebrałem zadanie o id " + zad.liczba
+									+ " i napisach " + zad.napis1 + " i " + zad.napis2);
+								}
+								Odpowiedz odp = new Odpowiedz(rand.nextInt(51), rand.nextInt(1000));
+								space.write(odp, null, defaultLease);
+							} catch (TransactionException | RemoteException | UnusableEntryException | InterruptedException ex) {
+								Logger.getLogger(Sidekick.class.getName()).log(Level.SEVERE, null, ex);
+							}
+						}
+					}
+					// obowiązkowy punkt wejścia
+					public static void main(String[] args) {
+						Sidekick murzyn = new Sidekick();
+						murzyn.zacznijMurzynic();
+					}
+				}
+			\end{lstlisting}
 	
 	
 	

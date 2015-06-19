@@ -1,6 +1,102 @@
 % !TeX spellcheck = pl_PL
 \newpage
 \section{CUDA}
+	\subsection{2013, 1 termin, Hafed Zighdi}
+		\subsubsection{Treść}
+			W oparciu o środowisko CUDA napisać równoległy program zapewniający wyszukiwanie minimum i maksimum elementów macierzy A i B. Można zakładać, że macierze wejściowe są kwadratowe. Program powinien zwracać 2 macierze zawierające min oraz max elementów macierzy wejściowych:
+			\begin{itemize}
+				\item minMatrix[i, j] = min(A[i, j], B[i, j])
+				\item maxMatrix[i, j] = max(A[i, j], B[i, j])
+			\end{itemize}
+			należy zaproponować kod kernela oraz jego wywołanie z kodem odpowiedzialnym za przydział pamięci z podziałem na bloki w dwóch wymiarach.
+		\subsubsection{Rozwiązanie}
+		\begin{lstlisting}[language=C]
+			#include <stdlib.h>
+			#include <stdio.h>
+			#include <math.h>
+			#define MATRIX_SIZE 10
+			
+			__global__ void transposeKernel(int * matrixA, int * matrixB, int * matrixMin, int * matrixMax)
+			{
+				int i = blockIdx.x * blockDim.x + threadIdx.x;
+				int j = blockIdx.y * blockDim.y + threadIdx.y;
+				if (i < MATRIX_SIZE && j < MATRIX_SIZE)
+				{
+					int index = i * MATRIX_SIZE + j;
+					matrixMin[index] = matrixA[index] > matrixB[index] ? matrixB[index] : matrixA[index];
+					matrixMax[index] = matrixA[index] < matrixB[index] ? matrixB[index] : matrixA[index];
+				}
+			}
+			
+			cudaError_t calculateMinMaxWithCuda(int ** matrixA, int ** matrixB, int ** matrixMin, int ** matrixMax)
+			{
+				// zdefiniowanie macierzy, która jest w pamięci karty
+				int * dev_a;
+				int * dev_b;
+				int * dev_max, dev_min;
+				size_t size = MATRIX_SIZE * MATRIX_SIZE;
+				// cudne dynksy
+				cudaError_t cudaStatus;
+				cudaStatus = cudaSetDevice(0);
+				// alokacja pamięci po 100 elementów
+				cudaStatus = cudaMalloc((void**)&dev_a, size * sizeof(int));
+				cudaStatus = cudaMalloc((void**)&dev_b, size * sizeof(int));
+				cudaStatus = cudaMalloc((void**)&dev_min, size * sizeof(int));
+				cudaStatus = cudaMalloc((void**)&dev_max, size * sizeof(int));
+			\end{lstlisting}
+			\newpage
+			\begin{lstlisting}[language=C]
+			{	// Spłaszczamy macierze do jednego wymiaru
+				// Kopiujemy po wierszu, 10 x 10
+				for (int i = 0; i < MATRIX_SIZE; i++)
+				{
+					cudaMemcpy((dev_a + i * MATRIX_SIZE), matrixA[i], MATRIX_SIZE * sizeof(int), cudaMemcpyHostToDevice);
+					cudaMemcpy((dev_b + i * MATRIX_SIZE), matrixB[i], MATRIX_SIZE * sizeof(int), cudaMemcpyHostToDevice);
+				}
+				// bloczek z wątkami 3x3
+				dim3 block_size(3, 3);
+				// liczba potrzebnych bloków, tak żeby size = liczba wątków
+				int block_count = MATRIX_SIZE / block_size.x + (MATRIX_SIZE % block_size.x == 0 ? 0 : 1);
+				
+				minMaxKernel << <grid_size, block_size >> >(dev_a, dev_b, dev_min, dev_max);
+				// przywrócenie dwóch wymiarów i przepisanie wyników
+				for (int i = 0; i < MATRIX_SIZE; i++)
+				{
+					cudaMemcpy(matrixMin[i], (dev_min + i * MATRIX_SIZE), MATRIX_SIZE * sizeof(int), cudaMemcpyDeviceToHost);
+					cudaMemcpy(matrixMax[i], (dev_max + i * MATRIX_SIZE), MATRIX_SIZE * sizeof(int), cudaMemcpyDeviceToHost);
+				}
+				return 1;
+			}
+			
+			int main()
+			{
+				int ** matrixA, ** matrixB;
+				int ** matrixMin, ** matrixMax;
+				matrixA = (int**)malloc(sizeof(int*)* MATRIX_SIZE);
+				matrixB = (int**)malloc(sizeof(int*)* MATRIX_SIZE);
+				matrixMin = (int**)malloc(sizeof(int*)* MATRIX_SIZE);
+				matrixMax = (int**)malloc(sizeof(int*)* MATRIX_SIZE);
+				for (int i = 0; i < MATRIX_SIZE; i++)
+				{
+					matrixA[i] = (int*)malloc(sizeof(int)* MATRIX_SIZE);
+					matrixB[i] = (int*)malloc(sizeof(int)* MATRIX_SIZE);
+					matrixMin[i] = (int*)malloc(sizeof(int)* MATRIX_SIZE);
+					matrixMax[i] = (int*)malloc(sizeof(int)* MATRIX_SIZE);
+				}
+				for (int i = 0; i < MATRIX_SIZE; i++)
+				{
+					for (int j = 0; j < MATRIX_SIZE; j++)
+					{
+						matrixA[i][j] = rand() % 20;
+						matrixB[i][j] = rand() % 20;
+						matrixMin[i] = matrixMax[i] = 0;
+					}
+				}
+				cudaError_t cudaStatus = calculateMinMaxWithCuda(matrixA, matrixB, matrixMin, matrixMax);
+				return 0;
+			}
+		\end{lstlisting}
+	\newpage
 	\subsection{2015, 0 termin, Hafed Zighdi}
 		\subsubsection{Treść}
 			W oparciu o środowisko CUDA napisać równoległy program zapewniający transpozycję macierzy kwadratowej ($ a_out[ i,j ] = a_in [ j,i ] $). Należy zaproponować kod kernela oraz jego wywołanie z kodem odpowiedzialnym za przydział pamięci z podziałem na bloki w dwóch wymiarach.
@@ -8,107 +104,79 @@
 			\begin{lstlisting}[language=C]
 			#include <stdio.h>
 			#include <stdlib.h>
-			
 			const unsigned int MATRIX_SIZE = 5;
-			
-			//definiowane na potrzeby debugowania
-			#define cudaError_t int
-			#define cudaSuccess 1
-			#define cudaFree free
-			#define cudaMalloc malloc
-			
-			struct dim3 {
-			int x;
-			int y;
-			dim3(int a, int b) {
-			x = a;
-			y = b;
-			}
-			};
-			//
 			
 			cudaError_t transposeWithCuda(int ** matrix, int ** matrixOut)
 			{
-			int * dev_a;
-			int * dev_b;
-			size_t size = MATRIX_SIZE * MATRIX_SIZE;
-			// bloczek z wątkami 2x2, zgodnie z treścią zadania
-			dim3 block_size(2, 2);
-			// liczba potrzebnych bloków, tak żeby size = liczba wątków
-			int block_count;
-			block_count = MATRIX_SIZE / block_size.x + (MATRIX_SIZE % block_size.x == 0 ? 0 : 1);
-			
-			// rozmiar gridu w blokach
-			// bloczek jest naszą podstawową jednostką (ma 4 wątki)
-			// grid ma mieć tyle bloczków ile potrzebujemy
-			dim3 grid_size(block_count, block_count);
-			
-			// jakieś dynksy do cudy
-			cudaError_t cudaStatus;
-			cudaStatus = cudaSetDevice(0);
-			
-			//allokacja tablic w pamięci karty graficznej
-			cudaStatus = cudaMalloc((void**) &dev_a, size * sizeof(int));
-			cudaStatus = cudaMalloc((void**) &dev_b, size * sizeof(int));
-			
-			// Spłaszczamy macierze do jednego wymiaru
-			// przekopiowanie matrixa do dev_a
-			for(int i = 0; i < MATRIX_SIZE; i++)
-			{
-			cudaStatus = cudaMemcpy((dev_a + i * MATRIX_SIZE), matrix[i], MATRIX_SIZE * sizeof(int), cudaMemcpyHostToDevice);
+				int * dev_a, dev_b;
+				size_t size = MATRIX_SIZE * MATRIX_SIZE;
+				// bloczek z wątkami 2x2, zgodnie z treścią zadania
+				dim3 block_size(2, 2);
+				// liczba potrzebnych bloków, tak żeby size = liczba wątków
+				int block_count;
+				block_count = MATRIX_SIZE / block_size.x + (MATRIX_SIZE % block_size.x == 0 ? 0 : 1);
+				// rozmiar gridu w blokach
+				// bloczek jest naszą podstawową jednostką (ma 4 wątki)
+				// grid ma mieć tyle bloczków ile potrzebujemy
+				dim3 grid_size(block_count, block_count);
+				// jakieś dynksy do cudy
+				cudaError_t cudaStatus;
+				cudaStatus = cudaSetDevice(0);
+				//allokacja tablic w pamięci karty graficznej
+				cudaStatus = cudaMalloc((void**) &dev_a, size * sizeof(int));
+				cudaStatus = cudaMalloc((void**) &dev_b, size * sizeof(int));
+				// Spłaszczamy macierze do jednego wymiaru
+				// przekopiowanie matrixa do dev_a
+				for(int i = 0; i < MATRIX_SIZE; i++)
+				{
+					cudaStatus = cudaMemcpy((dev_a + i * MATRIX_SIZE), matrix[i], MATRIX_SIZE * sizeof(int), cudaMemcpyHostToDevice);
+				}
+				transposeKernel<<<grid_size, block_size>>>(dev_a, dev_b);
+				// Konwersja z wektora 1D na macierz 2D
+				// przekopiowanie dev_b do matrixOut
+				for(int i = 0; i < MATRIX_SIZE; i++) {
+					cudaStatus = cudaMemcpy(matrixOut[i], (dev_b + i * MATRIX_SIZE), MATRIX_SIZE * sizeof(int), cudaMemcpyDeviceToHost);
+				}
+				return 1;
 			}
-			
-			transposeKernel<<<grid_size, block_size>>>(dev_a, dev_b);
-			
-			//Konwersja z wektora 1D na macierz 2D
-			// przekopiowanie dev_b do matrixOut
-			for(int i = 0; i < MATRIX_SIZE; i++) {
-			cudaStatus = cudaMemcpy(matrixOut[i], (dev_b + i * MATRIX_SIZE), MATRIX_SIZE * sizeof(int), cudaMemcpyDeviceToHost);
-			}
-			
-			return 1;
-			}
-			
-			
+			\end{lstlisting}
+			\newpage
+			\begin{lstlisting}[language=C]
 			__global__ void transposeKernel(int * a, int * out)
 			{
-			int i = blockIdx.x * blockDim.x + threadIdx.x;
-			int j = blockIdx.y * blockDim.y + threadIdx.y;
-			if (i < MATRIX_SIZE && j < MATRIX_SIZE)
-			{
-			out[i * MATRIX_SIZE + j] = a[j * MATRIX_SIZE + i];
-			}
-			
+				int i = blockIdx.x * blockDim.x + threadIdx.x;
+				int j = blockIdx.y * blockDim.y + threadIdx.y;
+				if (i < MATRIX_SIZE && j < MATRIX_SIZE)
+				{
+					out[i * MATRIX_SIZE + j] = a[j * MATRIX_SIZE + i];
+				}
 			}
 			
 			int main()
 			{
-			int ** matrix;
-			int ** matrixOut;
-			
-			matrix = (int**) malloc (sizeof(int*) * MATRIX_SIZE);
-			matrixOut = (int**) malloc (sizeof(int*) * MATRIX_SIZE);
-			
-			for (int i = 0; i < MATRIX_SIZE; i++)
-			{
-			matrix[i] = (int*) malloc (sizeof(int) * MATRIX_SIZE);
-			matrixOut[i] = (int*) malloc (sizeof(int) * MATRIX_SIZE);
-			}
-			
-			for (int i = 0; i < MATRIX_SIZE; i++)
-			{
-			for (int j = 0; j < MATRIX_SIZE; j++)
-			{
-			matrix[i][j] = rand() % 20;
-			printf("%d\t", matrix[i][j]);
-			}
-			printf("\n");
-			}
-			
-			// Add vectors in parallel.
-			cudaError_t cudaStatus = transposeWithCuda(matrix, matrixOut);
-			
-			return 0;
+				int ** matrix;
+				int ** matrixOut;
+				matrix = (int**) malloc (sizeof(int*) * MATRIX_SIZE);
+				matrixOut = (int**) malloc (sizeof(int*) * MATRIX_SIZE);
+				
+				for (int i = 0; i < MATRIX_SIZE; i++)
+				{
+					matrix[i] = (int*) malloc (sizeof(int) * MATRIX_SIZE);
+					matrixOut[i] = (int*) malloc (sizeof(int) * MATRIX_SIZE);
+				}
+				for (int i = 0; i < MATRIX_SIZE; i++)
+				{
+					for (int j = 0; j < MATRIX_SIZE; j++)
+					{
+						matrix[i][j] = rand() % 20;
+						printf("%d\t", matrix[i][j]);
+					}
+					printf("\n");
+				}
+				// Add vectors in parallel.
+				cudaError_t cudaStatus = transposeWithCuda(matrix, matrixOut);
+				
+				return 0;
 			}
 			
 			\end{lstlisting}

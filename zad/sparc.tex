@@ -305,7 +305,53 @@
 		\subsubsection{Treść}
 			Napisz w asemblerze procesora SPARC funkcję zwracającą \emph{a(n)} wyliczoną z poniższego wzoru rekurencyjnego, a pobierającą dwa argumenty: \emph{n} oraz \emph{k}, obydwa typu \textit{unsigned int}.
 			$$ a(n)=a(n-1)^k+n\cdot k,\;\;\;\;a(0)=1,\;\;\;n=1,2,3,... $$
-		\subsubsection{Rozwiązanie}
+		\subsubsection{Rozwiązanie nr 1 by Doxus}
+			\begin{lstlisting}[language={[sparc]Assembler}]
+				.global _start
+				
+				_start:
+					MOV		0x05,	%g1					;! g1 - K
+					MOV		0x0A,	%o7					;! rej o7 i i7 -> N (lokalne)
+					MOV		%o7,	%g7					;! N absolutne
+				
+				_petla:
+					SAVE	%sp,	-96,	%sp			;! otworzenie okna
+				
+					SUBcc	%i7,	0x00,	%g0			;! sprawdzenie, czy to dno rekurencji
+					BE		_nzero
+					NOP
+					
+					SUB		%i7,	0x01,	%o7			;! wykonanie rekurencji
+					BA		_petla
+					NOP
+					
+				_nzero:
+					MOV		0x00,	%i5
+					MOV		0x00,	%g2					;! g2 temp n
+				_petlapowrot:
+					RESTORE								;! zamknięcie koła
+					
+					MOV		%i5,	%l0					;! obliczenia
+					MOV		0x01,	%l1					;! temp k
+				_petlamnoz:
+					UMUL	%i5,	%l0,	%l0			;! obliczenia zgodnie ze wzorem
+					ADD		%l1,	0x01,	%l1
+					SUBcc	%l1,	%g1,	%g0
+					BNE		_petlamnoz
+					
+					UMUL	%g2,	%g1,	%l2
+					ADD		%l1,	%l2,	%o5
+				
+					ADD		%g2,	0x01,	%g2
+					
+					SUBcc	%g2,	%g7,	%g0			;! czy koniec odkręcania koła
+					BLE		_petlapowrot
+					NOP
+				
+					MOV		%i5,	%g1					;! g1 - wynik koncowy
+					NOP									;! kuniec
+			\end{lstlisting}
+		\subsubsection{Rozwiązanie nr 2}
 			Podobno otrzymano za to 5, choć rozwiązanie NIE JEST w pełni poprawne.
 			\begin{lstlisting}[language={[sparc]Assembler}]
 				.global fun
@@ -313,12 +359,12 @@
 				
 				fun:
 					save %sp,-96,%sp
-					
+				
 					mov %i0, %l0			; l0 - n
 					mov %i1, %l1			; l1 - k
 					mov 0, %l2				; power
 					mov 1, %l3				; a(n) = 1
-					
+				
 					subcc %i0, 1, %i0
 					bl theEnd				; if n = 0 then jump to theEnd
 					nop
@@ -326,7 +372,7 @@
 					mov %l0, %l2			; power = n
 					smul %l2, %l1, %l2		; power = power * k
 					add %l2, %l1, %l2		; power = power + k
-					
+				
 					call fun				; call recursion
 					mov %i0, %l3			; get score of recursion
 				
