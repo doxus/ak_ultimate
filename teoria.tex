@@ -167,7 +167,7 @@
 	\subsection{Okno rejestrów}
 	    \begin{table}[htbp]
 	    	\centering
-	    	\caption{Rejestry fizyczne}
+	    	\caption{Rejestry fizyczne - okno rejestrów}
 	    	\begin{tabular}{r|r|r}
 	    		\cline{2-2}    137   & \multirow{6}[2]{*}{$ \uparrow $ Okno rejestrów} &  \bigstrut[t]\\
 	    		&       &  \\
@@ -379,7 +379,7 @@
          	\item Załadowania kilku rozkazów z pamięci operacyjnej w jednym takcie procesora
 		\end{itemize}
     \subsection{Zależności między rozkazami}
-    	\subsubsection{Prawdziwa zależność danych}
+    	\subsubsection{Prawdziwa zależność danych} \label{subsubsec:RAW}
     		\emph{Read After Write (RAW)}\\
     		Występuje w momencie kiedy jeden rozkaz wymaga argumentu obliczanego przez poprzedni rozkaz. Opóźnienie eliminowane za pomocą "wyprzedzającego pobierania argumentu" - dana nie jest zapisywana do rejestru, tylko pobierana bezpośrednio z poprzedniego rozkazu, który znajduje się w akumulatorze (jeżeli dobrze rozumiem rysunek ze slajdu 21, wykład 4).
     	\subsubsection{Zależność wyjściowa}
@@ -454,7 +454,7 @@
 			\item Cecha systemu operacyjnego umożliwiająca wykonywanie kilku wątków w ramach jednego procesu
 			\item Cecha procesora oznaczająca możliwość jednoczesnego wykonywanie kilku wątków w ramach jednego procesora (rdzenia)
 		\end{itemize}
-	\subsection{Sprzętowa realizacja wielowątkowości}
+	\subsection{Sprzętowa realizacja wielowątkowości}\label{subsec:realizacjaWatkow}
 		Celem współbieżnej realizacji dwóch (lub więcej) wątków w jednym procesorze (rdzeniu) jest minimalizacja strat cykli powstałych w trakcie realizacji pojedynczego wątku w wyniku:
 		\begin{itemize}
 			\item chybionych odwołań do pamięci podręcznej,
@@ -1055,7 +1055,7 @@
 				\item Hipersześcian
 				\item Krata 2D, 3D
 				\item Torus 2D, 3D
-				\item Przełącznica krzyżowa (hierarchiczne przełącznice krzyżowe
+				\item Przełącznica krzyżowa (hierarchiczne przełącznice krzyżowe)
 				\item Sieci wielostopniowe (Omega, Butterfly, grube drzewo, Dragonfly i inne)
 				\item Sieci specjalizowane (\emph{proprietary} / \emph{custom network})
 			\end{itemize}

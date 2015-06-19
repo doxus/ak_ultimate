@@ -237,6 +237,14 @@
 			\begin{itemize}
 				\item Systemy NUMA zbudowane są z wielu procesorów, gdzie każdy procesor posiada własną, bardzo szybką pamięć lokalną.
 				\item Dodatkowo procesory posiadają wspólną, ogromną pamięć wspólną.
+				\item Dostęp do nielokalnej pamięci jest znacznie wolniejszy niż do lokalnej (ok. 10 razy).
+				\item W celu zapewnienia spójności między pamięciami podręcznymi stosowane są węzły i katalogi, i tylko katalogi, które są znacznie lepsze od protokołu MESI.
+				\item Można wyróżnić podkategorie systemów: NC-NUMA (non-cached) i CC-NUMA (cache coherent)
+				\item Systemy te posiadają średniej jakości skalowalność
+				\item Pamięć podręczna jest fizycznie rozproszona, ale logicznie wspólna.
+				\item Dostęp do pamięci nielokalnej odbywa się z użyciem katalogów oraz odczytywanie całych linii pamięci podręcznej.
+				\item Architektura NUMA jest bardzo efektywna dla aplikacji, które częściej odczytują z nielokalnej pamięci i nieefektywna dla aplikacji, które części zapisują do niej.\\
+				Przy zapisie trzeba zaktualizować stan tej linii we wszystkich węzłach, które je pobrały do siebie.
 			\end{itemize}
 			\item \textbf{Porównaj realizację rozkazów wektorowych w komputerach wektorowych i macierzowych.}
 			\ref{ss:wektor}
@@ -246,5 +254,21 @@
 				\item Z kolei w komputerze macierzowym ten sam rozkaz może być wykonywany w jednym kroku (jeśli jest wystarczająca liczba jednostek przetwarzających), czyli w stałym czasie.
 			\end{itemize}
 			\item \textbf{Wymień różnice między systemami SMP a MPP.}
+			\begin{itemize}
+				\item SMP posiada pamięć logicznie wspólną, ale może ona być fizycznie jednorodna (UMA) lub rozproszona (NUMA). Z kolei MPP posiada pamięć fizycznie i logicznie rozproszoną.
+				\item MMP jest znacznie bardziej skalowalne niż SMP (UMA - słabo, NUMA - średnio).
+				\item W SMP wymagany jest mechanizm do zachowania spójności pamięci podręcznych procesorów - może to być protokół MESI (UMA) lub katalogi (UMA i NUMA).
+				\item W MPP do kontroli wystarcza przesył komunikatów.
+				\item W SMP istnieje jedna wspólna pamięć, z kolei w MPP każdy węzeł ma swoją pamięć lokalną plus opcjonalnie wspólną.
+				\item W MPP jest wolniejsza komunikacji między węzłami sieci - potrzebna jest wymiana większej liczby informacji.
+			\end{itemize}
 			\item \textbf{Omów rozwiązania stosowane w klastrach o wysokiej niezawodności.}
+			\begin{itemize}
+				\item Redundancja węzłów (mocy obliczeniowej) - większa moc obliczeniowa, więcej mocy w zapasie
+				\item Dostęp do wspólnych zasobów (pamięci zewnętrznych) - więcej pamięci
+				\item Mirroring dysków - zabezpieczenie przed utratą danych
+				\item Mechanizmy kontrolujące funkcjonowanie węzłów - efektywniejsza praca całości jako jednego systemu
+				\item Redundancja sieci łączących (dla 3 rodzajów sieci) - przypadku błędu sieci klaster nie przestaje działać, tylko inna sieć przejmuje kontrolę
+				\item Redundancja zasilania - wincyj mocy i prundu
+			\end{itemize}
 		\end{enumerate}

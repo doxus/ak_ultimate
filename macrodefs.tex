@@ -8,13 +8,20 @@
 \newcommand{\Nie}[1] {
 	\color{Red}{#1}
 }
+\newcommand{\NieWiem}[1] {
+	\color{Blue}{#1}
+}
 
 % === Porównywarka odpowiedzi
 \newcommand{\answer}[3] {
 	\ifnum\pdfstrcmp{#1}{Tak}=0
 	\Tak{\item \textbf{#2}}
 	\else
-	\Nie{\item #2}
+		\ifnum\pdfstrcmp{#1}{Nie}=0
+		\Nie{\item #2}
+		\else
+		\NieWiem{\item #2}
+		\fi
 	\fi
 	\if\relax\detokenize{#3}\relax
 	\else

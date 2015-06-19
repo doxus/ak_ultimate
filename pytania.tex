@@ -540,6 +540,9 @@
 		isTrue5={Tak},%
 		answer5={Są przesuwane przy operacjach wywołania procedur}, %
 		explain5={Tak, z każdą nową wywołaną procedurą okno rejestrów przesuwane jest w dół (ze 137 do 0)}, %
+		isTrue6={Nie},%
+		answer6={Są przesuwane przy wystąpieniu rozkazów rozgałęzień.}, %
+		explain6={W architekturze SPARC okno jest przesuwane rozkazami SAVE i RESTORE, na życzenie programisty, a nie na wskutek rozkazów warunkowych.}, %
 	}
 \end{minipage}
 \begin{minipage}{\textwidth}
@@ -595,6 +598,12 @@
 		isTrue4={Tak},%
 		answer4={Zapewnia wykonanie tej samej operacji na wektorach argumentów},%
 		explain4={Znaczenie: \emph{Single Instruction Multiple Device}. Wykonuje jedną instrukcję na wielu urządzeniach.},%
+		isTrue5={Tak},%
+		answer5={Jest podstawą rozkazów wektorowych},%
+		explain5={Pod ten model są zaprojektowane rozkazy wektorowe - jedno instrukcja, wiele urządzeń.},%
+		isTrue6={Nie},%
+		answer6={Jest podstawą architektury procesorów superskalarnych},%
+		explain6={Nie, jest wykorzystywany w rozszerzeniach wektorowych, ale nie jest podstawą.},%
 	}
 \end{minipage}
 \begin{minipage}{\textwidth}
@@ -632,7 +641,7 @@
 \end{minipage}
 \begin{minipage}{\textwidth}
 	\question{%
-		question={Systemy wieloprocesorowe z pamięcią rozproszoną}%
+		question={Systemy wieloprocesorowe z pamięcią rozproszoną (MPP)}%
 	}{%
 		isTrue1={Tak},%
 		answer1={Wyróżniają się bardzo dużą skalowalnością},%
@@ -646,6 +655,15 @@
 		isTrue4={Nie},%
 		answer4={Wymagają zapewnienia spójności pamięci podręcznych pomiędzy węzłami},%
 		explain4={Wręcz nie powinny jej zapewniać, każdy węzeł pracuje osobno.},%
+		isTrue5={Tak},%
+		answer5={Wymianę danych i synchronizację procesów w węzłach realizują poprzez przesył komunikatów.},%
+		explain5={Tak, pamięć jest logicznie rozproszona, a węzły są fizycznie oddzielne, do komunikacji wystarcza tylko przesył komunikatów.},%
+		isTrue6={Nie},%
+		answer6={W większości przypadków wykorzystują nietypowe, firmowe rozwiązania sieci łączących węzły systemu.},%
+		explain6={Nie wiem czy w większości przypadków, ale na slajdach większość jest poświęcona typowym rozwiązaniom sieciowym (hipersześcian, krata, torus, przełącznica krzyżowa), a \emph{custom network} to tylko dodatek.},%
+		isTrue7={Nie},%
+		answer7={Wykorzystują katalog do utrzymania spójności pamięci węzłów systemu.},%
+		explain7={Między węzłami w MPP wykorzystuje się przesył komunikatów. Katalogi sa wykorzystywane przez systemy UMA i NUMA, które mogą być węzłami w MPP. Jednak komunikacja między samymi węzłami ich nie wykorzystuje.},%
 	}
 \end{minipage}
 \begin{minipage}{\textwidth}
@@ -718,16 +736,16 @@
 	}{%
 		isTrue1={Nie},%
 		answer1={Śledzenia adresów w protokole MESI},%
-		explain1={},%
+		explain1={Nie no kurwa, szanujmy się, katalogi powstały po to by wyprzeć protokół MESI.},%
 		isTrue2={Nie},%
 		answer2={Sterowania przesyłem komunikatów},%
-		explain2={},%
+		explain2={Nie, w UMA i NUMA nie ma przesyłu komunikatów, to jest w MPP i klastrach.},%
 		isTrue3={Tak},%
 		answer3={Utrzymania spójności pamięci w systemach o niejednorodnym dostępie do pamięci},%
-		explain3={},%
+		explain3={No tak, patrz poprzednie pytania. To jest problem z jakimi borykają się UMA i NUMA. Katalog można stosować do jego rozwiązania w obu architekturach.},%
 		isTrue4={Tak},%
 		answer4={Realizacji dostępu do nielokalnych pamięci w systemach NUMA},%
-		explain4={},%
+		explain4={Katalogi i węzły stanowią mechanizm do wymiany informacji między prockami i ich pamięciami.},%
 	}
 \end{minipage}
 \begin{minipage}{\textwidth}
@@ -748,163 +766,258 @@
 		explain4={Tak, patrz wyżej.},%
 	}
 \end{minipage}
-
+\begin{minipage}{\textwidth}
 \question{%
 	question={Efektywne wykorzystanie równoległości na poziomie danych umożliwiają}%
 }{%
-isTrue1={Tak},%
-answer1={Komputery wektorowe},%
-explain1={},%
-isTrue2={Tak},%
-answer2={Komputery macierzowe},%
-explain2={},%
-isTrue3={Tak},%
-answer3={Klastry},%
-explain3={},%
-isTrue4={Tak},%
-answer4={Procesory graficzne},%
-explain4={},%
-isTrue5={Tak},%
-answer5={Rozszerzenia SIMD procesorów superskalarnych}, %
-explain5={\\Ogółem zastosowanie tej równoległości jest możliwe gdy mamy do czynienia z wieloma danymi, które mogą być przetwarzane w tym samym czasie. A grafika, wektory, macierze itp. do takich należą.}, %
+	isTrue1={Tak},%
+	answer1={Komputery wektorowe},%
+	explain1={},%
+	isTrue2={Tak},%
+	answer2={Komputery macierzowe},%
+	explain2={},%
+	isTrue3={Tak},%
+	answer3={Klastry},%
+	explain3={},%
+	isTrue4={Tak},%
+	answer4={Procesory graficzne},%
+	explain4={},%
+	isTrue5={Tak},%
+	answer5={Rozszerzenia SIMD procesorów superskalarnych}, %
+	explain5={\\Ogółem zastosowanie tej równoległości jest możliwe gdy mamy do czynienia z wieloma danymi, które mogą być przetwarzane w tym samym czasie. A grafika, wektory, macierze itp. do takich należą.}, %
 }
-
-
-% --- PYTANIE 40
-\question{%
-	question={Wielowątkowość współbieżna w procesorze wielopotokowym zapewnia}%
-}{%
-isTrue1={Tak},%
-answer1={Możliwość wprowadzenia rozkazów różnych wątków do wielu potoków},%
-explain1={Tak, jest to charakterystyczna cecha tego typu wielowątkowości. Z kolei wielowątkowości grubo- i drobnoziarniste umożliwiają wprowadzenie do wielu potoków \emph{wyłącznie} jednego wątku (w jednym takcie!)},%
-isTrue2={Tak},%
-answer2={Realizację każdego z wątków do momentu wstrzymania któregoś rozkazu z danego wątku},%
-explain2={Tak, wątek jest realizowany do momentu wstrzymania rozkazu. Tę samą cechę posiada wielowątkowość gruboziarnista. Z kolei wielowątkowość drobnoziarnista w kolejnych taktach realizuje naprzemiennie rozkazy kolejnych wątków.},%
-isTrue3={Nie},%
-answer3={Przełączanie wątków co takt},%
-explain3={Nie, to umożliwia tylko wielowątkowość drobnoziarnista.},%
-isTrue4={Nie},%
-answer4={Automatyczne przemianowanie rejestrów},%
-explain4={Głowy nie dam, ale chyba żadna wielowątkowość nie zapewnia automatycznego przemianowania.},%
+\end{minipage}
+\begin{minipage}{\textwidth}
+	% --- PYTANIE 40
+	\question{%
+		question={Wielowątkowość współbieżna w procesorze wielopotokowym zapewnia}%
+	}{%
+		isTrue1={Tak},%
+		answer1={Możliwość wprowadzenia rozkazów różnych wątków do wielu potoków},%
+		explain1={Tak, jest to charakterystyczna cecha tego typu wielowątkowości. Z kolei wielowątkowości grubo- i drobnoziarniste umożliwiają wprowadzenie do wielu potoków \emph{wyłącznie} jednego wątku (w jednym takcie!)},%
+		isTrue2={Tak},%
+		answer2={Realizację każdego z wątków do momentu wstrzymania któregoś rozkazu z danego wątku},%
+		explain2={Tak, wątek jest realizowany do momentu wstrzymania rozkazu. Tę samą cechę posiada wielowątkowość gruboziarnista. Z kolei wielowątkowość drobnoziarnista w kolejnych taktach realizuje naprzemiennie rozkazy kolejnych wątków.},%
+		isTrue3={Nie},%
+		answer3={Przełączanie wątków co takt},%
+		explain3={Nie, to umożliwia tylko wielowątkowość drobnoziarnista.},%
+		isTrue4={Nie},%
+		answer4={Automatyczne przemianowanie rejestrów},%
+		explain4={Głowy nie dam, ale chyba żadna wielowątkowość nie zapewnia automatycznego przemianowania.},%
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={Architektura CUDA}%
+	}{%
+		isTrue1={Tak},%
+		answer1={Umożliwia bardzo wydajne wykonywanie operacji graficznych},%
+		explain1={Tak, ta architektura jest rozwinięciem mechanizmów wektorowych oraz macierzowych i jest przeznaczona specjalnie dla przetwarzania grafiki.},%
+		isTrue2={Tak},%
+		answer2={Stanowi uniwersalną architekturę obliczeniowa połączoną z równoległym modelem programistycznym},%
+		explain2={Tak, pomimo specjalizacji graficznej, architektura ta jest uniwersalna i zdolna do wszystkiego. Procesory posiadają uniwersalne programy obliczeniowe, a CUDA posiada model programistyczny (oraz podział programu na 5 faz). Składa się on z:\\- Kompilatora NVCC;\\- Podział programu na kod wykonywany przez procesor (host code) oraz kartę graficzną (kernel);\\- Realizacja obliczeń równoległych wg modelu SIMT (Single Instruction Multiple Threading)},%
+		isTrue3={Tak},%
+		answer3={Realizuje model obliczeniowy SIMT},%
+		explain3={Tak, patrz wyżej. Działanie: wiele niezależnych wątków wykonuje tę samą operację. Architektura posiada również mechanizm synchronizacji wątków (\emph{barrir synchronization}) dla komunikacji oraz współdzielona pamięć.},%
+		isTrue4={Nie},%
+		answer4={Jest podstawą budowy samodzielnych, bardzo wydajnych komputerów},%
+		explain4={Komputery CUDA nie są ogólnego zastosowania, tylko do ogólnych problemów numerycznych. Na pewno nie są podstawą, bo np. komputer ... (dokończyć by trza)},%
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={Spójność pamięci podręcznych w procesorze wielordzeniowym może być m.in. zapewniona za pomocą}%
+	}{%
+		isTrue1={Nie},%
+		answer1={Przełącznicy krzyżowej},%
+		explain1={Nie, to tylko jakieś rozwiązanie sieci połączeń.},%
+		isTrue2={Nie},%
+		answer2={Katalogu},%
+		explain2={ie,to bardziej zaawansowany shit służący do komunikacji.},%
+		isTrue3={Tak},%
+		answer3={Protokołu MESI},%
+		explain3={Tak, i tylko to do tego służy.},%
+		isTrue4={Nie},%
+		answer4={Wspólnej magistrali},%
+		explain4={Nie, ona służy do komunikacji i synchronizacji (?) dostępu do pamięci.},%
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={Metoda przemianowania rejestrów jest stosowana w celu eliminacji:}%
+	}{%
+		isTrue1={Nie},%
+		answer1={Błędnego przewidywania rozgałęzień},%
+		explain1={Nie, do tego służy m.in. tablica historii rozgałęzień.},%
+		isTrue2={Nie},%
+		answer2={Chybionego odwołania do pamięci podręcznej},%
+		explain2={Nie, to jest problem architektury VLIW i eliminuje się do przez przesunięcie rozkazów LOAD jak najwyżej, tak aby zminimalizować czas ewentualnego oczekiwania},%
+		isTrue3={Nie},%
+		answer3={Prawdziwej zależności danych},%
+		explain3={Nie, od tego jest metoda wyprzedzającego pobierania argumentu.},%
+		isTrue4={Tak},%
+		answer4={Zależności wyjściowej między rozkazami.},%
+		explain4={Tak, ta metoda eliminuje powyższy i poniższy problem. Polega na dynamicznym przypisywaniu rejestrów do rozkazów.},%
+		isTrue5={Tak},%
+		answer5={Antyzależności między rozkazami},%
+		explain5={Patrz wyżej.},%
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={W systemach wieloprocesorowych o architekturze CC-NUMA}%
+	}{%
+		isTrue1={Tak},%
+		answer1={Spójność pamięci wszystkich węzłów jest utrzymywana za pomocą katalogu},%
+		explain1={Tak, w NUMA do zachowania spójności danych można stosować wyłącznie katalogi (a np. protokołu MESI nie).},%
+		isTrue2={Tak},%
+		answer2={Pamięć operacyjna jest rozproszona fizycznie pomiędzy węzłami, ale wspólna logicznie},%
+		explain2={Dokładnie tak.},%
+		isTrue3={Nie},%
+		answer3={Każdy procesor ma bezpośredni dostęp do pamięci operacyjnej każdego węzła},%
+		explain3={Nie, dostęp jest pośredni. Pamięć w CC-NUMA jest fizycznie rozproszona, więc coś musi pośredniczyć w tej wymianie danych. Służy do tego mechanizm katalogów i węzłów. Procesor zgłasza zapotrzebowanie na linię pamięci do katalogu i ją później otrzymuje.},%
+		isTrue4={Tak},%
+		answer4={Dane są wymieniane między węzłami w postaci linii pamięci podręcznej},%
+		explain4={Tak, ponieważ w architekturze NUMA wymiana rekordów pamięci następuje z użyciem całej linii. Np. jeśli procek chce pobrać jednego floata 4-bajtowego, a linia ma 16 bajtów, to musimy pobrać całą linię (ale i tak odbywa się to bardzo szybko).},%
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	% --- PYTANIE 45
+	\question{%
+		question={W tablicy historii rozgałęzień z 1 bitem historii można zastosować następujący algorytm przewidywania (najbardziej złożony)}%
+	}{%
+		isTrue1={Nie},%
+		answer1={Skok opóźniony},%
+		explain1={Nie, skoki opóźnione nie służą do przewidywania rozgałęzień, są zupełnie innym mechanizmem eliminacji hazardu.},%
+		isTrue2={Nie},%
+		answer2={Przewidywanie, że rozgałęzienie (skok warunkowy) zawsze nastąpi},%
+		explain2={Nie, to strategia statyczna, która może być wykonywana gdy adres rozkazu rozgałęzienia NIE jest w tablicy. Nie wykorzystuje bitu historii.},%
+		isTrue3={Nie},%
+		answer3={Przewidywanie, że rozgałęzienie nigdy nie nastąpi},%
+		explain3={Nie, to strategia statyczna, która może być wykonywana gdy adres rozkazu rozgałęzienia NIE jest w tablicy. Nie wykorzystuje bitu historii.},%
+		isTrue4={Tak},%
+		answer4={Przewidywanie, że kolejne wykonanie rozkazu rozgałęzienia będzie przebiegało tak samo jak poprzednie},%
+		explain4={Tak, i to jest wszystko na co stać historię 1-bitową. Historia 2-bitowa umożliwia interpretację:\\- historii ostatniego wykonania skoku - tak lub nie;\\- przewidywania następnego wykonania skoku - tak lub nie\\A zamiana strategii następuje dopiero po drugim błędzie przewidywania.},%
+		isTrue5={Nie},%
+		answer5={Wstrzymanie napełniania potoku}, %
+		explain5={Nie, wstrzymywanie potoku mogą spowodować algorytmy zajmujące się eliminacją hazardu danych - zależnosci między argumentami.}, %
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={Do czynników tworzących wysoką niezawodność klastrów należą}%
+	}{%
+		isTrue1={Tak},%
+		answer1={Mechanizm mirroringu dysków},%
+		explain1={Tak, bo system operacyjny może.},%
+		isTrue2={Tak},%
+		answer2={Dostęp każdego węzła do wspólnych zasobów (pamięci zewnętrznych)},%
+		explain2={Tak, w razie czego można podpiąć i korzystać z dodatkowej pamięci.},%
+		isTrue3={Tak},%
+		answer3={Redundancja węzłów},%
+		explain3={No tak, jest.},%
+		isTrue4={Nie},%
+		answer4={Mechanizm "heartbeat"},%
+		explain4={Co to jest?},%
+		isTrue5={Nie},%
+		answer5={Zastosowanie procesorów wielordzeniowych w węzłach}, %
+		explain5={Nie, nie chodzi o liczbę rdzeni, ale o to, że każdy węzeł jest osobnych systemem, serwerem lub pecetem.}, %
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={Konsekwencją błędu przy przewidywaniu rozgałęzień może być:}%
+	}{%
+		isTrue1={Nie},%
+		answer1={Wstrzymanie realizowanego wątku i przejście do realizacji innego wątku},%
+		explain1={Przewidywanie rozgałęzień odbywa się lokalnie, osobno dla każdego wątku.},%
+		isTrue2={Tak},%
+		answer2={Konieczność wyczyszczenia kolejki rozkazów do potoku},%
+		explain2={W przypadku jeżeli mechanizm przewidywania rozgałęzienia się pomyli i zacznie pobierać rozkazy z błędnego rozgałęzienia, potok rozkazów musi zostać wyczyszczony. Czyli np. w IFie miało być \emph{true}, a okazało się, że \emph{false}, to należy zbędne pobrane rozkazy wyczyścić.},%
+		isTrue3={Nie},%
+		answer3={Konieczność wyczyszczenia tablicy historii rozgałęzień.},%
+		explain3={W przypadku błędu należy tablicę aktualizować, aby w przyszłości to rozgałęzienie było przewidywane z większą dokładnością.},%
+		isTrue4={Nie},%
+		answer4={Przerwanie realizowanego procesu / wątku i sygnalizacja wyjątku},%
+		explain4={Nie, należy jedynie zmienić strategię / przejść do innej gałęzi, a nie usuwać proces. Błąd przewidywania rozgałęzień nie jest czymś na tyle złym, by przerywać program. To naturalna konsekwencja potokowości, z którą należy się uporać.},%
+		isTrue5={Nie},%
+		answer5={Konieczność przemianowania rejestrów w procesorach}, %
+		explain5={Przemianowanie rejestrów występuje by procesorach skalarnych w celu równoległej realizacji zadań na potokach.}, %
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={Katalog może być stosowany do:}%
+	}{%
+		isTrue1={NieWiem},%
+		answer1={Utrzymania spójności pamięci podręcznych poziomu L1 i L2 w procesorach wielordzeniowych.},%
+		explain1={Wiadomo, że latalog jest wykorzystywany do zachowania spójności pamięci w systemach wieloprocesorowych, UMA i NUMA. Ale czy w wielordzeniowym? A chuj wie.},%
+		isTrue2={Tak},%
+		answer2={Utrzymania spójności pamięci wszystkich węzłów w systemach CC-NUMA},%
+		explain2={Systemy NUMA wykorzystują katalogi do zachowania spójności pamięci, i tylko katalogi.},%
+		isTrue3={NieWiem},%
+		answer3={Do utrzymania spójności pamięci węzłów systemów wieloprocesorowych z pamięcią rozproszoną (MPP)},%
+		explain3={Jeśli chodzi o zachowanie spójności pamięci w obrębie węzła, to \textbf{tak}, bo węzłem może być system UMA lub NUMA. Ale, jeśli chodzi o zachowanie spójności pamięci między węzłami, to \textbf{nie}, bo do tego służy przesył komunikatów.},%
+		isTrue4={Nie},%
+		answer4={Sterowania realizacją wątków w architekturze CUDA},%
+		explain4={Zdecydowanie bullshit, CUDA nie wykorzystuje katalogu. W CUDA wątkami steruje osobny procesor wątków.},%
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={Sprzętowe przełączenie wątków może być wynikiem: }%
+	}{%
+		isTrue1={Tak},%
+		answer1={Chybienia przy odwołaniu do pamięci podręcznej.},%
+		explain1={Patrz: realizacja sprzętowej wielowątkowości \ref{subsec:realizacjaWatkow}},
+		isTrue2={Nie},%
+		answer2={Upływu zadanego czasu (np. taktu)},%
+		explain2={Bullshit, szanujmy się. Można to zrobić programowo, ale nie sprzętowo.},%
+		isTrue3={Nie},%
+		answer3={Wystąpienia rozkazu rozgałęzienia},%
+		explain3={Dopiero jak nastąpi błąd przewidywania. Przy drabince IFów byłby armageddon.},%
+		isTrue4={Tak},%
+		answer4={Błędnego przewidywania rozgałęzień},%
+		explain4={Patrz: realizacja sprzętowej wielowątkowości \ref{subsec:realizacjaWatkow}},%
+		isTrue5={Nie},%
+		answer5={Przesunięcia okien rejestrów},%
+		explain5={To tylko zmiana rejestrów, niezwiązana z wątkami.},%
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={W architekturze CC-NUMA czas dostępu do pamięci operacyjnej może zależeć od:}%
+	}{%
+		isTrue1={Tak},%
+		answer1={Rodzaju dostępu (odczyt - zapis)},%
+		explain1={Zapis jest znacznie wolniejszy, bo wymaga aktualizacji całej spójnej logicznie pamięci.},
+		isTrue2={Nie},%
+		answer2={Stanu linii (zapisanego w katalogu), do której następuje odwołanie},%
+		explain2={Jak linia znajduje się już w katalogu, to następuje odczyt tylko.},%
+		isTrue3={Tak},%
+		answer3={Położenia komórki, do której odwołuje się rozkaz (lokalna pamięć węzła – pamięć innego węzła)},%
+		explain3={Dostęp do pamięci nielokalnej (innego procka) jest znacznie dłuższy (ok. 10-krotnie)},%
+		isTrue4={Nie},%
+		answer4={Odległości węzłów, zaangażowanych w wykonanie rozkazu, w strukturze sieci łączącej},%
+		explain4={Różnice są rzędu mikrosekund, nie jest to znaczący czas, tylko margines błędu najwyżej.},%
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={Wyprzedzające pobranie argumentu pozwala rozwiązać konflikt wynikający z:}%
+	}{%
+		isTrue1={Nie},%
+		answer1={Zależności wyjściowej miedzy rozkazami},%
+		explain1={Tę zależność musi kontrolować układ sterujący.},%
+		isTrue2={Tak},%
+		answer2={Prawdziwej zależności danych},%
+		explain2={Tak, do tego służy, patrz: prawdziwa zależność danych \ref{subsubsec:RAW}},%
+		isTrue3={Nie},%
+		answer3={Błędnego przewidywania rozgałęzień},%
+		explain3={Nie powoduje konfliktów, należy je tylko obsłużyć i ograniczyć liczbę występowań.},%
+		isTrue4={Tak},%
+		answer4={Antyzależności miedzy rozkazami},%
+		explain4={Rozkazowi, który odczytuje jakąś zmienną, od razu jest podrzucana jej zmieniona wartość. zamiast przechodzić przez rejestr pośredni (zapis i ponowny odczyt).},%
 }
-
-
-\question{%
-	question={Architektura CUDA}%
-}{%
-isTrue1={Tak},%
-answer1={Umożliwia bardzo wydajne wykonywanie operacji graficznych},%
-explain1={Tak, ta architektura jest rozwinięciem mechanizmów wektorowych oraz macierzowych i jest przeznaczona specjalnie dla przetwarzania grafiki.},%
-isTrue2={Tak},%
-answer2={Stanowi uniwersalną architekturę obliczeniowa połączoną z równoległym modelem programistycznym},%
-explain2={Tak, pomimo specjalizacji graficznej, architektura ta jest uniwersalna i zdolna do wszystkiego. Procesory posiadają uniwersalne programy obliczeniowe, a CUDA posiada model programistyczny (oraz podział programu na 5 faz). Składa się on z:\\- Kompilatora NVCC;\\- Podział programu na kod wykonywany przez procesor (host code) oraz kartę graficzną (kernel);\\- Realizacja obliczeń równoległych wg modelu SIMT (Single Instruction Multiple Threading)},%
-isTrue3={Tak},%
-answer3={Realizuje model obliczeniowy SIMT},%
-explain3={Tak, patrz wyżej. Działanie: wiele niezależnych wątków wykonuje tę samą operację. Architektura posiada również mechanizm synchronizacji wątków (\emph{barrir synchronization}) dla komunikacji oraz współdzielona pamięć.},%
-isTrue4={Nie},%
-answer4={Jest podstawą budowy samodzielnych, bardzo wydajnych komputerów},%
-explain4={Komputery CUDA nie są ogólnego zastosowania, tylko do ogólnych problemów numerycznych. Na pewno nie są podstawą, bo np. komputer ... (dokończyć by trza)},%
-}
-
-
-\question{%
-	question={Spójność pamięci podręcznych w procesorze wielordzeniowym może być m.in. zapewniona za pomocą}%
-}{%
-isTrue1={Nie},%
-answer1={Przełącznicy krzyżowej},%
-explain1={Nie, to tylko jakieś rozwiązanie sieci połączeń.},%
-isTrue2={Nie},%
-answer2={Katalogu},%
-explain2={ie,to bardziej zaawansowany shit służący do komunikacji.},%
-isTrue3={Tak},%
-answer3={Protokołu MESI},%
-explain3={Tak, i tylko to do tego służy.},%
-isTrue4={Nie},%
-answer4={Wspólnej magistrali},%
-explain4={Nie, ona służy do komunikacji i synchronizacji (?) dostępu do pamięci.},%
-}
-
-
-\question{%
-	question={Metoda przemianowania rejestrów jest stosowana w celu eliminacji:}%
-}{%
-isTrue1={Nie},%
-answer1={Błędnego przewidywania rozgałęzień},%
-explain1={Nie, do tego służy m.in. tablica historii rozgałęzień.},%
-isTrue2={Nie},%
-answer2={Chybionego odwołania do pamięci podręcznej},%
-explain2={Nie, to jest problem architektury VLIW i eliminuje się do przez przesunięcie rozkazów LOAD jak najwyżej, tak aby zminimalizować czas ewentualnego oczekiwania},%
-isTrue3={Nie},%
-answer3={Prawdziwej zależności danych},%
-explain3={Nie, od tego jest metoda wyprzedzającego pobierania argumentu.},%
-isTrue4={Tak},%
-answer4={Zależności wyjściowej między rozkazami.},%
-explain4={Tak, ta metoda eliminuje powyższy i poniższy problem. Polega na dynamicznym przypisywaniu rejestrów do rozkazów.},%
-isTrue5={Tak},%
-answer5={Antyzależności między rozkazami},%
-explain5={Patrz wyżej.},%
-}
-
-\question{%
-	question={W systemach wieloprocesorowych o architekturze CC-NUMA}%
-}{%
-isTrue1={Tak},%
-answer1={Spójność pamięci wszystkich węzłów jest utrzymywana za pomocą katalogu},%
-explain1={},%
-isTrue2={Tak},%
-answer2={Pamięć operacyjna jest rozproszona fizycznie pomiędzy węzłami, ale wspólna logicznie},%
-explain2={},%
-isTrue3={Nie},%
-answer3={Każdy procesor ma bezpośredni dostęp do pamięci operacyjnej każdego węzła},%
-explain3={},%
-isTrue4={Nie},%
-answer4={Dane są wymieniane między węzłami w postaci linii pamięci podręcznej},%
-explain4={},%
-}
-
-
-% --- PYTANIE 45
-\question{%
-	question={W tablicy historii rozgałęzień z 1 bitem historii można zastosować następujący algorytm przewidywania (najbardziej złożony)}%
-}{%
-isTrue1={Nie},%
-answer1={Skok opóźniony},%
-explain1={Nie, skoki opóźnione nie służą do przewidywania rozgałęzień, są zupełnie innym mechanizmem eliminacji hazardu.},%
-isTrue2={Nie},%
-answer2={Przewidywanie, że rozgałęzienie (skok warunkowy) zawsze nastąpi},%
-explain2={Nie, to strategia statyczna, która może być wykonywana gdy adres rozkazu rozgałęzienia NIE jest w tablicy. Nie wykorzystuje bitu historii.},%
-isTrue3={Nie},%
-answer3={Przewidywanie, że rozgałęzienie nigdy nie nastąpi},%
-explain3={Nie, to strategia statyczna, która może być wykonywana gdy adres rozkazu rozgałęzienia NIE jest w tablicy. Nie wykorzystuje bitu historii.},%
-isTrue4={Tak},%
-answer4={Przewidywanie, że kolejne wykonanie rozkazu rozgałęzienia będzie przebiegało tak samo jak poprzednie},%
-explain4={Tak, i to jest wszystko na co stać historię 1-bitową. Historia 2-bitowa umożliwia interpretację:\\- historii ostatniego wykonania skoku - tak lub nie;\\- przewidywania następnego wykonania skoku - tak lub nie\\A zamiana strategii następuje dopiero po drugim błędzie przewidywania.},%
-isTrue5={Nie},%
-answer5={Wstrzymanie napełniania potoku}, %
-explain5={Nie, wstrzymywanie potoku mogą spowodować algorytmy zajmujące się eliminacją hazardu danych - zależnosci między argumentami.}, %
-}
-
-\question{%
-	question={Do czynników tworzących wysoką niezawodność klastrów należą}%
-}{%
-isTrue1={Tak},%
-answer1={Mechanizm mirroringu dysków},%
-explain1={},%
-isTrue2={Tak},%
-answer2={Dostęp każdego węzła do wspólnych zasobów(pamięci zewnętrznych)},%
-explain2={},%
-isTrue3={Tak},%
-answer3={Redundancja węzłów},%
-explain3={},%
-isTrue4={Nie},%
-answer4={Mechanizm "heartbeat"},%
-explain4={},%
-isTrue5={Nie},%
-answer5={Zastosowanie procesorów wielordzeniowych w węzłach}, %
-explain5={}, %
-}
-
-
-
-
+\end{minipage}
 \end{enumerate}

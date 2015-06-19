@@ -1,6 +1,58 @@
 % !TeX spellcheck = pl_PL
 \newpage
 \section{MOSIX}
+	\subsection{2013, 1 termin, Daniel Kostrzewa}
+		\subsubsection{Treść}
+		Wykorzystując \textit{n} węzłów klastra napisać funkcję, która obliczy wartość \textit{F(x, y)}. Nagłówek funkcji ma wyglądać następująco:
+		\begin{lstlisting}[language=C]
+			double fun(double x, double y, int k)
+		\end{lstlisting}
+		gdzie wartością zwracaną jest obliczona wartość funkcji; k - liczba elementów iloczynu; x, y - argumenty funkcji. Założyć, że \textit{k} jest podzielne przez \textit{n} bez reszty.
+	\subsubsection{Rozwiązanie}
+		\begin{lstlisting}[language=C]
+			#include <stdio.h>
+			#include <stdlib.h>
+			#include <math.h>
+			
+			double calculateProduct(double x, double y, double a) {
+				return a * sqrt(x * y) / (2 * pow(x, 3) + 5 * y);
+			}
+			
+			int main(int argc, char * argv[]) {
+				int n = atoi(argv[1]);		// liczba węzłów klastra
+				int k = atoi(argv[2]);		// liczba elementów iloczynu
+				double x = atof(argv[3]);	// pierwszy argument
+				double y = atof(argv[4]);	// drugi argument
+				int final_product = 1;		// iloczyn wynikowy
+				int process_number = k / n;
+				int response_stream[2];		// strumień dla danych
+				double part_result = 1;		// jebnięcie potoków
+				pipe(response_stream);
+				// utworzenie procesów potomnych
+				int i, j;
+				for (i = 0; i < process_number; i++)
+				{
+					if (fork() == 0)
+					{
+						for (j = i * process_number; j < (i + 1) * process_number; j++)
+						{
+							part_result = part_result * calculateProduct(x, y, j);
+							write(response_stream[1], &part_result, sizeof(double));
+						}
+						exit(0);
+					}
+				}
+				// odczytanie danych częściowych
+				for (i = 0; i < process_number; i++)
+				{
+					read(response_stream[0], &part_result, sizeof(double));
+					final_product = final_product * part_result;
+				}
+				printf("Twój szczęśliwy iloczyn to %g", final_product);
+				return 0;
+			}
+		\end{lstlisting}
+
 	\subsection{2015, 0 termin, Daniel Kostrzewa}
 		\subsubsection{Treść}
 			Napisać program, który utworzy \textit{n} procesów potomnych. Proces zarządzający ma wysyłać zestaw liczb do procesów potomnych (założyć, że liczba przesyłanych danych wynosi \textit{k}).
@@ -11,81 +63,75 @@
 			#include <stdio.h>
 			#include <stdlib.h>
 			#include <math.h>
-			
 			#define PI 3.14159
 			
 			float calculate_circle_area(int radius)
 			{
-			return PI * pow((float) radius, 2);
+				return PI * pow((float) radius, 2);
 			}
 			
 			int main(int argc, char* argv[])
 			{
-			int n = atoi(argv[1]);
-			int k = atoi(argv[2]);
-			
-			int poison = -1;		//promien -1 oznacza ze jest to trujaca pigulka zabijajaca proces potomny
-			
-			int * tab = (int*) malloc(sizeof(int) * k);	//allokacja tablicy k liczb (promieni)
-			int i;
-			for (i = 0; i < k; i++)
-			{
-			tab[i] = rand() % 20;
-			}
-			
-			int process_number = n / k;
-			int data_stream[2], response_stream[2];		//2 strumienie, jeden do wysyłania danych, drugi do odbioru odpowiedzi
-			
-			// wyniki
-			int part;
-			int sum = 0;
-			
-			// jebnięcie potoków
-			// odpowiedzi z procesów potomnych
-			pipe(response_stream);
-			// in - promienie kół
-			// out - otrzymane wyniki - pola kół
-			pipe(data_stream);
-			
-			// utworzenie procesów potomnych
-			for (i = 0; i < n; i++)
-			{
-			if (fork() == 0)
-			{
-			int radius;
-			// wykonywanie obliczeń dopóki nie zostanie OTRUTY(!)
-			while(true)
-			{
-			if (read(data_stream[0], &radius, sizeof(int)) != sizeof(int))
-			continue;
-			if (radius == -1)	// wyłącza się tylko jak otrzymamy pigułkę
-			exit(0);
-			
-			float result = calculate_circle_area(radius);
-			write(response_stream[1], &result, sizeof(float));
-			}
-			}
-			}
-			// wysłanie danych do procesów potomnych
-			for (i = 0; i < k; i++)
-			{
-			write(data_stream[1], &tab[i], sizeof(int));
-			}
-			// Halo odbjoor danych
-			for (i = 0; i < n; i++)
-			{
-			read(response_stream[0], &part, sizeof(int));
-			sum = sum + part;
-			}
-			// ZABIJANIE DZIECI
-			for (i = 0; i < k; i++)
-			{
-			write(data_stream[1], &poison, sizeof(int));
-			}
-			// wypisanie odpowiedzi
-			printf("Suma pól kół: %d", sum);
-			
-			return 0;
+				int n = atoi(argv[1]);
+				int k = atoi(argv[2]);
+				//promien -1 oznacza ze jest to trujaca pigulka zabijajaca proces potomny
+				int poison = -1;		
+				//allokacja tablicy k liczb (promieni)
+				int * tab = (int*) malloc(sizeof(int) * k);
+				int i;
+				for (i = 0; i < k; i++)
+				{
+					tab[i] = rand() % 20;
+				}
+				int process_number = n / k;
+				// 2 strumienie, jeden do wysyłania danych, drugi do odbioru odpowiedzi
+				int data_stream[2], response_stream[2];
+				// wyniki
+				int part;
+				int sum = 0;
+				// jebnięcie potoków
+				// odpowiedzi z procesów potomnych
+				pipe(response_stream);
+				// in - promienie kół
+				// out - otrzymane wyniki - pola kół
+				pipe(data_stream);
+				// utworzenie procesów potomnych
+				for (i = 0; i < n; i++)
+				{
+					if (fork() == 0)
+					{
+						int radius;
+						// wykonywanie obliczeń dopóki nie zostanie OTRUTY(!)
+						while(true)
+						{
+							if (read(data_stream[0], &radius, sizeof(int)) != sizeof(int))
+								continue;
+							if (radius == -1)	// wyłącza się tylko jak otrzymamy pigułkę
+								exit(0);
+							float result = calculate_circle_area(radius);
+							write(response_stream[1], &result, sizeof(float));
+						}
+					}
+				}
+				// wysłanie danych do procesów potomnych
+				for (i = 0; i < k; i++)
+				{
+					write(data_stream[1], &tab[i], sizeof(int));
+				}
+				// Halo odbjoor danych
+				for (i = 0; i < n; i++)
+				{
+					read(response_stream[0], &part, sizeof(int));
+					sum = sum + part;
+				}
+				// ZABIJANIE DZIECI
+				for (i = 0; i < k; i++)
+				{
+					write(data_stream[1], &poison, sizeof(int));
+				}
+				// wypisanie odpowiedzi
+				printf("Suma pól kół: %d", sum);
+				return 0;
 			}
 			
 			\end{lstlisting}
