@@ -139,6 +139,27 @@
 \end{minipage}
 \begin{minipage}{\textwidth}
 	\question{%
+		question={Dla uniknięcia hazardu danych można:}%
+	}{%
+		isTrue1={Nie},%
+		answer1={Zastosować uproszczone metody adresacji.},%
+		explain1={RISC nie eliminuje hazardu XD Skracają tylko czas dostępu do pamięci.},%
+		isTrue2={Tak},%
+		answer2={Wykorzystać szynę zwrotną.},%
+		explain2={Szyna zwrotna jest stosowana by zastosować "wyprzedzające pobieranie argumentów", które eliminuje prawdziwą zależność danych (RAW).},%
+		isTrue3={Nie},%
+		answer3={Zastosować specjalny bit w kodzie rozkazu.},%
+		explain3={Jeden dodatkowy bicik nie sprawi, że argument będzie odczytany poprawnie.},%
+		isTrue4={Nie},%
+		answer4={Zastosować tablicę historii rozgałęzień.},%
+		explain4={Ona eliminuje hazard sterowania.},%
+		isTrue5={Tak},%
+		answer5={Wstrzymać na 1 takt napełnianie potoku.},%
+		explain5={Tak, to może wyeliminować antyzależność (WAR).},%
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
 		question={Mechanizm skoków opóźnionych:}%
 	}{%
 		isTrue1={Tak},%
@@ -171,6 +192,12 @@
 		isTrue4={Nie},%
 		answer4={Jest obsługiwana przez jądro systemu operacyjnego},%
 		explain4={Chyba nie, ten mechanizm znajduje się w sprzęcie procesora.},%
+		isTrue5={Nie},%
+		answer5={Jest stosowana do statycznego przewidywania rozgałęzień.},%
+		explain5={Ona służy do dynamicznego przewidywania rozgałęzień. Początkowe strategie są statyczne, ale później zmieniają się w dynamiczne.},%
+		isTrue6={Nie},%
+		answer6={Pozwala zapamiętać całą historię wykonań każdego rozkazu rozgałęzienia.},%
+		explain6={Tablica poświęca dla każdego rozkazu pewną skończoną liczbę bitów w celu przewidzenia rozgałęzienia.},%
 	}
 \end{minipage}
 \begin{minipage}{\textwidth}
@@ -191,7 +218,7 @@
 		explain4={Tak, i to jest wszystko na co stać historię 1-bitową. Historia 2-bitowa umożliwia interpretację:\\- historii ostatniego wykonania skoku - tak lub nie;\\- przewidywania następnego wykonania skoku - tak lub nie\\A zamiana strategii następuje dopiero po drugim błędzie przewidywania.},%
 		isTrue5={Nie},%
 		answer5={Wstrzymanie napełniania potoku}, %
-		explain5={Nie, wstrzymywanie potoku mogą spowodować algorytmy zajmujące się eliminacją hazardu danych - zależnosci między argumentami.}, %
+		explain5={Nie, wstrzymywanie potoku mogą spowodować algorytmy zajmujące się eliminacją hazardu danych - zależności między argumentami.}, %
 	}
 \end{minipage}
 \begin{minipage}{\textwidth}
@@ -473,7 +500,7 @@
 		explain2={Tak, multimedialne rozszerzenie służą do działania na wielu rejestrach jednocześnie, co umożliwiają m.in. technologie MMX i SSE.},%
 		isTrue3={Tak},%
 		answer3={Jest wykorzystywany w heterogenicznej architekturze PowerXCell},%
-		explain3={Być może XD},%
+		explain3={Tak jest \url{https://en.wikipedia.org/wiki/Cell_(microprocessor)}},%
 		isTrue4={Tak},%
 		answer4={Zapewnia wykonanie tej samej operacji na wektorach argumentów},%
 		explain4={Znaczenie: \emph{Single Instruction Multiple Device}. Wykonuje jedną instrukcję na wielu urządzeniach.},%
@@ -637,6 +664,27 @@
 \end{minipage}
 \begin{minipage}{\textwidth}
 	\question{%
+		question={Systemy wieloprocesorowe z jednorodnym dostępem do pamięci (UMA):}%
+	}{%
+		isTrue1={Tak},%
+		answer1={Zapewniają spójność pamięci podręcznych wszystkich procesorów},%
+		explain1={Czuwa nad tym protokół MESI, każdy uaktualnia stan pamięci w każdym z procesorów.},%
+		isTrue2={Tak},%
+		answer2={Mają niską skalowalność},%
+		explain2={Mają wręcz chujową skalowalność, ponieważ przeważnie są połączone takimi konstrukcjami jak przełącznica krzyżowa czy wspólna magistrala, a sam mechanizm \emph{snoopingu} jest kiepsko skalowalny.},%
+		isTrue3={Tak},%
+		answer3={Wykorzystują katalog do utrzymania spójności pamięci.},%
+		explain3={Tak, wg wykładów Kozielskiego UMA może wykorzystywać do kontroli pamięci spójnej zarówno katalog, jak i protokół MESI.},%
+		isTrue4={Nie},%
+		answer4={Wykorzystują przesył komunikatów między procesorami.},%
+		explain4={To cecha MPP oraz klastrów.},%
+		isTrue5={Tak},%
+		answer5={Umożliwiają dostęp do pamięci najczęściej poprzez wspólną magistralę lub przełącznicę krzyżową.},%
+		explain5={Są to jednego z możliwych konfiguracji UMA, są to najprostsze i najtańsze rozwiązania, więc prawdopodobnie też najczęściej stosowane (ale również najmniej skalowalne).},%
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
 		question={Protokół MESI:}%
 	}{%
 		isTrue1={Nie},%
@@ -682,7 +730,7 @@
 \end{minipage}
 \begin{minipage}{\textwidth}
 	\question{%
-		question={W architekturze CC-NUMA}%
+		question={W architekturze CC-NUMA:}%
 	}{%
 		isTrue1={Tak},%
 		answer1={Każdy procesor ma dostęp do pamięci operacyjnej każdego węzła},%
@@ -835,7 +883,7 @@
 \end{minipage}
 \begin{minipage}{\textwidth}
 	\question{%
-		question={Systemy wieloprocesorowe z pamięcią rozproszoną (MPP):}%
+		question={Systemy pamięcią rozproszoną (MPP):}%
 	}{%
 		isTrue1={Tak},%
 		answer1={Wyróżniają się bardzo dużą skalowalnością},%
@@ -979,6 +1027,24 @@
 \end{minipage}
 \begin{minipage}{\textwidth}
 	\question{%
+		question={Sieci systemowe (SAN)}%
+	}{%
+		isTrue1={Nie},%
+		answer1={Wymagają protokołu MESI},%
+		explain1={Sieci to tylko kabel, nie mają wymagań co do zarządzania pamięcią XD},%
+		isTrue2={Tak},%
+		answer2={Wykorzystują przełączniki łączone wg topologii grubego drzewa},%
+		explain2={Topologię grubego drzewa wykorzystuje np. InfiniBand, która jest siecią łączącą w klastrach znajdujących się w komputerach top500.},%
+		isTrue3={Tak},%
+		answer3={Realizują przesyły bloków danych bezpośrednio między pamięciami operacyjnymi węzłów sieci},%
+		explain3={Sieci SAN posiadają sterowniki DMA, czyli mogą przesyłać dane bezpośrednio między pamięciami, a same dane przesyłane są w pakietach, czyli jakichś blokach.},%
+		isTrue4={Tak},%
+		answer4={Są stosowane w klastrach},%
+		explain4={Tak, łączą węzły z systemami.},%
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
 		question={Czy poniższa lista jest rosnąco uporządkowana według skalowalności:}%
 	}{%
 		isTrue1={Nie},%
@@ -1029,4 +1095,23 @@
 		explain5={To tylko zmiana rejestrów, niezwiązana z wątkami.},%
 	}
 \end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={Dostęp każdego procesora do wspólnej pamięci operacyjnej jest realizowany w systemach:}%
+	}{%
+		isTrue1={Tak},%
+		answer1={NUMA},%
+		explain1={W NUMA pamięć jest rozdzielona fizycznie, ale logicznie wspólna. Wszystkie procesory mają do niej dostęp.},
+		isTrue2={Tak},%
+		answer2={SMP},%
+		explain2={Wszystkie modele SMP, jak UMA, NUMA czy CC-NUMA posiadają pamięć logicznie wspólną.},
+		isTrue3={Nie},%
+		answer3={Klaster},%
+		explain3={Pamięć jest logicznie rozproszona, każdy węzeł(czyli system) posiada swoją.},
+		isTrue4={Nie},%
+		answer4={MPP},%
+		explain4={Pamięć jest logicznie rozproszona, każdy węzeł (procesor albo system UMA / NUMA) posiada swoją.},
+	}
+\end{minipage}
+
 \end{enumerate}
