@@ -1,5 +1,58 @@
 % !TeX spellcheck = pl_PL
+\documentclass[a4paper,twoside]{article}
+\usepackage{polski}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
 
+\usepackage[unicode, bookmarks=true]{hyperref} %do zakładek
+\usepackage{tabto} % do tabulacji
+\NumTabs{6} % globalne ustawienie wielkosci tabulacji
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{dcolumn}
+\usepackage{bigstrut}
+\usepackage{color}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{wrapfig}
+\usepackage{listings,lstautogobble}
+\usepackage[usenames,dvipsnames]{xcolor}
+
+
+\setlength{\textheight}{24cm}
+\setlength{\textwidth}{15.92cm}
+\setlength{\footskip}{10mm}
+\setlength{\oddsidemargin}{0mm}
+\setlength{\evensidemargin}{0mm}
+\setlength{\topmargin}{0mm}
+\setlength{\headsep}{5mm}
+
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+\newcolumntype{N}{@{}m{0pt}@{}}
+
+\graphicspath{ {./images/} }
+
+% === Reset inkrementacji sekcji przy nowym parcie === %
+\usepackage{titlesec}
+
+\makeatletter
+\@addtoreset{section}{part}
+\makeatother
+\titleformat{\part}[display]
+{\normalfont\LARGE\bfseries\centering}{}{0pt}{}
+
+\begin{document}
+	\bibliographystyle{plain}
+	\input{./macrodefs}
+	
+	
+	
+	\begin{titlepage}
+		\title{\huge Architektura komputerów - ULTIMATE}
+		\author{\large SonMati \\ Doxus}
+		\maketitle
+	\end{titlepage}
 \newpage
 %===============================================================================
 %*** Opracowanie wykładów *****************************
@@ -1229,3 +1282,4 @@
 			\item Cele budowy: wysoka wydajność lub/i wysoka niezawodność, równoważenie obciążenia
 			\item Korzystny wskaźnik: cena/wydajność
 		\end{itemize}
+\end{document}
