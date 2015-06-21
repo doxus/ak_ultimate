@@ -32,9 +32,9 @@
 			\item \textbf{Wymień najważniejsze cechy architektury procesorów superskalarnych.}
 			\label{itm:superskalar}
 			\begin{itemize}
-				\item kilka potokowych jednostek operacyjnych
-				\item wykonywanie kilku rozkazów w 1 takcie
-				\item konieczność pobrania z PaO kilku rozkazów jednym takcie
+				\item Kilka potokowych jednostek operacyjnych
+				\item Wykonywanie kilku rozkazów w 1 takcie
+				\item Honieczność pobrania z PaO kilku rozkazów jednym takcie
 			\end{itemize}
 			
 			
@@ -222,6 +222,51 @@
 			
 			\item \textbf{Co jest celem sprzętowego sterowania współbieżną realizacją wielu wątków w jednym rdzeniu? Jakie są metody i jakie warunki sprzętowej realizacji wielowątkowości?}\\
 			Patrz: \ref{itm:watek}
+		\end{enumerate}
+		
+	\section{2014, termin I, NSI}
+		\begin{enumerate}
+			\item \textbf{Scharakteryzuj ogólnie procesory o architekturze superskalarnej}
+			\begin{itemize}
+				\item Procesor superskalarny posiada potoki, które umożliwiają wykonywanie większej niż 1 liczby rozkazów w 1 takcie.
+				\item Potrafi załadować kilka rozkazów z pamięci operacyjnej w jednym takcie procesora.
+				\item Z tych powodów wynika hazard sterowania oraz hazard danych.
+				\item Hazard sterowania wynika z potokowości i polega na możliwości błędnego przewidywania rozgałęzień i warunków. Eliminuje się go stosują układy przewidywania rozgałęzień (sprzętowo) lub przez programistę metodą skoków opóźnionych (programowo).
+				\item Hazard danych również wynika z potokowości procesora, polega na przetwarzania danych w taki sposób, że równoległe wykonywania operacji, może skutkować błędnym wykonaniem programu. Można wyróżnić 3 rodzaje zależności:
+				\begin{itemize}
+					\item Prawdziwa zależność danych (\emph{RAW - Read After Write}) - próba odczytania zmiennej która jest jednocześnie zapisywana. Można rozwiązać przez szynę zwrotną (wyprzedzające pobieranie argumentu) lub metodę przemianowania rejestrów.
+					\item Zależność wyjściowa (\emph{WAW - Write After Write}) - próba zapisania zmiennej która jest jednocześnie zapisywana. Ten rodzaj zależności musi być wykrywany sprzętowo.
+					\item Antyzależność (\emph{WAR - Write After Read}) - próba zapisania zmiennej która jest jednocześnie odczytywana. Można rozwiązać przez wstrzymanie napełniania potoku na 1 takt lub metodę przemianowania rejestrów.
+				\end{itemize}
+			\end{itemize}
+			\item \textbf{Wyjaśnij na czym polega różnica w wykonaniu rozkazów wektorowych w komputerach wektorowych i macierzowych}
+			\begin{itemize}
+				\item W komputerach wektorowych czas wykonania rozkazu wektorowego jest wprost proporcjonalny do długości wektora. Z kolei w komputerach macierzowych, jeśli ten posiada wystarczającą liczbę jednostek (co najmniej długość wektora x długość wektora), czas ten jest stały.
+			\end{itemize}
+			\item \textbf{Scharakteryzuj ogólnie systemy typu klaster}
+			\begin{itemize}
+				\item Pamięć systemów klaster jest rozproszona fizycznie i logicznie.
+				\item Węzłem klastra może być albo komputer osobisty (PC), albo system SMP jako serwer.
+				\item Każdy węzeł klastra musi posiadać osobny system operacyjny.
+				\item Klaster może być węzłem systemu MPP.
+				\item Za komunikację odpowiada przesył komunikatów.
+				\item Węzły są połączone za pomocą sieci specjalizowane SAN lub zwykłej sieci LAN.
+				\item Klastry charakteryzują się wysoką niezawodnością i wydajnością za rozsądną cenę.
+				\item Bardzo wysoka skalowalność.
+			\end{itemize}
+			\item \textbf{Wyjaśnij na czym polega problem zależności między danymi przy potokowej realizacji rozkazów. Podaj przykłady rozwiązania tego problemu w procesorach RISC.}
+			\begin{itemize}
+				\item przy potokowej realizacji rozkazów występuje hazard danych, czyli zależności między danymi. Można wyróżnić ich 3 rodzaje:
+				\begin{itemize}
+					\item Prawdziwa zależność danych (\emph{RAW - Read After Write}) - próba odczytania zmiennej która jest jednocześnie zapisywana. Można rozwiązać przez szynę zwrotną (wyprzedzające pobieranie argumentu) lub metodę przemianowania rejestrów.
+					\item Zależność wyjściowa (\emph{WAW - Write After Write}) - próba zapisania zmiennej która jest jednocześnie zapisywana. Ten rodzaj zależności musi być wykrywany sprzętowo.
+					\item Antyzależność (\emph{WAR - Write After Read}) - próba zapisania zmiennej która jest jednocześnie odczytywana. Można rozwiązać przez wstrzymanie napełniania potoku na 1 takt lub metodę przemianowania rejestrów.
+				\end{itemize}
+			\end{itemize}
+			\item \textbf{Omów organizację pamięci podręcznych (PaP) oraz metody sprowadzania danych z pamięci operacyjnej do PaP? Dlaczego stosuje się pamięci podręczne.}
+			\begin{itemize}
+				\item 
+			\end{itemize}
 		\end{enumerate}
 		
 	\section{2015, Termin 0}

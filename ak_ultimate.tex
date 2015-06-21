@@ -18,8 +18,9 @@
 \usepackage{wrapfig}
 \usepackage{listings,lstautogobble}
 \usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{epigraph}
 
-
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
 \setlength{\textheight}{24cm}
 \setlength{\textwidth}{15.92cm}
 \setlength{\footskip}{10mm}
@@ -103,9 +104,41 @@
 
 
 \begin{titlepage}
-\title{\huge Architektura komputerów - ULTIMATE}
-\author{\large SonMati \\ Doxus}
-\maketitle
+	\begin{center}
+		
+		% Upper part of the page. The '~' is needed because \\
+		% only works if a paragraph has started.
+		\includegraphics[width=0.5\textwidth]{./images/logo.png}~\\[1cm]
+		%?[width=0.15\textwidth]
+		
+		\textsc{\LARGE Politechnika Śląska w Gliwicach}\\[1.5cm]
+		
+		\textsc{\Large Architektura komputerów}\\
+		\textsc{\today}\\[0.5cm]
+		
+		% Title
+		\HRule \\[0.4cm]
+		{ \huge \bfseries ULTIMATE  \\[0.4cm] }
+		
+		\HRule \\[1.2cm]
+		
+		% Author and supervisor
+		\textsc{\Large Autorzy:} \\
+		{\large Son Mati} \\
+		{\large Doxus}\\[0.8cm]
+		
+		Informatyka, semestr VI \\
+		Rok akademicki 2014/2015 \\
+		Grupy GKiO3 oraz PSI \\
+		Rybnik oraz Mikołów \\
+		Rocznik 2012\\[1.2cm]
+		\epigraph{
+			"Gry są życiem. Gry są światem."
+		}{
+		--- Doxus} .
+		\vfill
+		
+	\end{center}
 \end{titlepage}
 
 \input{./teoria.tex}
