@@ -760,8 +760,8 @@
 			\item Ulepszona realizacja operacji zmp FMA (fused multiply-add) dla pojedynczej i podwójnej precyzji
 		\end{itemize}
 
-	\section{Wątki}
-		\subsection{Co to jest?}
+	\subsection{Wątki}
+		\subsubsection{Co to jest?}
 			\begin{itemize}
 				\item Wątek reprezentuje pojedynczą operację (a single work unit or operation)
 				\item Wątki są automatycznie grupowane w bloki, maksymalny rozmiar bloku = 512 wątków (w architekturze Fermi i wyższych –1024 wątki).
@@ -770,12 +770,12 @@
 				\item Grupowanie bloków –siatka (grid) o geometrii 1, 2-wymiarowej
 				\item Wymaga się, aby bloki wątków tworzących siatkę mogły się wykonywać niezależnie: musi być możliwe ich wykonanie w dowolnym porządku, równolegle lub szeregowo.
 			\end{itemize}
-		\subsection{Grupowanie wątków w bloki i siatkę}
+		\subsubsection{Grupowanie wątków w bloki i siatkę}
 			\begin{itemize}
 				\item Siatka o geometrii jednowymiarowej (trzy bloki wątków)
 				\item Każdy blok -geometria dwuwymiarowa (wymiary 2 x 3)
 			\end{itemize}
-		\subsection{Sprzętowa organizacja wykonywania wątków}
+		\subsubsection{Sprzętowa organizacja wykonywania wątków}
 			\begin{itemize}
 				\item Przy uruchomieniu \textit{kernela} wszystkie bloki tworzące jego siatkę obliczeń są rozdzielane pomiędzy multiprocesory danego GPU
 				\item Wszystkie wątki danego bloku są przetwarzane w tym samym multiprocesorze
@@ -794,16 +794,16 @@
 %========================================
 %*** Rodzaje pamięci multiprocesora *****
 %========================================
-\section{Rodzaje pamięci multiprocesora}
-	\subsection{Pamięć globalna}
+\subsection{Rodzaje pamięci multiprocesora}
+	\subsubsection{Pamięć globalna}
 		Duża pamięć, o czasie życia aplikacji (dane umieszczone w tej pamięci są usuwane po zakończeniu aplikacji), dostępna dla każdego wątku w dowolnym bloku, ale o dość długim czasie dostępu wynoszącym ok. 400-600 taktów zegara.
-	\subsection{Pamięć współdzielona}
+	\subsubsection{Pamięć współdzielona}
 		Niewielka pamięć o czasie życia bloku (zakończenie działania bloku powoduje usunięcie danych w niej przechowywanych), dostępna dla każdego wątku w bloku dla którego jest dedykowana, o bardzo krótkim czasie dostępu.
-	\subsection{Pamięć stałych}
+	\subsubsection{Pamięć stałych}
 		Niewielki fragment pamięci globalnej, który jest cache-owany, przez co dostęp do niego jest bardzo szybki. Jest ona tylko do odczytu. Czas życia pamięci stałych oraz jej dostępność jest taka sama jak pamięci globalnej.
-	\subsection{Rejestry}
+	\subsubsection{Rejestry}
 		Niewielka, bardzo szybka pamięć o czasie życia wątku (po zakończeniu wątku dane z rejestrów są usuwane). Tylko jeden wątek może w danym momencie korzystać z danego rejestru.
-	\subsection{Pamięć lokalna i pamięć tekstur}
+	\subsubsection{Pamięć lokalna i pamięć tekstur}
 		Podobnie jak w przypadku pamięci stałych, są to dedykowane fragmenty pamięci globalnej. Pamięć lokalna jest wykorzystywana do przechowywania danych lokalnych wątku, które nie mieszczą się w rejestrach, a pamięć tekstur posiada specyficzne metody adresowania i cache-owanie specyficzne dla zastosowań graficznych.
 
 %========================================
