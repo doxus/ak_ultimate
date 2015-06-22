@@ -87,6 +87,9 @@
 		isTrue6={Nie},%
 		answer6={Są przesuwane przy wystąpieniu rozkazów rozgałęzień.}, %
 		explain6={W architekturze SPARC okno jest przesuwane rozkazami SAVE i RESTORE, na życzenie programisty, a nie na wskutek rozkazów warunkowych.}, %
+		isTrue6={Nie},%
+		answer6={Są otwierane przy występowaniu rozkazów rozgałęzień.}, %
+		explain6={Są otwierane przy wywołaniu funkcji.}, %
 	}
 \end{minipage}
 \begin{minipage}{\textwidth}
@@ -819,9 +822,9 @@
 	\question{%
 		question={Katalog może być stosowany do:}%
 	}{%
-		isTrue1={NieWiem},%
+		isTrue1={Nie},%
 		answer1={Utrzymania spójności pamięci podręcznych poziomu L1 i L2 w procesorach wielordzeniowych.},%
-		explain1={Wiadomo, że latalog jest wykorzystywany do zachowania spójności pamięci w systemach wieloprocesorowych, UMA i NUMA. Ale czy w wielordzeniowym? A chuj wie.},%
+		explain1={Wiadomo, że katalog jest wykorzystywany do zachowania spójności tego rodzaju pamięci, która jest wspólna (L2). L1 jest pamięcią prywatną rdzenia, więc nie ma potrzebny zachowywać jej spójności.},%
 		isTrue2={Tak},%
 		answer2={Utrzymania spójności pamięci wszystkich węzłów w systemach CC-NUMA},%
 		explain2={Systemy NUMA wykorzystują katalogi do zachowania spójności pamięci, i tylko katalogi.},%
@@ -939,6 +942,9 @@
 		isTrue7={Nie},%
 		answer7={Wykorzystują katalog do utrzymania spójności pamięci węzłów systemu.},%
 		explain7={Między węzłami w MPP wykorzystuje się przesył komunikatów. Katalogi sa wykorzystywane przez systemy UMA i NUMA, które mogą być węzłami w MPP. Jednak komunikacja między samymi węzłami ich nie wykorzystuje.},%
+		isTrue8={Tak},%
+		answer8={W roli węzłów mogą wykorzystywać systemy SMP.},%
+		explain8={Poznane podkategorie SMP, UMA i NUMA, mogą być węzłami.},%
 	}
 \end{minipage}
 \begin{minipage}{\textwidth}
@@ -1114,9 +1120,9 @@
 		isTrue1={Tak},%
 		answer1={Chybienia przy odwołaniu do pamięci podręcznej.},%
 		explain1={Patrz: realizacja sprzętowej wielowątkowości \ref{subsec:realizacjaWatkow}},
-		isTrue2={Nie},%
+		isTrue2={Tak},%
 		answer2={Upływu zadanego czasu (np. taktu)},%
-		explain2={Bullshit, szanujmy się. Można to zrobić programowo, ale nie sprzętowo.},%
+		explain2={Jest coś takiego jak wielowątkowość drobnoziarnista, która przełącza wątki co takt.},%
 		isTrue3={Nie},%
 		answer3={Wystąpienia rozkazu rozgałęzienia},%
 		explain3={Dopiero jak nastąpi błąd przewidywania. Przy drabince IFów byłby armageddon.},%
@@ -1126,6 +1132,24 @@
 		isTrue5={Nie},%
 		answer5={Przesunięcia okien rejestrów},%
 		explain5={To tylko zmiana rejestrów, niezwiązana z wątkami.},%
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={Sprzętowe sterowanie wielowątkowością:}%
+	}{%
+		isTrue1={Tak},%
+		answer1={Zapewnia lepsze wykorzystanie potoków.},%
+		explain1={Tak, ma na celu minimalizację problemów, jakie stwarza przetwarzanie potokowe, jak hazard sterowania, zależności między rozkazami oraz chybione odwołania do pamięci.},%
+		isTrue2={Tak},%
+		answer2={Wymaga zwielokrotnienia zasobów procesora (rejestry, liczniki rozkazów i inne)},%
+		explain2={Tak, aby móc wykonać sterować wątkami na poziomie sprzętu potrzeba więcej sprzętu.},%
+		isTrue3={Nie},%
+		answer3={Nie może być stosowane w przypadku hazardu sterowania},%
+		explain3={To sterowanie służy właśnie minimalizacji start powstałych m.in. z hazardu sterowania.},%
+		isTrue4={Tak},%
+		answer4={M.in. minimalizują straty wynikające z chybionych odwołań do pamięci podrecznej},%
+		explain4={Patrz wyżej.},%
 	}
 \end{minipage}
 \begin{minipage}{\textwidth}
