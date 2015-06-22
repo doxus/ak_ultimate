@@ -56,6 +56,7 @@
 		        \item czasów wykonania
 	        \end{itemize}
 	        \item Model obliczeń pamięć - pamięć
+	        \item Mikroprogramowane układy sterujące
 	        \item Niewiele rejestrów - były droższe niż komórki pamięci i przy przełączaniu kontekstu obawiano się wzrostu czasu przełączania kontekstu (chowanie rejestrów na stos i odwrotnie)
 	        \item Przerost struktury sprzętowej przy mało efektywnym wykorzystaniu list rozkazów
         \end{itemize}
@@ -138,7 +139,7 @@
 	       		\item \textbf{Tryb rejestrowy pośredni}\tab AE = RX + 0 = RX
 	       	\end{itemize}
        		Tryb absolutny oraz tryb rejestrowy pośredni są przypadkami szczególnymi.
-
+	\newpage
     \subsection{Logiczna organizacja rejestrów procesora RISC I}
 	    \begin{table}[htbp]
 	    	\centering
@@ -162,7 +163,6 @@
 	    		&       & {\scriptsize R0} \bigstrut[b]\\
 	    		\cline{2-2}    \end{tabular}%
 	    	\label{tab:addlabel}%
-	    	\vspace{-2cm}
 	    \end{table}
 	\subsection{Okno rejestrów}
 	    \begin{table}[htbp]
@@ -195,11 +195,13 @@
 	    		\cline{2-2}
 	    	\end{tabular}%
 	    	\label{tab:addlabel}%
+	    	\vspace{-2cm}
 	    \end{table}
 	    
 %========================================
 %*** Mechanizmy potokowe ****************
 %========================================
+\newpage
 \section{Mechanizmy potokowe}
 	\subsection{Realizacja rozkazów w procesorze niepotokowym}
 		Rozkazy wykonywane są liniowo w czasie - jeden po drugim, w takiej kolejności w jakiej przyjdą do procesora.
@@ -241,7 +243,7 @@
 	   		\item Zapis wyniku
 	   	\end{enumerate}
 	   	Zasada działania jest dokładnie taka sama jak w przypadku podziału na dwie fazy. Załóżmy, że jeden rozkaz wykonuje się w 7iu taktach zegarowych. 1 T = 7 F. Wówczas w momencie gdy rozkaz numer 1 znajduje się w 5tym takcie wykonania rozkaz numer 5 może zostać pobrany.
-   	
+	\newpage
    	\subsection{Analiza czasowa potokowej realizacji ciągu rozkazów}
 	   	\begin{wrapfigure}[5]{r}{0.4\textwidth}
 	   		\includegraphics[width=0.38\textwidth]{./images/potok03}
@@ -390,10 +392,12 @@
 	         W przypadku gdy pierwszy rozkaz czyta wartość rejestru, a drugi zapisuje coś do tego rejestru i oba wykonują się równolegle, to drugi musi czekać aż pierwszy odczyta swoje. Ten rodzaj zależności może zostać wyeliminowany przez sprzętowe wykrywanie zależności i wstrzymanie napełniania potoku na co najmniej takt.\\
 	         Jeśli faza wykonania rozkazu nie będzie mogła być wykonana w jednym takcie (np. dla rozkazów zmiennoprzecinkowych), to zachodzi konieczność wstrzymania napełniania potoku.
         \subsubsection{Wnioski}
+        \begin{samepage}
 	        \begin{itemize}
 	           	\item Dopuszczenie do zmiany kolejności rozpoczynania wykonania (wydawania) rozkazów i / lub zmiany kolejności kończenia rozkazów prowadzi do możliwości wystąpienia zależności wyjściowej lub antyzależności.
 	           	\item Zawartości rejestrów nie odpowiadają wtedy sekwencji wartości, która winna wynikać z realizacji programu
 	        \end{itemize}
+	    \end{samepage}
         
 	\subsection{Metody eliminacji zależności}
 		\subsubsection{Metoda przemianowania rejestrów}
@@ -412,12 +416,13 @@
 				\item I4: R7b $ \leftarrow $ R3c op R4b
 			\end{itemize}
 			W powyższym przykładzie rozkaz I3 może być wykonany jako drugi (co zapobiegnie zależnościom RAW między I1 i I2 oraz I3 i I4), lub nawet jako pierwszy.
-			
+			\vfill
 			
 %========================================
 %*** Architektura VLIW ******************
 %========================================
 \section{Architektura VLIW}
+	\begin{samepage}
 	\subsection{Co to jest?}
 		VLIW - \emph{Very Long Instruction Word}.
 		\begin{center}
@@ -445,7 +450,9 @@
 			\item Rozwiązanie: przesunięcie rozkazów LOAD jak najwyżej, aby zminimalizować czas ewentualnego oczekiwania.
 			\item Rozkaz CHECK sprawdza wykonanie LOAD (załadowanie rejestru)
 		\end{itemize}
-	
+\end{samepage}
+\vfill
+\newpage
 %========================================
 %*** Wielowątkowość *********************
 %========================================
@@ -519,6 +526,8 @@
 			\item Większe zużycie energii (w porównaniu z procesorami dwurdzeniowymi)
 			\item Możliwość monitorowanie wykonania jednego wątku przez inny wątek (złośliwy), poprzez wpływ na współdzielone dane pamięci podręcznej - kradzież kluczy kryptograficznych
 		\end{itemize}
+		\vfill
+		\newpage
 
 %========================================
 %*** Klasyfikacja komputerów równoległych
@@ -547,18 +556,20 @@
 			TLP - Task Level Parallelism.\\
 			Pojawia się kiedy są tworzone zadania, które mogą być wykonywane niezależnie i w większości równolegle.
 	
-	\subsection{Drogi wykorzystania równoległości aplikacji w architekturze komputerów}
+	\subsection{Wykorzystanie równoległości aplikacji w architekturze komputerów}
 		\begin{itemize}
 			\item \textbf{Równoległość poziomu rozkazów} (ILP - Instruction Level Parallelism) - odnosi się do przetwarzania potokowego i superskalarnego, w których w pewnym (niewielkim) stopniu wykorzystuje się równoległość danych.
 			\item \textbf{Architektury wektorowe i procesory graficzne} - wykorzystują równoległość danych poprzez równoległe wykonanie pojedynczego rozkazu na zestawie danych.
 			\item \textbf{Równoległość poziomu wątków} (TLP - Thread Level Parallelism) - odnosi się do wykorzystania równoległości danych albo równoległości zadań w ściśle połączonych systemach (ze wspólną pamięcią), które dopuszczają interakcje między wątkami.
 			\item \textbf{Równoległość poziomu zleceń} (RLP - Request Level Parallelism) - odnosi się do równoległości zadań określonych przez programistę lub system operacyjny. Ta forma równoległości jest wykorzystywana w systemach luźno połączonych (z pamięcią rozproszoną) i klastrach.
 		\end{itemize}
-	
+	\vfill
 	\subsection{Klasyfikacja Flynna}
+		\begin{samepage}
 		M. Flynn, 1966
 		\subsubsection{Kryterium klasyfikacji}
 			Liczba strumieni rozkazów i liczba strumieni danych w systemie komputerowym.
+		
 			\begin{itemize}
 				\item \textbf{SISD}: Single Instruction, Single Data Stream
 				\begin{center}
@@ -583,13 +594,16 @@
 				\item \textbf{JP} – Jednostka przetwarzająca
 				\item \textbf{PaO} – Pamięć operacyjna
 			\end{itemize}
+		\end{samepage}
 		\subsubsection{Klasyfikacja opisowa}
 			\includegraphics[width=16cm]{klasyfikacja}
-
+		\vfill
+		
 %========================================
 %*** Architektura SIMD ******************
-%========================================	
+%========================================
 \section{Architektura SIMD}
+	\begin{samepage}
 	\subsection{Co to jest?}
 		\begin{itemize}
 			\item Tłumaczenie \emph{Single Instruction Multiple Device}
@@ -602,6 +616,7 @@
 		\end{itemize}
 		Idee realizacji obu (macierzowy i wektorowy):\\
 		\includegraphics[width=16cm]{wektor_macierz}\\
+	\end{samepage}
 	\subsection{Komputery wektorowe}
 	\label{ss:wektor}
 		\subsubsection{Lokalizacja wektorów danych}
@@ -662,13 +677,13 @@
 	
 	% ******* MACIERZOWE *********************************
 	\subsection{Komputery macierzowe}
+	\begin{samepage}
 		\subsubsection{Co to jest?}
 			Architektura komputerów macierzowych - model SIMD w dwóch wariantach:
 			\begin{itemize}
 				\item SIMD - DM (z pamięcią rozproszoną)
 				\item SIMD - SM (z pamięcią wspólną)
 			\end{itemize}
-		
 		\subsubsection{Elementy komputera macierzowego}
 			\begin{enumerate}
 				\item \textbf{Jednostka sterująca} - procesor wykonujący rozkazy sterujące i skalarne oraz inicjujący wykonanie rozkazów wektorowych w sieci elementów przetwarzających.
@@ -679,7 +694,7 @@
 					\item sieć dynamiczna: jednostopniowa; wielostopniowa (wyróżnia połączenia blokujące i nieblokujące)
 				\end{itemize}
 			\end{enumerate}
-		
+	\end{samepage}
 		\subsubsection{Podsumowanie}
 			\begin{itemize}
 				\item Architektura SIMD
@@ -782,18 +797,17 @@
 				\item W danej chwili (cyklu) pojedynczy rdzeń multiprocesora wykonuje jeden wątek programu
 				\item Multiprocesor tworzy, zarządza, szereguje i wykonuje wątki w grupach po 32, nazywanych wiązkami (\emph{warp}).
 				\item Wiązki są szeregowane do wykonania przez \emph{warp scheduler}. Wiązka wątków jest wykonywana jako jeden wspólny rozkaz (analogia do rozkazu SIMD, tzn. rozkazu wektorowego)
+				
 				\item Sposób wykonania wiązki wątków (rozkazu SIMD) zależy od budowy multiprocesora:
+				\begin{samepage}
 				\begin{itemize}
 					\item Dla architektury Fermi (32 procesory w jednym multiprocesorze / 2 \emph{warp-schedulery} = 16 procesorów na 1 wiązkę) wiązka jest wykonywana jako 2 rozkazy - wiązka jest dzielona na dwie połówki (\emph{half–warp}) wykonywane jako 2 rozkazy (te same, ale na dwóch zestawach danych).
 					\item Dla architektury Tesla (8 procesorów w jednym multiprocesorze, 1 \emph{warp-scheduler}) wiązka jest dzielona na cztery ćwiartki (\emph{quarter-warp}) wykonywane jako 4 kolejne rozkazy (te same, ale na czterech zestawach danych).
 				\end{itemize}
 				\item Konstrukcja \emph{warp schedulera} umożliwia uruchomienie wielu wiązek wątków współbieżnie -\emph{ warp scheduler }pamięta wtedy adresy wiązek, przypisane im rozkazy SIMD oraz ich stan (gotowość do wykonania lub stan oczekiwania na pobranie danych z pamięci).
 				\item Współbieżne uruchomienie wielu wiązek pozwala zmniejszyć straty związane z oczekiwaniem na dane (zwykle długi czas dostępu do pamięci).
+				\end{samepage}
 			\end{itemize}
-
-%========================================
-%*** Rodzaje pamięci multiprocesora *****
-%========================================
 \subsection{Rodzaje pamięci multiprocesora}
 	\subsubsection{Pamięć globalna}
 		Duża pamięć, o czasie życia aplikacji (dane umieszczone w tej pamięci są usuwane po zakończeniu aplikacji), dostępna dla każdego wątku w dowolnym bloku, ale o dość długim czasie dostępu wynoszącym ok. 400-600 taktów zegara.
@@ -805,11 +819,9 @@
 		Niewielka, bardzo szybka pamięć o czasie życia wątku (po zakończeniu wątku dane z rejestrów są usuwane). Tylko jeden wątek może w danym momencie korzystać z danego rejestru.
 	\subsubsection{Pamięć lokalna i pamięć tekstur}
 		Podobnie jak w przypadku pamięci stałych, są to dedykowane fragmenty pamięci globalnej. Pamięć lokalna jest wykorzystywana do przechowywania danych lokalnych wątku, które nie mieszczą się w rejestrach, a pamięć tekstur posiada specyficzne metody adresowania i cache-owanie specyficzne dla zastosowań graficznych.
-
-%========================================
-%*** Systemy wieloprocesorowe ***********
-%========================================
+\vfill
 \section{Systemy wieloprocesorowe (UMA)}
+\begin{samepage}
 	\subsection{Rodzaje}
 		\begin{itemize}
 			\item Systemy z pamięcią wspólną
@@ -820,6 +832,7 @@
 			\item Systemy z jednorodnym dostępem do pamięci (UMA – \emph{Uniform Memory Access})
 			\item Systemy z niejednorodnym dostępem do pamięci (NUMA – Non 	- \emph{Uniform Memory Access})
 		\end{itemize}
+\end{samepage}
 		\subsubsection{Klasyfikacja} \label{subsubsec:klasyfikacjaUMA}
 			\begin{itemize}
 				\item Systemy ze wspólną magistralą
@@ -887,20 +900,20 @@
 	\subsection{Systemy z sieciami typu punkt-punkt}
 		\subsubsection{HyperTransport (HT)}
 			\begin{itemize}
-				\item Technologia wprowadzona w 2001 przez HyperTransportConsortium(AMD, Apple, Cisco, Nvidia, Sun i in.)
-				\item Przeznaczona do łączenia procesorów, pamięci i układów we/wy -technologia HT zastąpiła wspólną magistralę
-				\item Dla łączenia wielu procesorów stosowana razem z techniką NUMA
-				\item Topologia punkt -punkt
-				\item Sieć dwukierunkowa, szeregowo/równoległa, o wysokiej przepustowości, małych opóźnieniach,
-				\item Łącza o szerokości 2, 4, 8, 16, or 32 bity. Teoretyczna przepustowość: 25.6 GB/s (3.2GHz x 2 transfers per clock cycle x 32 bits per link) dla jednego kierunku lub 51.2 GB//s łącznie dla obu kierunków transmisji
-				\item Transmisja pakietów składających się z 32-bitowych słów
+				\item Technologia wprowadzona w 2001 przez HyperTransport Consortium(AMD, Apple, Cisco, Nvidia, Sun i in.).
+				\item Przeznaczona do łączenia procesorów, pamięci i układów we/wy - technologia HT zastąpiła wspólną magistralę.
+				\item Dla łączenia wielu procesorów stosowana razem z techniką NUMA.
+				\item Topologia punkt - punkt.
+				\item Sieć dwukierunkowa, szeregowo / równoległa, o wysokiej przepustowości, małych opóźnieniach.
+				\item Łącza o szerokości 2, 4, 8, 16, or 32 bity. Teoretyczna przepustowość: 25.6 GB/s (3.2GHz x 2 \textit{transfers per clock cycle} x 32 \textit{bits per link}) dla jednego kierunku lub 51.2 GB/s łącznie dla obu kierunków transmisji.
+				\item Transmisja pakietów składających się z 32-bitowych słów.
 			\end{itemize}
 		\subsubsection{Intel QuickPath Interconnect (QPI)}
 			\begin{itemize}
-				\item Następca Front-SideBus (FSB) -magistrali łączącej procesor z kontrolerem pamięci
-				\item Tworzy bardzo szybkie połączenia między procesorami i pamięcią oraz procesorami i hubami we/wy
-				\item Tworzy mechanizm „scalablesharedmemory” (NUMA) –zamiast wspólnej pamięci dostępnej przez FSB, każdy Procesor ma własną dedykowaną pamięcdostępną przez IntegratedMemory Controleroraz możliwość dostępu do dedykowanej pamięci innych procesorów poprzez QPI
-				\item Podstawową zaletą QPI jest realizacja połączeń punkt-punkt (zamiast dostępu przez wspólną magistralę)
+				\item Następca \emph{Front-SideBus} (FSB) - magistrali łączącej procesor z kontrolerem pamięci.
+				\item Tworzy bardzo szybkie połączenia między procesorami i pamięcią oraz procesorami i hubami we/wy.
+				\item Tworzy mechanizm „\emph{scalable shared memory}” (NUMA) – zamiast wspólnej pamięci dostępnej przez FSB, każdy Procesor ma własną dedykowaną pamięć dostępną przez \textit{Integrated Memory Controler} oraz możliwość dostępu do dedykowanej pamięci innych procesorów poprzez QPI.
+				\item Podstawową zaletą QPI jest realizacja połączeń punkt-punkt (zamiast dostępu przez wspólną magistralę).
 			\end{itemize}
 				
 	\subsection{Podsumowanie}
@@ -918,7 +931,6 @@
 				\item W systemach z dużą liczbą węzłów, posiadających lokalną pamięć, dla zapewnienia spójności pamięci podręcznych jest stosowane rozwiązanie oparte na katalogu.
 			\end{itemize}
 		\end{itemize}
-		
 %========================================
 %*** Systemy NUMA ***********************
 %========================================	
@@ -941,6 +953,7 @@
 		\begin{center}
 			\includegraphics[width=0.45\textwidth]{./images/NUMA01}
 		\end{center}
+		\vfill
 	\subsection{Katalog}
 		\subsubsection{Najprostsza postać katalogu}
 		\begin{center}
@@ -960,13 +973,10 @@
 				\item \emph{n} bitów (1 bit na węzeł) wskazujących posiadanie linii przez węzeł
 				\item element listy pól z numerami węzłów aktualnie posiadających daną linię
 			\end{enumerate}
-	\subsection{System DASH}
-		\subsubsection{Co to jest?}
+	\subsection{Działanie katalogu na przykładzie systemu DASH}
+		\subsubsection{Co to jest system DASH?}
 			\begin{itemize}
 				\item Pierwszy system CC-NUMA wykorzystujący katalog
-				\item 16 węzłów połączonych kratą
-				\item Węzeł: 4 procesory MIPS R3000 + 16 MB RAM + katalog
-				\item Linia PAP = 16 B
 				\item Katalog = 1 M wierszy 18-bitowych
 				\begin{itemize}
 					\item Wiersz katalogu= 16 bitów obecności linii w węzłach + stan linii
@@ -999,8 +1009,8 @@
 					\item stan linii = \textit{modified} $ \rightarrow $ przekierowanie żądania do węzła x posiadającego linię. Węzeł x unieważnia ją u siebie i przesyła żądającemu.
 				\end{itemize}
 			\end{itemize}
-		\subsubsection{Katalog czy snooping}
-			Mechanizm spójności oparty o katalog jest bardziej skalowalny od mechanizmu „snooping”, ponieważ wysyła się w nim bezpośrednią prośbę i komunikaty unieważniające do tych węzłów, które mają kopie linii, podczas gdy mechanizm „snooping” rozgłasza (\emph{broadcast}) wszystkie prośby i unieważnienia do wszystkich węzłów.
+	\subsection{Katalog czy snooping}
+		Mechanizm spójności oparty o katalog jest bardziej skalowalny od mechanizmu „snooping”, ponieważ wysyła się w nim bezpośrednią prośbę i komunikaty unieważniające do tych węzłów, które mają kopie linii, podczas gdy mechanizm „snooping” rozgłasza (\emph{broadcast}) wszystkie prośby i unieważnienia do wszystkich węzłów.
 			
 	\subsection{Podsumowanie}
 		\begin{itemize}
@@ -1081,11 +1091,12 @@
 				\item Wolniejsza (na ogół) komunikacja – przesył komunikatów
 				\item Dedykowane, bardzo szybkie, sieci łączące
 			\end{itemize}
-			
+			\vfill
 %========================================
 %*** Klastry ****************************
-%========================================	
+%========================================
 \section{Klastry}
+	\begin{samepage}
 	Klaster (komputerowy) (ang. \emph{cluster}).
 	\subsection{Definicja}
 		\begin{itemize}
@@ -1098,6 +1109,7 @@
 		\begin{center}
 			\includegraphics[width=0.5\textwidth]{./images/klastry01}
 		\end{center}
+	\end{samepage}
 	\subsection{Ogólna charakterystyka klastrów}
 		\subsubsection{Węzły} \label{subsubsec:wezlyKlastry}
 			\begin{itemize}
@@ -1219,6 +1231,32 @@
 				\includegraphics[width=0.35\textwidth]{./images/klastry06}
 			\end{center}
 			Każdy węzeł zapisuje dane na własny dysk i automatycznie (pod kontrolą odpowiedniego oprogramowania) jest tworzona kopia tego zapisu na dyskach innych węzłów.
+		\subsection{Mechanizmy kontrolujące funkcjonowanie węzłów}
+			\begin{itemize}
+				\item Programy agentów + mechanizm "\emph{heartbeat}"
+				\item Procedura redefiniowania klastra po awarii ("\emph{fail-over}")
+				\subsubsection{Heartbeat}
+					\begin{itemize}
+						\item Regularne sygnały wysyłane przez każdy węzeł w sieci łączącej węzły klastry, świadczące o poprawnej pracy węzła
+						\item Mechanizm "\emph{heartbeat}" jest wykorzystywany w procedurze "\emph{fail-over}"
+						\item Heartbeat – również system (program) zarządzania klastrami o wysokiej niezawodności, oparty na Linux-HA (\textit{High-Availability Linux})
+					\end{itemize}
+				\subsubsection{Fail-over}
+					\begin{itemize}
+						\item Zdolność do automatycznego przełączenia systemu, który uległ awarii (również aplikacji, serwera lub sieci) na system rezerwowy
+						\item Operacja przełączania jest podejmowana na podstawie śledzenia sygnału "\emph{heartbeat}"
+						\item W niektórych rozwiązaniach operacja "\emph{fail-over}" wymaga częściowego nadzoru administratora "\textit{automated with manual approval}"
+						\item "\emph{Fail-back}" – powrót do stanu początkowego po usunięciu awarii
+					\end{itemize}
+			\end{itemize}
+		\subsection{Problem rywalizacji o zasoby po awarii}
+			Tzw. problem \textit{split-brain}.
+			\subsubsection{Mechanizm \textit{quorum}}
+			\begin{itemize}
+				\item \emph{Quorum disk} – zawiera bazę danych (plik) z opisem konfiguracji klastra i informacjami o wszystkich obiektach zarządzanych przez klaster.
+				\item W danej chwili quorum disk może być w posiadaniu tylko jednego węzła.
+			\end{itemize}
+			
 			
 	\subsection{Podsumowanie}
 		\begin{itemize}
@@ -1229,3 +1267,4 @@
 			\item Cele budowy: wysoka wydajność lub/i wysoka niezawodność, równoważenie obciążenia
 			\item Korzystny wskaźnik: cena/wydajność
 		\end{itemize}
+	\newpage

@@ -46,6 +46,27 @@
 \end{minipage}
 \begin{minipage}{\textwidth}
 	\question{%
+		question={Architektura RISC charakteryzuje się:}%
+	}{%
+		isTrue1={Tak},%
+		answer1={Niedużą liczbą trybów adresowania},%
+		explain1={Cechą architektury RISC jest prostota. Wszystkie rozkazy posiadają jednakowy rozmiar i wystarcza minimalna liczba trybów adresowania.},%
+		isTrue2={Nie},%
+		answer2={Modelem obliczeń pamięć - pamięć},%
+		explain2={Nie, ten model był stosowany w CISCach, które posiadały niewielką liczbę rejestrów ponieważ były droższe oraz obawiano się wzrostu czasu przełączania kontekstu.},%
+		isTrue3={Nie},%
+		answer3={Wykorzystaniem mikroprogramowalnych układów sterujących},%
+		explain3={Takie układy były stosowane w CISCach. Jest to też rozwiązanie bardzo stare (początki w latach 50-tych).},%
+		isTrue4={Tak},%
+		answer4={Niezbyt obszerną listą rozkazów},%
+		explain4={RISC dążył do uproszenie listy rozkazów, które w CISCach były ogromne i z większości się nie korzystało.},%
+		isTrue5={Tak},%
+		answer5={Intensywnym wykorzystaniem przetwarzania potokowego},%
+		explain5={Był to jeden z kluczowych elementów sukcesu procesorów RISC.},%
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
 		question={Okna rejestrów}%
 	}{%
 		isTrue1={Nie},%
@@ -285,6 +306,24 @@
 		isTrue4={Tak},%
 		answer4={Liczba rozkazów, które procesor może wykonać w taktach zależy od liczby jednostek potokowych w procesorze},%
 		explain4={Tak, patrz pierwsza odpowiedź.},%
+		isTrue5={Tak},%
+		answer5={Jest możliwe równoległe wykonywanie kilku rozkazów w jednym procesorze (rdzeniu)},%
+		explain5={Tak, właśnie taka jest idea stworzenia procesorów superskalarnych, by móc w jednym takcie wykonać $>1$ liczby instrukcji. Zapewnia to niepojedyncza liczba jednostek potokowych.},%
+		isTrue6={Tak},%
+		answer6={Rozszerzenia architektury wykorzystujące model SIMD umożliwiają wykonanie rozkazów wektorowych},%
+		explain6={Tak, "pojedyncza instrukcja - wiele urządzeń". To rozszerzenie korzysta z możliwości architektury superskalarnej - możliwości wykonywania wielu rozkazów w 1 takcie - i realizuje pojedynczy rozkaz na wielu rejestrach jednocześnie.},%
+		isTrue7={Nie},%
+		answer7={Nie występuje prawdziwa zależność danych},%
+		explain7={Niestety występuje, i prawdę mówiąc, występuje tutaj każdy rodzaj zależności między rozkazami: prawdziwa zależność danych, zależność wyjściowa oraz antyzależność.},%
+		isTrue8={Tak},%
+		answer8={Mogą wystąpić nowe formy hazardu danych: zależności wyjściowe między rozkazami oraz antyzależności},%
+		explain8={Tak, patrz wyżej.},%
+		isTrue9={Nie},%
+		answer9={Nie występuje hazard danych (problemy z potokowym wykonaniem rozkazów o zależnych argumentach).},%
+		explain9={Nie, patrz wyżej.},%
+		isTrue10={Nie},%
+		answer10={Hazard sterowania jest całkowicie eliminowany przez statyczne strategie przewidywania rozgałęzień.},%
+		explain10={Superskalarna architektura ma mechanizm dynamicznego przewidywania, a poza tym, ani statyczne, ani dynamiczne strategie nie eliminują całkowicie hazardu sterowania.},%
 	}
 \end{minipage}
 \begin{minipage}{\textwidth}
@@ -318,24 +357,6 @@
 		isTrue9={Nie},%
 		answer9={Jest stosowana tylko w procesorach wielordzeniowych},%
 		explain9={Architektura superskalarna to nie wielordzeniowość! Jednostka superskalarna wykonuje wiele instrukcji jednocześnie, ale w pojedynczym wątku. Z kolei procesor wielordzeniowy potrafi wykonywać wiele wątków, czyli wiele ciągów instrukcji jednocześnie. Jednostka superskalarna może być rdzeniem, ale ofc nie tylko w tym typie procków jest stosowana.},%
-	}
-\end{minipage}
-\begin{minipage}{\textwidth}
-	\question{%
-		question={W procesorach superskalarnych:}%
-	}{%
-		isTrue1={Tak},%
-		answer1={Jest możliwe równoległe wykonywanie kilku rozkazów w jednym procesorze (rdzeniu)},%
-		explain1={Tak, własnie taka jest idea stworzenia procesorów superskalaranych, by móc w jednym takcie wykonać $>1$ liczby instrukcji. Zapewnia to niepojedyncza liczba jednostek potokowych.},%
-		isTrue2={Tak},%
-		answer2={Rozszerzenia architektury wykorzystujące model SIMD umożliwiają wykonanie rozkazów wektorowych},%
-		explain2={},%
-		isTrue3={Nie},%
-		answer3={Nie występuje prawdziwa zależność danych},%
-		explain3={Niestety występuje, i prawdę mówiąc, występuje tutaj każdy rodzaj zależności między rozkazami: prawdziwa zależność danych, zależność wyjściowa oraz antyzależność.},%
-		isTrue4={Tak},%
-		answer4={Mogą wystąpić nowe formy hazardu danych: zależności wyjściowe między rozkazami oraz antyzależności},%
-		explain4={Tak, patrz wyżej.},%
 	}
 \end{minipage}
 \begin{minipage}{\textwidth}
@@ -483,9 +504,12 @@
 		isTrue3={Nie},%
 		answer3={Liczba modułów pamięci operacyjnej w systemach komputerowych},%
 		explain3={},%
-		isTrue4={Tak},%
-		answer4={Liczba strumieni rozkazów i danych w systemach komputerowych},%
-		explain4={To po prostu należy zapamiętać. \textbf{Kryterium klasyfikacji Flynna jest \emph{liczba strumieni rozkazów} oraz \emph{liczba strumieni danych} w systemie komputerowym. NIC WIĘCEJ, NIC MNIEJ.\\Albo inaczej: \emph{$Liczba\_strumieni\times(rozkazow+danych)$}}},%
+		isTrue4={Nie},%
+		answer4={Sposób połączenia jednostek przetwarzających z modułami pamięci operacyjnej.},%
+		explain4={},%
+		isTrue5={Tak},%
+		answer5={Liczba strumieni rozkazów i danych w systemach komputerowych},%
+		explain5={To po prostu należy zapamiętać. \textbf{Kryterium klasyfikacji Flynna jest \emph{liczba strumieni rozkazów} oraz \emph{liczba strumieni danych} w systemie komputerowym. NIC WIĘCEJ, NIC MNIEJ.\\Albo inaczej: \emph{$Liczba\_strumieni\times(rozkazow+danych)$}}},%
 	}
 \end{minipage}
 \begin{minipage}{\textwidth}
@@ -619,14 +643,23 @@
 		answer1={Nie mogą być wykonywane bez użycia potokowych jednostek arytmetycznych},%
 		explain1={Mogą. Komputery macierzowe ich nie posiadają i wykonują rozkazy wektorowe sprawnie.},%
 		isTrue2={Tak},%
-		answer2={W komputerach wektorowych ich czas wykonania jest wprost proporcjonalny do długości wektora},%
-		explain2={Tak, na przykładzie rozkazu dodawania wektorów widać, że czas rośnie równomiernie wraz z ilością elementów wektora.\\$t_{w}=t_{start}+(n-1)\times\tau$},%
-		isTrue3={Tak},%
-		answer3={Są charakterystyczne dla architektury SIMD},%
-		explain3={Tak, z niej się zrodziły, tak samo jak m.in. technologie MMX i SSE.},%
-		isTrue4={Nie},%
-		answer4={Są rozkazami dwuargumentowymi i w wyniku zawsze dają wektor},%
-		explain4={Nie, mogą operować na 1 argumencie na przykład. Rozkaz może być też 3 argumentowy, jak rozkaz dodawania VADD. Pierwszym argumentem jest rejestr docelowy, zawartość pozostałych dwóch jest dodana.},%
+		answer2={Są charakterystyczne dla architektury SIMD},%
+		explain2={Tak, z niej się zrodziły, tak samo jak m.in. technologie MMX i SSE.},%
+		isTrue3={Nie},%
+		answer3={Są rozkazami dwuargumentowymi i w wyniku zawsze dają wektor},%
+		explain3={Nie, mogą operować na 1 argumencie na przykład. Rozkaz może być też 3 argumentowy, jak rozkaz dodawania VADD. Pierwszym argumentem jest rejestr docelowy, zawartość pozostałych dwóch jest dodana.},%
+		isTrue4={Tak},%
+		answer4={W komputerach wektorowych ich czas wykonania jest wprost proporcjonalny do długości wektora},%
+		explain4={Tak, na przykładzie rozkazu dodawania wektorów widać, że czas rośnie równomiernie wraz z ilością elementów wektora.\\$t_{w}=t_{start}+(n-1)\times\tau$},%
+		isTrue5={Nie},%
+		answer5={W komputerach wektorowych ich czas wykonania jest liniowo zależny od długości wektora},%
+		explain5={Tak, patrz wzór wyżej. Wyraźnie widać, że wraz ze wzrostem długości wektora, rozkaz dodawania wykonuje się dłużej o stałą wartość. Z kolei przepustowość (liczba operacji zmiennoprzecinkowych na sekundę) rośnie logarytmicznie wraz z długością wektora.},%
+		isTrue6={Nie},%
+		answer6={W komputerach macierzowych ich czas wykonania jest wprost proporcjonalny do liczby elementów przetwarzających},%
+		explain6={Przy odpowiedniej liczbie jednostek przetwarzających jest stały},%
+		isTrue7={Tak},%
+		answer7={Mogą być wykonane na sieci elementów przetwarzających.},%
+		explain7={Czyli na komputerze macierzowym - owszem.},%
 	}
 \end{minipage}
 \begin{minipage}{\textwidth}
@@ -806,16 +839,16 @@
 	}{%
 		isTrue1={Nie},%
 		answer1={Przełącznicy krzyżowej},%
-		explain1={Nie, to tylko jakieś rozwiązanie sieci połączeń.},%
-		isTrue2={Nie},%
+		explain1={Nie, to rozwiązanie sieci połączeń w architekturze UMA. Mało wydajna.},%
+		isTrue2={Tak},%
 		answer2={Katalogu},%
-		explain2={ie,to bardziej zaawansowany shit służący do komunikacji.},%
+		explain2={To mechanizm do zachowania spójności jaki stosowany jest głównie w architekturze NUMA, ale UMA też może.},%
 		isTrue3={Tak},%
 		answer3={Protokołu MESI},%
-		explain3={Tak, i tylko to do tego służy.},%
+		explain3={Tak, i tylko to do tego służy. Wykorzystuje do wyłącznie architektura UMA.},%
 		isTrue4={Nie},%
 		answer4={Wspólnej magistrali},%
-		explain4={Nie, ona służy do komunikacji i synchronizacji (?) dostępu do pamięci.},%
+		explain4={Nie, jest to jeden z rodzajów połączeń w architekturze UMA, ale nie ma nic wspólnego ze spójnością pamięci jej procków.},%
 	}
 \end{minipage}
 \begin{minipage}{\textwidth}
@@ -991,7 +1024,7 @@
 		question={Do czynników tworzących wysoką niezawodność klastrów należą:}%
 	}{%
 		isTrue1={Tak},%
-		answer1={Mechanizm mirroringu dysków},%
+		answer1={Mechanizm \emph{mirroringu} dysków},%
 		explain1={Tak, bo system operacyjny może.},%
 		isTrue2={Tak},%
 		answer2={Dostęp każdego węzła do wspólnych zasobów (pamięci zewnętrznych)},%
@@ -999,9 +1032,9 @@
 		isTrue3={Tak},%
 		answer3={Redundancja węzłów},%
 		explain3={No tak, jest.},%
-		isTrue4={Nie},%
+		isTrue4={Tak},%
 		answer4={Mechanizm "heartbeat"},%
-		explain4={Co to jest?},%
+		explain4={Tak, gdy ten mechanizm przestaje odbierać "bicie serca" jednego z węzłów, wówczas może wywołać procedurę obsługi - przenieść zadania do innego węzła, włączyć powiadomienie itp.},%
 		isTrue5={Nie},%
 		answer5={Zastosowanie procesorów wielordzeniowych w węzłach}, %
 		explain5={Nie, nie chodzi o liczbę rdzeni, ale o to, że każdy węzeł jest osobnych systemem, serwerem lub pecetem.}, %
@@ -1111,6 +1144,24 @@
 		isTrue4={Nie},%
 		answer4={MPP},%
 		explain4={Pamięć jest logicznie rozproszona, każdy węzeł (procesor albo system UMA / NUMA) posiada swoją.},
+	}
+\end{minipage}
+\begin{minipage}{\textwidth}
+	\question{%
+		question={Procesory wielordzeniowe:}%
+	}{%
+		isTrue1={Nie},%
+		answer1={Są niezbędne do realizacji rozkazów wektorowych.},%
+		explain1={Nie, o ile wiele rdzeni może umożliwić wykonywanie rozkazów wektorowych, to warunkiem koniecznym do wykonywania rozkazów wektorowych jest istnieje wielu jednostek przetwarzających w dowolnej postaci.},
+		isTrue2={NieWiem},%
+		answer2={Tworzą systemy wieloprocesorowe ze wspólną pamięcią i jednorodnym dostępem do pamięci.},%
+		explain2={Tak, mogą one tworzyć system wieloprocesorowy (z rdzeniami), ale pamięć CHYBA nie musi być wspólna o jednorodnym dostępie (no bo chyba każdy rdzeń może mieć własną.)??},
+		isTrue3={Tak},%
+		answer3={Są niezbędne do współbieżnego przetwarzania wątkowego.},%
+		explain3={Tak, jest to konieczne aby realizować współbieżnie wiele wątkóW w obrębie jednego procesora.},
+		isTrue4={NieWiem},%
+		answer4={Wymagają kontroli spójności pamięci podręcznych.},%
+		explain4={Każdy rdzeń posiada pamięć podręczną L1, która jest prywatna oraz pamięć podręczną L2, która jest publiczna. Do L2 inne rdzenie mogą się odnosić poprzez magistralę i występuje problem spójności cache'u.},
 	}
 \end{minipage}
 
