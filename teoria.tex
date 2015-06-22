@@ -1177,7 +1177,7 @@
 			\item Łącza światłowodowe i miedziane
 			\item Głównym stosowanym protokołem jest SCSI, ponadto ATM, TCP/IP
 		\end{itemize}
-	\subsection{Sieci łączące -różnice}
+	\subsection{Sieci łączące - różnice}
 		\begin{itemize}
 			\item Parametry – przepustowość, czas opóźnienia
 			\item Topologia
@@ -1186,6 +1186,35 @@
 				\item Sieci specjalizowane – sieć przełączników (\textit{switched fabric}) – popularna topologia „grubego drzewa”
 			\end{itemize}
 		\end{itemize}
+	\subsection{Sieci specjalizowane (SAN)}
+		Na przykładzie sieci InfiniBand:
+		\subsubsection{Opis elementów}
+			\begin{itemize}
+				\item Adaptery węzłów posiadają sterowniki DMA dla szybkiego odczytu pamięci oraz mikroprocesory sterujące
+				\item Przełącznikami są przełącznice krzyżowe
+				\item Posiadają adapter kanałowy urządzenia zewnętrznego
+			\end{itemize}
+		\subsubsection{Cechy transmisji}
+			\begin{itemize}
+				\item Każda transmisja w oddzielnym kanale przy realizacji połączenia punkt – punkt
+				\item Komunikat dzielony na pakiety (4 KB)
+				\item Pakiet rozpoczyna 128-bitowy nagłówek adresowy, dekodowany w każdym przełączniku
+				\item Przesył pakietu przez przełącznik do kolejnego przełącznika (punktu) bez kompletowania całego pakietu w przełączniku (\emph{cut through routing}, \emph{wormhole routing})
+			\end{itemize}
+		\subsubsection{Rodzaje komunikatów}
+			\begin{itemize}
+				\item Operacja odczytu lub zapisu bloku danych w trybie RDMA (\emph{Remote DMA}) pomiędzy pamięciami operacyjnymi dwóch węzłów
+				\item Kanałowa operacja \emph{send} lub \emph{receive}
+				\item Transmisja komunikatu w trybie rozgłaszania (\emph{multicast})
+				\item Operacja oparta na modelu transakcji (z możliwością wycofania)
+			\end{itemize}
+		\subsubsection{Przepustowość łączy}
+			Obok tej pojedynczej (SDR – \emph{single data rate}) prędkości InfiniBand umożliwia też przesył z podwójną (\emph{double} - DDR), poczwórną (\emph{quad} - QDR) i wyższymi prędkościami.
+		\subsubsection{Parametry}
+			\begin{itemize}
+				\item Opóźnienie przesyłu między punktami rzędu 1 mikrosekundy
+				\item Struktura sieci często jest oparta o topologię grubego drzewa ("\emph{fat tree}")
+			\end{itemize}
 	\subsection{Klastry o wysokiej niezawodności} \label{subsec:niezawodnoscKlastrow}
 		\subsubsection{Czynniki tworzące wysoką niezawodność klastrów}
 			\begin{enumerate}
@@ -1231,6 +1260,7 @@
 				\includegraphics[width=0.35\textwidth]{./images/klastry06}
 			\end{center}
 			Każdy węzeł zapisuje dane na własny dysk i automatycznie (pod kontrolą odpowiedniego oprogramowania) jest tworzona kopia tego zapisu na dyskach innych węzłów.
+		\newpage
 		\subsection{Mechanizmy kontrolujące funkcjonowanie węzłów}
 			\begin{itemize}
 				\item Programy agentów + mechanizm "\emph{heartbeat}"
