@@ -1,6 +1,4 @@
 % !TeX spellcheck = pl_PL
-\newpage
-
 \section{Sparc}
 	Uwagi:
 	\begin{itemize}
@@ -317,7 +315,7 @@
 				_petla:
 					SAVE	%sp,	-96,	%sp			;! otworzenie okna
 				
-					SUBcc	%i7,	0x00,	%g0			;! sprawdzenie, czy to dno rekurencji
+					SUBcc	%i7,	0x00,	%g0			;! sprawdzenie, czy to dno
 					BE		_nzero
 					NOP
 					
@@ -351,48 +349,104 @@
 					MOV		%i5,	%g1					;! g1 - wynik koncowy
 					NOP									;! kuniec
 			\end{lstlisting}
-		\subsubsection{Rozwiązanie nr 2}
+		\newpage
+		\subsubsection{Rozwiązanie nr 2 by Trimack}
+			\begin{lstlisting}[language={[sparc]Assembler}]
+				.global _start
+				.proc 4
+				;! Rejestry:
+				;! %i0 - n. Numer elementu ciągu, który chcemy pobrać
+				;! %i1 - k. Parametr równania ciągu
+				;!
+				;! %l0 - zmienna tymczasowa do porównań
+				;! %l1 - licznik potęgowania
+				;! %l2 - wynik potęgowania
+				;! %l3 - wynik mnożenia n * k
+				;!
+				;! Wzór: a(n) = a(n - 1) ^ k + n * k; a(0) = 1
+				;! Wartość zwracana: a(n)
+				
+				_start:
+					save	%sp,	-96,	%sp 	;! Przesuniecie okienka
+					
+					subcc	%i0,	1,		%o0		;! %o0 -> n - 1. if (n == 0)
+					bneg	zwroc1
+					nop
+					
+					subcc	%i1,	1,		%l0		;! if (k == 0)
+					bneg	zwroc1
+					nop
+					
+					mov		%i1,	%o1				;! %o1 -> k
+					call	_start
+					nop
+				
+					;! %o0 -> a(n - 1)
+					mov		%i1,	%l1				;! %l1 -> k
+					mov		%o0,	%l2				;! %l2 -> a(n - 1)
+				
+				power:
+					;! dekrementacja licznika i sprawdzenie, czy skończyliśmy potęgować: if (%l1 - 1 = 0)
+					subcc	%l1,	1,		%l1		
+					be		powerEnd
+					nop
+					umul	%l2,	%o0,	%l2			;! %l2 *= a(n - 1)
+					ba		power
+					nop
+				powerEnd:
+					;! %l2 -> a(n - 1) ^ k
+					umul	%i0,	%i1,	%l3			;! %l3 = n * k
+					add		%l2,	%l3,	%i0			;! %i0 = wynik
+					ba		end
+					nop
+				zwroc1:
+					mov		1,		%i0
+				end:	
+					ret
+					restore
+			\end{lstlisting}
+		\newpage
+		\subsubsection{Rozwiązanie nr 3}
 			Podobno otrzymano za to 5, choć rozwiązanie NIE JEST w pełni poprawne.
 			\begin{lstlisting}[language={[sparc]Assembler}]
 				.global fun
 				.proc 4
 				
 				fun:
-					save %sp,-96,%sp
+					save	%sp,	-96,	%sp
 				
-					mov %i0, %l0			; l0 - n
-					mov %i1, %l1			; l1 - k
-					mov 0, %l2				; power
-					mov 1, %l3				; a(n) = 1
+					mov		%i0,	%l0				; l0 - n
+					mov		%i1,	%l1				; l1 - k
+					mov		0,		%l2				; power
+					mov		1,		%l3				; a(n) = 1
 				
-					subcc %i0, 1, %i0
-					bl theEnd				; if n = 0 then jump to theEnd
+					subcc	%i0,	1,		%i0
+					bl		theEnd					; if n = 0 then jump to theEnd
 					nop
 					
-					mov %l0, %l2			; power = n
-					smul %l2, %l1, %l2		; power = power * k
-					add %l2, %l1, %l2		; power = power + k
+					mov		%l0,	%l2				; power =n
+					smul	%l2,	%l1,	%l2		; power = power * k
+					add		%l2,	%l1,	%l2		; power = power + k
 				
-					call fun				; call recursion
-					mov %i0, %l3			; get score of recursion
+					call	fun						; call recursion
+					mov		%i0,	%l3				; get score of recursion
 				
 				expo:
-					smul %l3, %l3, %l3
-					subcc %l2, 1, %l2
-					bl theEnd
+					smul	%l3,	%l3,	%l3
+					subcc	%l2,	1,		%l2
+					bl		theEnd
 					nop
-					ba expo
+					ba		expo
 					nop
 				theEnd:
-					mov %l3, %i0			; return score
+					mov		%l3,	%i0				; return score
 					ret
 					restore
-				
 				.end
 			\end{lstlisting}
 		
 	\newpage
-	\subsection{2014, 0 termin, Jerzy Respondek}
+	\subsection{2015, 0 termin, Jerzy Respondek}
 		\subsubsection{Treść}
 			Napisz w asemblerze procesora SPARC funkcję realizującą dokładnie tę samą operację, co jej odpowiednik w języku C:
 			\begin{lstlisting}[language=C]
@@ -406,40 +460,82 @@
 				return suma;
 			}
 			\end{lstlisting}
-		\subsubsection{Rozwiązanie}
+		\subsubsection{Rozwiązanie 1 by Doxus}
 			\begin{lstlisting}[language={[sparc]Assembler}]
 			.global _start
-			
 			_start:
-			! i1 wskaznik na pocz tablicy
-			! i2 n
-			
-			! i0 - wyjsciowa suma (RESTORE spowoduje ze bedzie to w rej.
-			! wyjsciowych funkcji nadrzędnej
-			
-			! l0, l1 - wskaznik na el. tablicy, n
-			! l2 - iterator
-			! l3 - suma
-			
-			mov %i1, %l0
-			mov %i2, %l1
-			mov 0x00, %l2
-			mov 0x00, %l3
+			;! i1 wskaznik na pocz tablicy
+			;! i2 n
+			;! i0 - wyjsciowa suma (RESTORE spowoduje ze bedzie to w rej.
+			;! wyjsciowych funkcji nadrzędnej
+			;! l0, l1 - wskaznik na el. tablicy, n
+			;! l2 - iterator
+			;! l3 - suma
+				mov		%i1,	%l0			
+				mov		%i2,	%l1			
+				mov		0x00,	%l2
+				mov		0x00,	%l3
 			_loop:
-			! if sprawdzają czy i < n
-			subcc %l2, %l1, %g0
-			bge _koniec
-			nop
+				;! if sprawdzają czy i < n
+				subcc	%l2,	%l1,	%g0
+				bge		_koniec
+				nop
 			
-			ld [%l0], %l7
-			umul %l7, %l2, %l7
-			add %l7, %l3, %l3
-			
-			add %l2, 0x01, %l2
-			
-			ba _loop
-			add %l0, 0x04, %l0		!można zamienić miejscami i dać nop, ale tak optymalniej
+				ld		[%l0],	%l7
+				umul	%l7, 	%l2,	%l7
+				add		%l7,	%l3, 	%l3
+				
+				add		%l2,	0x01,	%l2
+				
+				ba		_loop
+				add		%l0,	0x04,	%l0
+				;!można zamienić miejscami i dać nop, ale tak optymalniej
 			
 			_koniec:
-			mov %l3, %i0
+				mov		%l3,	%i0
+			\end{lstlisting}
+		\newpage
+		\subsubsection{Rozwiązanie 2 by Trimack}
+			\begin{lstlisting}[language={[sparc]Assembler}]
+				.global f
+				.proc 4
+				;! Rejestry:
+				;! %i0 - adres tablicy wejsciowej
+				;! %i1 - rozmiar tablicy (n)
+				;!
+				;! %l0 - zmienna tymczasowa do porównań
+				;! %l1 - suma
+				;! %l2 - licznik (i)
+				;! %l3 - i * a[i]
+				;!
+				;! int f(int *tab, int n)
+				
+				f:
+					save	%sp,	-96,	%sp
+					mov	0,	%l1						;! suma = 0
+					mov	0,	%l2						;! i = 0
+				
+					subcc	%i1,	1,		%l0		;! if (n == 0)
+					bneg	koniec
+					nop
+				
+				petlaFor:	
+					subcc	%l2,	%i1,	%l0		;! if (i >= n)
+					bge		koniec
+					nop
+				
+					ld		[%i0],	%l3				;! %l3 = a[i]
+					smul	%l3,	%l2,	%l3		;! %l3 = i * a[i]
+					
+					add		%l1,	%l3,	%l1		;! suma += i * a[i]
+					add		%i0,	4,		%i0		;! %i0 wskazuje na kolejny e. tablicy
+					
+					add		%l2,	1,		%l2		;! i++
+					ba		petlaFor
+					nop
+				
+				koniec:
+					mov		%l1,	%i0				;! zwrócenie wyniku
+					ret
+					restore
 			\end{lstlisting}

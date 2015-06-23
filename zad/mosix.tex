@@ -139,3 +139,74 @@
 			
 			\end{lstlisting}
 		\newpage
+	\subsection{Termin nieznany, Daniel Kostrzewa}
+		\subsubsection{Treść}
+			Znaleźć wartość wielomianu \textit{k}-tego stopnia w punkcie \textit{x} wyrażonego poniższym wzorem. Liczby \textit{k} oraz \textit{x} są podawane jako parametry wywołania programu. W Zadaniu należy stworzyć potok oraz dwa procesy potomne. Jeden z procesów potomnych wyznacza wartość wielomianu dla \textit{k-1} stopnia, natomiast drugi dla \textit{k-2} stopnia. Zadanie rozwiązać metodą rekurencyjną.
+			$$ P_k(x)=15P_{k-1}\left(\cfrac{3}{8}x\right)-P_{k-2}\left(\cfrac{x^2}{2}\right)\;\;\;\;\;\;P_0(x)=1\;\;\;\;\;\;P_1(x)=x$$
+		\subsubsection{Rozwiązanie}
+			\begin{lstlisting}[language=C]
+				 #include <stdio.h>
+				 #include <stdlib.h>
+				 // Main
+				 int main(int argc, char *argv[])
+				 {	
+					 double wynik = 0;				// Ostateczny wynik programu
+					 double x;
+					 int k;
+					 if (argc == 3)
+					 {		
+						 k = atoi( argv[1] );
+						 x = atof( argv[2] );
+						 wynik = liczWielomian(k, x);
+						 printf("Wielomian jest rowny: %f\n", wynik);
+					 }
+					 else
+						 printf("Podano nieprawidlowe parametry!\n");
+					 return 0;
+				 }
+				 // Metoda do liczenia wartosci wielomianu
+				 double licz2(int k, double x)
+				 {
+					 double result, Pk1, Pk2;
+					 if (k == 0)
+						 return 1;
+					 if (k == 1)
+						 return x;
+					 Pk1 = licz2(k - 1, 0.375 * x);
+					 Pk2 = licz2(k - 2, x*x / 2.0);
+					 result = 15 * Pk1 - Pk2;
+					 return result;
+				 }
+			\end{lstlisting}
+			\newpage
+			\begin{lstlisting}[language=C]
+				 // Obliczenie całości wielomianu
+				 double liczWielomian(int k, double x)
+				 {
+					 double mainResult = 0, childResult1, childResult2;
+					 int potok[2];
+					 if (k == 0)
+						 return 1;
+					 if (k == 1)
+						 return x;
+					 pipe(potok);
+					 // Pierwsze dziecko - wielomian k-1 stopnia
+					 if ( fork() == 0 )
+					 {
+						 childResult1 = 15 * licz2(k - 1, 0.375 * x);
+						 write( potok[1], &childResult1, sizeof(childResult1) );
+						 exit(0);
+					 }
+					 // Drugie dziecko - wielomian k-2 stopnia
+					 if ( fork() == 0 )
+					 {
+						 childResult2 = licz2(k - 2, x*x / 2.0);
+						 write( potok[1], &childResult2, sizeof(childResult2) );
+						 exit(0);
+					 }
+					 read( potok[0], &childResult1, sizeof(childResult1) );
+					 read( potok[0], &childResult2, sizeof(childResult2) );
+					 mainResult = childResult1 - childResult2;
+					 return mainResult;
+				 }
+			\end{lstlisting}
