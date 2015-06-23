@@ -450,8 +450,74 @@
 	\newpage
 	\subsection{2014, I termin, Adam Duszeńko}
 		\subsubsection{Treść}
-			Napisać kod programu głównego wykonawczego do przetwarzania z wykorzystaniem maszyny JavaSpace przetwarzającego obiekty zadań zawierające dwie wartości całkowite, oraz numer obiektu i flagę logiczną początkowo zawierającą wartość \textit{FALSE}. W momencie pobrania obiektu zadania program wykonawczy ma podmienić w przestrzeni JavaSpace pobrany obiekt na ten sam, ale z flagą ustawioną na wartość \textit{TRUE}. Przetwarzanie obiektu realizowane jest w funkcji \textit{int check(int, int)} do której należy przekazać wartości z obiektu zadania. PO skończeniu przetwarzania zadania, przed zwróceniem wyniku, należy usunąć z przestrzeni JavaSpace obiekt przetwarzanego zadania. Wynik funkcji \textit{check} należy umieścić w obiekcie wynikowym którego strukturę proszę zaproponować. Obsłużyć koniec działania programu przez skonsumowanie "zatrutej pigułki".
+			Napisać kod programu głównego wykonawczego do przetwarzania z wykorzystaniem maszyny JavaSpace przetwarzającego obiekty zadań zawierające dwie wartości całkowite, oraz numer obiektu i flagę logiczną początkowo zawierającą wartość \textit{FALSE}. W momencie pobrania obiektu zadania program wykonawczy ma podmienić w przestrzeni JavaSpace pobrany obiekt na ten sam, ale z flagą ustawioną na wartość \textit{TRUE}. Przetwarzanie obiektu realizowane jest w funkcji \textit{int check(int, int)} do której należy przekazać wartości z obiektu zadania. Po skończeniu przetwarzania zadania, przed zwróceniem wyniku, należy usunąć z przestrzeni JavaSpace obiekt przetwarzanego zadania. Wynik funkcji \textit{check} należy umieścić w obiekcie wynikowym którego strukturę proszę zaproponować. Obsłużyć koniec działania programu przez skonsumowanie "zatrutej pigułki".
 		\subsubsection{Propozycja rozwiązania 1}
+			\textbf{Klasa Odpowiedzi (wynik Zadania)}:
+			\begin{lstlisting}[language=Java]
+				/**
+				 * @author Son Mati
+				 * @waifu Itsuka Kotori
+				 */
+				public class Odpowiedz implements Entry {
+					public Integer id;
+					public Integer wynik;
+					
+					public Odpowiedz() {
+					}
+					
+					public Odpowiedz(Integer id, Integer wynik) {
+						this.id = id;
+						this.wynik = wynik;
+					}
+				}
+			\end{lstlisting}
+			\newpage
+			\textbf{Klasa Wykonawcy}:
+			\begin{lstlisting}[language=Java]
+				/**
+				 * @author Son Mati
+				 * @waifu Itsuka Kotori
+				 */
+				public class Sidekick {
+					protected Integer defaultLease = 100000;
+					protected JavaSpace space;
+					protected Lookup lookup;
+					// domyślny konstruktor obowiązakowy
+					public Sidekick() {
+						lookup = new Lookup(JavaSpace.class);
+					}
+					public void zacznijMurzynic() {
+						while(true) {
+							try {
+								this.space = (JavaSpace)lookup.getService();
+								Zadanie zad = new Zadanie(null, null, null, false, null);
+								zad = (Zadanie) space.take(zad, null, defaultLease);
+								if (zad.poisonPill == true) {
+									space.write(zad, null, defaultLease);
+									return;
+								}
+								zad.flag = true;
+								space.write(zad, null, defaultLease);
+								int result = this.check(zad.liczba1, zad.liczba2);
+								Odpowiedz odp = new Odpowiedz(zad.id, result);
+								space.take(zad, null, defaultLease);    // pełen wzorzec
+								space.write(odp, null, defaultLease);
+							} catch (TransactionException | RemoteException | UnusableEntryException | InterruptedException ex) {
+								Logger.getLogger(Sidekick.class.getName()).log(Level.SEVERE, null, ex);
+							}
+						}
+					}
+					// dla przykładu
+					public int check(int a, int b) {
+						return a + b;
+					}
+					// obowiązkowy Run
+					public static void main(String[] args) {
+						Sidekick murzyn = new Sidekick();
+						murzyn.zacznijMurzynic();
+					}
+				}
+			\end{lstlisting}
 	\newpage
 	\subsection{2015, 0 termin, Adam Duszeńko}
 		\subsubsection{Treść}

@@ -714,7 +714,80 @@
 				}
 			\end{lstlisting}
 		\newpage
-		
+		\section{Egzamin 2014, T1, Hafed Zghidi}
+		\subsection{Treść}
+			Korzystając z pakietu PVM zorganizować równoległe przetwarzania polegające na wyliczeniu silni każdego elementu tablicy \textit{T} składającej się z 1000 elementów typu \textit{INT}. Wynik ma zostać zapisany w tej samej tablicy \textit{T} (silnia(T[i]) $ \leftarrow $ T[i] dla i = 0 ... 999). Napisać proces główny realizujący podział zadania na podzadania oraz koordynujący równoległe wykonanie w procesach potomnych (procesu potomnego NIE należy pisać). Podział podzadań ma zostać zrealizowany zgodnie z zasadą dynamicznego podziału (równoważenia) zadań.
+		\subsection{Rozwiązanie}
+			\begin{lstlisting}[language=C]
+				#include "pvm3.h"
+				#define ELEMENT_NUMBER 1000
+				int main()
+				{
+					// nasza tablica
+					int T[ELEMENT_NUMBER];
+					int i;
+					for (i = 0; i < ELEMENT_NUMBER; i++)
+					T[i] = i;
+					
+					int ilhost, ilarch;			//parametry z PVMa
+					struct pvmhostinfo * info;
+					pvm_config(&ilhost, &ilarch, &info);
+					
+					int id_komorki = 0;
+					int tid;
+					// Dla każdego hosta - inicjujemy go
+					for (i = 0; i < ilhost; i++)
+					{
+						pvm_spawn("/potomek", 0, PvmTaskHost, info[i].hi_name, 1, &tid);	//powołanie potomka
+						if (tid < 0)
+						{
+							ilhost--;
+							continue;
+						}
+						pvm_initsend(PvmDataDefault);
+						// wysyłamy
+						pvm_pkint(&T[id_komorki], 1, 1);
+						pvm_send(tid, 100);
+						id_komorki++;
+					}
+			\end{lstlisting}
+			\newpage
+			\begin{lstlisting}[language=C]
+				{
+					// Wykonywanie programu aż do przedostatniej pętli
+					int bufid, child_tid, child_id_komorki, child_silnia, tmp;
+					while (id_komorki < ELEMENT_NUMBER)
+					{
+						// odebranie info o zakończeniu pracy
+						bufid = pvm_recv(-1, 200);
+						pvm_bufinfo(bufid, &tmp, &tmp, &child_tid);
+						// pobranie obliczonej silni
+						pvm_upkint(&child_id_komorki, 1, 1);
+						pvm_upkint(&child_silnia, 1, 1);
+						// napisanie wartości w tablicy
+						T[child_id_komorki] = child_silnia;
+						// wysłanie nowych danych
+						pvm_initsend(PvmDataDefault);
+						pvm_pkint(&T[id_komorki], 1, 1);
+						pvm_send(child_tid, 100);
+						id_komorki++;
+					}
+					// Odebranie ostatnich danych
+					for (i = 0; i < ilhost; i++)
+					{
+						bufid = pvm_recv(-1, 200);
+						pvm_bufinfo(bufid, &tmp, &tmp, &child_tid);
+						// pobranie obliczonej silni
+						pvm_upkint(&child_id_komorki, 1, 1);
+						pvm_upkint(&child_silnia, 1, 1);
+						// napisanie wartości w tablicy
+						T[child_id_komorki] = child_silnia;
+					}
+					pvm_exit();
+					return 0;
+				}
+			\end{lstlisting}
+		\newpage
 		\subsection{2015, 0 termin, Hafed Zighdi}
 			\subsubsection{Treść}
 				Naszym zadaniem jest przeszukanie fragmentu obrazu (\textit{wzorzec}) o rozmiarze $ nxn $ w obrazie 	\textit{Obraz} o rozmiarze $ mxm (m>>n) $. 
@@ -761,11 +834,11 @@
 						pvm_send(tid, 100);		//wysłanie wiersza
 						id_wiersza++;
 					}
-					\end{lstlisting}
-					\newpage
-					\begin{lstlisting}[language=C]
+				\end{lstlisting}
+				\newpage
+				\begin{lstlisting}[language=C]
 					{ 	// ...
-						//// Wykonywanie programu aż do przedostatniej pętli
+						// Wykonywanie programu aż do przedostatniej pętli
 						int bufid, child_tid, child_liczba_wystapien, tmp;
 						while ( id_wiersza < (m - n) )
 						{
@@ -786,7 +859,7 @@
 							pvm_send(child_tid, 100);
 							id_wiersza++;
 						}
-						//// Odebranie ostatnich danych
+						// Odebranie ostatnich danych
 						for	(i = 0; i < id_wiersza - ilhost + 1; i++ )
 						{
 							bufid = pvm_recv(-1, 200);
