@@ -1,11 +1,11 @@
 % !TeX spellcheck = pl_PL
+\newpage
 \section{CUDA}
-
-			\textbf{Wyszukiwanie minimum i maximum w macierzach A i B wg wzorów:
-			\begin{itemize}
-				\item minMatrix[i, j] = min(A[i, j], B[i, j])
-				\item maxMatrix[i, j] = max(A[i, j], B[i, j])
-			\end{itemize}}
+	\subsection{Wyszukiwanie minimum i maximum w macierzach A i B wg wzorów:}
+		\begin{itemize}
+			\item minMatrix[i, j] = min(A[i, j], B[i, j])
+			\item maxMatrix[i, j] = max(A[i, j], B[i, j])
+		\end{itemize}
 		\begin{lstlisting}[language=C]
 			#include <stdlib.h>
 			#include <stdio.h>
@@ -40,6 +40,7 @@
 				cudaStatus = cudaMalloc((void**)&dev_min, size * sizeof(int));
 				cudaStatus = cudaMalloc((void**)&dev_max, size * sizeof(int));
 			\end{lstlisting}
+			\newpage
 			\begin{lstlisting}[language=C]
 			{	// Spłaszczamy macierze do jednego wymiaru
 				// Kopiujemy po wierszu, 10 x 10
@@ -91,7 +92,9 @@
 				return 0;
 			}
 		\end{lstlisting}
-		\textbf{Transpozycja macierzy kwadratowej ($ a_out[ i,j ] = a_in [ j,i ] $).}
+		\newpage
+		\subsection{Transpozycja macierzy kwadratowej}
+			($ a_out[ i,j ] = a_in [ j,i ] $
 			\begin{lstlisting}[language=C]
 			#include <stdio.h>
 			#include <stdlib.h>
@@ -131,6 +134,7 @@
 				return 1;
 			}
 			\end{lstlisting}
+			\newpage
 			\begin{lstlisting}[language=C]
 			__global__ void transposeKernel(int * a, int * out)
 			{
