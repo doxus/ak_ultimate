@@ -1,10 +1,113 @@
-\newpage
+% !TeX spellcheck = pl_PL
+\documentclass[a4paper,twoside]{article}
+\usepackage{polski}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+
+\usepackage[unicode, bookmarks=true]{hyperref} %do zakładek
+\usepackage{tabto} % do tabulacji
+\NumTabs{6} % globalne ustawienie wielkosci tabulacji
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{dcolumn}
+\usepackage{bigstrut}
+\usepackage{color}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{wrapfig}
+\usepackage{listings,lstautogobble}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{epigraph}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+\setlength{\textheight}{24cm}
+\setlength{\textwidth}{15.92cm}
+\setlength{\footskip}{10mm}
+\setlength{\oddsidemargin}{0mm}
+\setlength{\evensidemargin}{0mm}
+\setlength{\topmargin}{0mm}
+\setlength{\headsep}{5mm}
+
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+\newcolumntype{N}{@{}m{0pt}@{}}
+
+\graphicspath{ {./images/} }
+
+% === Reset inkrementacji sekcji przy nowym parcie === %
+\usepackage{titlesec}
+
+\makeatletter
+\@addtoreset{section}{part}
+\makeatother
+\titleformat{\part}[display]
+{\normalfont\LARGE\bfseries\centering}{}{0pt}{}
+
+
+% --- Listing dialektu SPARC Assemblera
+\lstdefinelanguage
+[sparc]{Assembler}		%
+[x86masm]{Assembler}	% based on the "x86masm" dialect
+{
+	morekeywords= %
+	{
+		ld, LD, st, ST, %
+		mov, MOV, swap, SWAP, %
+		nop, NOP, %
+		AND, and, ANDcc, andcc, OR, or, ORcc, orcc, XOR, xor, XORcc, xorcc, %
+		ADDX, addx, ADDXcc, addxcc, %
+		SUB, sub, SUBcc, subcc, SUBX, subx, SUBXcc, subxcc, %
+		UMUL, umul, SMUL, smul, UMULcc, umulcc, SMULcc, smulcc, %
+		UDIV, udiv, SDIV, sdiv, UDIVcc, udivcc, SDIVcc, sdivcc, %
+		BA, ba, BNE, bne, BG, bg, BNEG, bneg, bge, BGE, be, BE,%
+		CALL, call, RET, ret, RETL, retl, %
+		SAVE, save, RESTORE, restore %
+	}	
+}
+
+% --- Opcje listingu kodu
+\lstset{
+	frame=single,
+	autogobble=true,
+	commentstyle=\ttfamily\itshape\color{ForestGreen},
+	keywordstyle=\color{blue},
+	stringstyle=\color[rgb]{0.64,0.08,0.08},
+	numberstyle=\color[rgb]{0.205, 0.142, 0.73},
+	frameround=ffff,
+	rulecolor=\color{black},
+	tabsize=4,
+	breaklines=true, %
+	% --- Polskie znaki w listingu kodu
+	literate=%
+	{ą}{{\c{a}}}1
+	{ć}{{\'c}}1
+	{ę}{{\c{e}}}1
+	{ł}{{\l{}}}1
+	{ń}{{\'n}}1
+	{ó}{{\'o}}1
+	{ś}{{\'s}}1
+	{ź}{{\'z}}1
+	{ż}{{\.z}}1
+	{Ą}{{\c{A}}}1
+	{Ć}{{\'C}}1
+	{Ę}{{\c{E}}}1
+	{Ł}{{\L{}}}1
+	{Ń}{{\'N}}1
+	{Ó}{{\'O}}1
+	{Ś}{{\'S}}1
+	{Ź}{{\'Z}}1
+	{Ż}{{\.Z}}1
+}
+
+\begin{document}
+	\bibliographystyle{plain}
+	\input{./macrodefs}
 %===============================================================================
 %*** Zadania egzaminacyjne *****************************
 %===============================================================================
-\part{Zadania egzaminacyjne}
 	\input{./zad/sparc.tex}
 	\input{./zad/pvm.tex}
 	\input{./zad/javaspaces.tex}
 	\input{./zad/cuda.tex}
 	\input{./zad/mosix.tex}
+\end{document}
