@@ -1,9 +1,8 @@
 % !TeX spellcheck = pl_PL
 \newpage
 \section{MOSIX}
-	\subsection{2013, 1 termin, Daniel Kostrzewa}
-		\subsubsection{Treść}
-		Wykorzystując \textit{n} węzłów klastra napisać funkcję, która obliczy wartość \textit{F(x, y)}. Nagłówek funkcji ma wyglądać następująco:
+	\subsection{Treść}
+		Funkcja wykorzystuje \textit{n} węzłów klastra, liczy wartość \textit{F(x, y)}. Nagłówek funkcji:
 		\begin{lstlisting}[language=C]
 			double fun(double x, double y, int k)
 		\end{lstlisting}
@@ -134,7 +133,7 @@
 	\newpage 
 	\subsection{2015, 0 termin, Daniel Kostrzewa}
 		\subsubsection{Treść}
-			Napisać program, który utworzy \textit{n} procesów potomnych. Proces zarządzający ma wysyłać zestaw liczb do procesów potomnych (założyć, że liczba przesyłanych danych wynosi \textit{k}).
+			Program tworzy \textit{n} procesów potomnych. Proces zarządzający ma wysyłać zestaw liczb do procesów potomnych (założyć, że liczba przesyłanych danych wynosi \textit{k}).
 			Procesy potomne mają w pętli wykonywać następujące czynności: czekać na liczbę wysłaną przez proces zarządzający, na podstawie odebranej liczby obliczyć pole koła (odebrana liczba jest promieniem koła), odesłać wynik do procesu zarządzającego.
 			Proces zarządzający po wysłaniu wszystkich liczb przechodzi w stan odbierania danych i sumuje pola kół. Końcowa wartość ma zostać wyświetlona na ekranie.
 		\subsubsection{Rozwiązanie}
@@ -218,9 +217,8 @@
 			
 			\end{lstlisting}
 		\newpage
-	\subsection{Termin nieznany, Daniel Kostrzewa}
-		\subsubsection{Treść}
-			Znaleźć wartość wielomianu \textit{k}-tego stopnia w punkcie \textit{x} wyrażonego poniższym wzorem. Liczby \textit{k} oraz \textit{x} są podawane jako parametry wywołania programu. W Zadaniu należy stworzyć potok oraz dwa procesy potomne. Jeden z procesów potomnych wyznacza wartość wielomianu dla \textit{k-1} stopnia, natomiast drugi dla \textit{k-2} stopnia. Zadanie rozwiązać metodą rekurencyjną.
+	\subsection{Treść}
+			Program liczy wartość wielomianu \textit{k}-tego stopnia w punkcie \textit{x} wyrażonego wzorem. Liczby \textit{k} oraz \textit{x} są podawane jako parametry wywołania programu. W Zadaniu należy stworzyć potok oraz dwa procesy potomne. Jeden z procesów potomnych wyznacza wartość wielomianu dla \textit{k-1} stopnia, natomiast drugi dla \textit{k-2} stopnia. Zadanie rozwiązać metodą rekurencyjną.
 			$$ P_k(x)=15P_{k-1}\left(\cfrac{3}{8}x\right)-P_{k-2}\left(\cfrac{x^2}{2}\right)\;\;\;\;\;\;P_0(x)=1\;\;\;\;\;\;P_1(x)=x$$
 		\subsubsection{Rozwiązanie}
 			\begin{lstlisting}[language=C]
