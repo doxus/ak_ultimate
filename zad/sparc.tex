@@ -25,7 +25,6 @@
 					return 0;
 				}
 			\end{lstlisting}
-		\newpage
 		\subsubsection{Odpowiednik w SPARCu}
 			\begin{lstlisting}[language={[sparc]Assembler}]
 				.global minmax
@@ -83,8 +82,6 @@
 					ret
 					restore ; odtworzenie okienka
 			\end{lstlisting}
-		
-	\newpage
 		\subsection{Treść}
 			Funkcja zwraca \emph{a(n)} wyliczoną ze wzoru rekurencyjnego, pobiera dwa argumenty: \emph{n} oraz \emph{k}, obydwa typu \textit{unsigned int}.
 			$$ a(n)=a(n-1)^k+n\cdot k,\;\;\;\;a(0)=1,\;\;\;n=1,2,3,... $$
@@ -134,7 +131,6 @@
 					MOV		%i5,	%g1					;! g1 - wynik koncowy
 					NOP									;! kuniec
 			\end{lstlisting}
-		\newpage
 		\subsubsection{Rozwiązanie nr 2 by Trimack}
 			\begin{lstlisting}[language={[sparc]Assembler}]
 				.global _start
@@ -190,8 +186,6 @@
 					ret
 					restore
 			\end{lstlisting}
-		
-	\newpage
 		\subsection{Treść}
 			Funkcja realizująca operację w języku C:
 			\begin{lstlisting}[language=C]
@@ -239,7 +233,6 @@
 			_koniec:
 				mov		%l3,	%i0
 			\end{lstlisting}
-		\newpage
 		\subsubsection{Rozwiązanie 2}
 			\begin{lstlisting}[language={[sparc]Assembler}]
 				.global f

@@ -1,14 +1,10 @@
 % !TeX spellcheck = pl_PL
-\newpage
 \section{MOSIX}
-	\subsection{2013, 1 termin, Daniel Kostrzewa}
-		\subsubsection{Treść}
-		Wykorzystując \textit{n} węzłów klastra napisać funkcję, która obliczy wartość \textit{F(x, y)}. Nagłówek funkcji ma wyglądać następująco:
+		\textbf{n węzłów klastra liczy wartość \textit{F(x, y)}.}
 		\begin{lstlisting}[language=C]
 			double fun(double x, double y, int k)
 		\end{lstlisting}
-		gdzie wartością zwracaną jest obliczona wartość funkcji; k - liczba elementów iloczynu; x, y - argumenty funkcji. Założyć, że \textit{k} jest podzielne przez \textit{n} bez reszty.
-	\subsubsection{Rozwiązanie}
+		\textbf{k - liczba elementów iloczynu; x, y - argumenty funkcji. k jest podzielne przez n bez reszty.}
 		\begin{lstlisting}[language=C]
 			#include <stdio.h>
 			#include <stdlib.h>
@@ -52,15 +48,11 @@
 				return 0;
 			}
 		\end{lstlisting}
-	\subsection{2014, 1 termin, Daniel Kostrzewa}
-		\subsubsection{Treść}
-			Mają do dyspozycji \textit{n} węzłów klastra napisać funkcję, która obliczy całkę metodą trapezów z funkcji zapisanej poniżej. Nagłówek funkcji wygląda następująco:
+			\textbf{n węzłów klastra liczy całkę metodą trapezów z funkcji 	$$ y=15x^3-7x^2+sin(2x^4)-8 $$}
 			\begin{lstlisting}[language=C]
 				double calka(double xl, double xp, double krok)
 			\end{lstlisting}
-			gdzie wartością zwracaną jest obliczona wartość całki; xl - początek przedziału całkowania, xp - koniec przedziału całkowania, krok - wartość kroku całkowania.
-			$$ y=15x^3-7x^2+sin(2x^4)-8 $$
-		\subsubsection{Rozwiązanie}
+		\textbf{xl - początek przedziału całkowania, xp - koniec przedziału całkowania, krok - wartość kroku całkowania.}
 		\begin{lstlisting}[language=C]
 			#include <stdio.h>
 			#include <stdlib.h>
@@ -100,8 +92,7 @@
 				// Potok do zapisu i odczytu
 				int potok[2];
 				pipe(potok);
-		\end{lstlisting}	
-		\newpage
+		\end{lstlisting}
 		\begin{lstlisting}[language=C]
 			{
 				// Kindermachen
@@ -131,13 +122,7 @@
 				return mainResult;
 			}
 		\end{lstlisting}
-	\newpage 
-	\subsection{2015, 0 termin, Daniel Kostrzewa}
-		\subsubsection{Treść}
-			Napisać program, który utworzy \textit{n} procesów potomnych. Proces zarządzający ma wysyłać zestaw liczb do procesów potomnych (założyć, że liczba przesyłanych danych wynosi \textit{k}).
-			Procesy potomne mają w pętli wykonywać następujące czynności: czekać na liczbę wysłaną przez proces zarządzający, na podstawie odebranej liczby obliczyć pole koła (odebrana liczba jest promieniem koła), odesłać wynik do procesu zarządzającego.
-			Proces zarządzający po wysłaniu wszystkich liczb przechodzi w stan odbierania danych i sumuje pola kół. Końcowa wartość ma zostać wyświetlona na ekranie.
-		\subsubsection{Rozwiązanie}
+			\textbf{n procesów potomnych. Zarządca wysyła k danych do potomkówm które w pętli odbierają liczbe, liczą pole kołoa, wysyłają wynik.}
 			\begin{lstlisting}[language=C]
 			#include <stdio.h>
 			#include <stdlib.h>
@@ -175,7 +160,6 @@
 				// out - otrzymane wyniki - pola kół
 				pipe(data_stream);
 			\end{lstlisting}
-			\newpage
 			\begin{lstlisting}[language=C]
 				// utworzenie procesów potomnych
 				for (i = 0; i < n; i++)
@@ -215,14 +199,9 @@
 				printf("Suma pól kół: %d", sum);
 				return 0;
 			}
-			
 			\end{lstlisting}
-		\newpage
-	\subsection{Termin nieznany, Daniel Kostrzewa}
-		\subsubsection{Treść}
-			Znaleźć wartość wielomianu \textit{k}-tego stopnia w punkcie \textit{x} wyrażonego poniższym wzorem. Liczby \textit{k} oraz \textit{x} są podawane jako parametry wywołania programu. W Zadaniu należy stworzyć potok oraz dwa procesy potomne. Jeden z procesów potomnych wyznacza wartość wielomianu dla \textit{k-1} stopnia, natomiast drugi dla \textit{k-2} stopnia. Zadanie rozwiązać metodą rekurencyjną.
+			\textbf{Poszukiwanie wartości wielomianu k stopnia, obliczenia na 2 klastrach za pomocą rekurencji}
 			$$ P_k(x)=15P_{k-1}\left(\cfrac{3}{8}x\right)-P_{k-2}\left(\cfrac{x^2}{2}\right)\;\;\;\;\;\;P_0(x)=1\;\;\;\;\;\;P_1(x)=x$$
-		\subsubsection{Rozwiązanie}
 			\begin{lstlisting}[language=C]
 				 #include <stdio.h>
 				 #include <stdlib.h>
@@ -257,7 +236,6 @@
 					 return result;
 				 }
 			\end{lstlisting}
-			\newpage
 			\begin{lstlisting}[language=C]
 				 // Obliczenie całości wielomianu
 				 double liczWielomian(int k, double x)
