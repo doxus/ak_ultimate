@@ -268,17 +268,43 @@
 				\item 
 			\end{itemize}
 		\end{enumerate}
-		
+	\newpage
 	\section{2015, Termin 0}
 		\begin{enumerate}
 			\item \textbf{Omów najważniejsze cechy architektury CUDA w szczególności model pamięci.}
+			\begin{samepage}
 				\begin{itemize}
-					\item Cała architektura utworzona z wątków, które są grupowane w bloki.
-					\item Wątki niezależnie wykonują tę samą operację.
-					\item Każdy wątek ma swoją lokalną pamięć, dodatkowo mają wspólną pamięć globalną i współdzieloną.
-					\item Za komunikację między wątkami odpowiadają mechanizmy synchronizacji (\emph{barrier synchronization})
+					\item \emph{Cechy architektury}:
+					\begin{itemize}
+						\item CUDA to architektura wielordzeniowych procesorów graficznych, to uniwersalna architektura obliczeniowa wraz z równoległym modelem programistycznym, wspiera C i C++.
+						\item Posiada uniwersalny procesor przetwarzający wierzchołki, piksele i geometrię oraz uniwersalne programy obliczeniowe.
+						\item Posiada procesor wątków, który eliminuje "ręczne" zarządzanie rejestrami wektorowymi.
+						\item Oparta jest o model SIMT (\emph{single-instruction multiple-thread}), gdzie wiele niezależnych wątków wykonuje równocześnie tę samą instrukcję.
+						\item Model programistyczny dzieli kod na część wykonywaną przez procesor i część wykonywaną przez kartę graficzną.
+					\end{itemize}
+					\item \textbf{Wątki}:
+					\begin{itemize}
+						\item Każdy wątek niezależnie wykonują tę samą operację oraz ma swoją lokalną pamięć, dodatkowo wątki mają wspólną pamięć globalną i współdzieloną.
+						\item Za komunikację między wątkami odpowiadają mechanizmy synchronizacji (\emph{barrier synchronization}).
+						\item Wątki są automatycznie grupowane w bloki o geometrii 1, 2 lub 3-wymiarowej.
+						\item Bloki grupowane są w siatkę (\emph{grid} - kratę) o geometrii 1, 2-wymiarowej.
+						\item Bloki wątków tworzących siatkę muszą się wykonywać niezależnie.
+					\end{itemize}
+					\item \textbf{Model pamięci:}
+					\begin{itemize}
+						\item \textbf{Pamięć globalna} - duża, o czasie życia aplikacji, dostępna dla każdego wątku w dowolnym bloku, o długim czasie dostępu. W pamięci globalnej wyróżnia się:
+						\begin{itemize}
+							\item \textbf{Pamięć stałych} - mały fragment, który jest tylko do odczytu oraz jest \textit{cache}-owany, dzięki czemu dostęp do niego jest bardzo szybki. Czas życia oraz jej dostępność taka sama.
+							\item \textbf{Pamięć lokalna} - wykorzystywana do przechowywania danych lokalnych wątku, które nie mieszczą się w rejestrach
+							\item \textbf{Pamięć tekstur} - posiada specyficzne metody adresowania i \textit{cache}-owanie dla zastosowań graficznych
+						\end{itemize}
+						\item \textbf{Pamięć współdzielona} - niewielka, o czasie życia bloku, dostępna dla każdego wątku w bloku dla którego jest dedykowana, o bardzo krótkim czasie dostępu.
+						\item \textbf{Rejestry}	- niewielka, bardzo szybka, o czasie życia wątku. Tylko jeden wątek może w danym momencie korzystać z danego rejestru.
+					\end{itemize}
 				\end{itemize}
+			\end{samepage}
 			\item \textbf{Omów budowę systemów o niejednorodnym dostępie do pamięci (NUMA).}
+			\begin{samepage}
 			\begin{itemize}
 				\item Systemy NUMA zbudowane są z wielu procesorów, gdzie każdy procesor posiada własną, bardzo szybką pamięć lokalną.
 				\item Dodatkowo procesory posiadają wspólną, ogromną pamięć wspólną.
@@ -291,29 +317,48 @@
 				\item Architektura NUMA jest bardzo efektywna dla aplikacji, które częściej odczytują z nielokalnej pamięci i nieefektywna dla aplikacji, które części zapisują do niej.\\
 				Przy zapisie trzeba zaktualizować stan tej linii we wszystkich węzłach, które je pobrały do siebie.
 			\end{itemize}
+			\end{samepage}
 			\item \textbf{Porównaj realizację rozkazów wektorowych w komputerach wektorowych i macierzowych.}
+			\begin{samepage}
 			\ref{ss:wektor}
 			\begin{itemize}
-				\item W komputerze wektorowym szybkość realizacji rozkazów rośnie logarytmicznie wraz ze zwiększeniem długości wektora.
-				\item Efektywność wykonywania rozkazów w komputerze wektorowym dąży to pewnej stałej wartości, która jest efektywnością idealną.
-				\item Z kolei w komputerze macierzowym ten sam rozkaz może być wykonywany w jednym kroku (jeśli jest wystarczająca liczba jednostek przetwarzających), czyli w stałym czasie.
+				\item \textbf{W komputerze wektorowym}:
+				\begin{itemize}
+					\item Szybkość realizacji rozkazów jest liniowo proporcjonalna do długości wektora.
+					\item Moc obliczeniowa rośnie logarytmicznie (nieliniowo) wraz ze zwiększeniem długości wektora.
+					\item Przyspieszenie (stosunek czasu wykonywania na komputerze szeregowym do czasu na wektorowym) jest w idealnym przypadku równa długości wektora.
+					\item Efektywność wykonywania rozkazów dąży do pewnej stałej wartości, która jest efektywnością idealną.
+				\end{itemize}
+				\item \textbf{Z kolei w komputerze macierzowym}:
+				\begin{itemize}
+					\item Rozkaz wektorowy może być wykonywany w jednym kroku (jeśli jest wystarczająca liczba jednostek przetwarzających), czyli w stałym czasie.
+					\item Dzieje się tak dzięki sieci elementów przetwarzających.
+				\end{itemize}
 			\end{itemize}
+			\end{samepage}
 			\item \textbf{Wymień różnice między systemami SMP a MPP.}
+			\begin{samepage}
 			\begin{itemize}
 				\item SMP posiada pamięć logicznie wspólną, ale może ona być fizycznie jednorodna (UMA) lub rozproszona (NUMA). Z kolei MPP posiada pamięć fizycznie i logicznie rozproszoną.
 				\item MMP jest znacznie bardziej skalowalne niż SMP (UMA - słabo, NUMA - średnio).
 				\item W SMP wymagany jest mechanizm do zachowania spójności pamięci podręcznych procesorów - może to być protokół MESI (UMA) lub katalogi (UMA i NUMA).
-				\item W MPP do kontroli wystarcza przesył komunikatów.
+				\item W MPP do kontroli wystarcza przesył komunikatów. Jest on realizowany programowo (MPP I generacji) lub sprzętowo przez routery (MPP II generacji).
 				\item W SMP istnieje jedna wspólna pamięć, z kolei w MPP każdy węzeł ma swoją pamięć lokalną plus opcjonalnie wspólną.
 				\item W MPP jest wolniejsza komunikacji między węzłami sieci - potrzebna jest wymiana większej liczby informacji.
+				\item SMP węzłem jest zwykły procesor, w MPP jest to procesor lub system wieloprocesorowy (właśnie SMP).
 			\end{itemize}
+			\end{samepage}
+			
 			\item \textbf{Omów rozwiązania stosowane w klastrach o wysokiej niezawodności.}
+			\begin{samepage}
 			\begin{itemize}
-				\item Redundancja węzłów (mocy obliczeniowej) - większa moc obliczeniowa, więcej mocy w zapasie
-				\item Dostęp do wspólnych zasobów (pamięci zewnętrznych) - więcej pamięci
-				\item Mirroring dysków - zabezpieczenie przed utratą danych
+				\item Redundancja węzłów (mocy obliczeniowej) - większa moc obliczeniowa, więcej mocy w zapasie, różne tryby pracy klastrów (aktywny-pasywny, pasywny-pasywny, mieszane)
+				\item Dostęp do wspólnych zasobów (pamięci zewnętrznych) - więcej pamięci, współdzielona lub nie ("współdziel wszystko", "nie współdziel nic").
+				\item \textit{Mirroring} dysków - zabezpieczenie przed utratą danych, zapis na dwóch dyskach jednocześnie tych samych danych
 				\item Mechanizmy kontrolujące funkcjonowanie węzłów - efektywniejsza praca całości jako jednego systemu
 				\item Redundancja sieci łączących (dla 3 rodzajów sieci) - przypadku błędu sieci klaster nie przestaje działać, tylko inna sieć przejmuje kontrolę
 				\item Redundancja zasilania - wincyj mocy i prundu
+				\item Mechanizmy kontrolujące funkcjonowanie węzłów - "Heartbeat" oraz "Fail-over". Heartbeat to regularne wysyłanie sygnałów przez węzeł do sieci, które świadczą o poprawnej pracy. Jeżeli "bicie serca" zostanie przerwane / zakłócone, do akcji wkracza Fail-over - obsługa awarii. Ten przełącza system, który uległ awarii na system rezerwowy. Poprzez Fail-back określa się powrót do stanu sprzed awarii.
 			\end{itemize}
+			\end{samepage}
 		\end{enumerate}

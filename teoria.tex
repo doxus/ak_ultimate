@@ -729,7 +729,7 @@
 		\begin{itemize}
 			\item GPU - Graphics Processing Unit
 			\item Wcześniejsze GPU - specjalizowane języki (HLSL, GLSL czy NVIDIA Cg), tylko rendering
-			\item CUDA (Compute Unified Device Architecture) -architektura wielordzeniowych procesorów graficznych (GPU)
+			\item CUDA (\emph{Compute Unified Device Architecture}) - architektura wielordzeniowych procesorów graficznych (GPU)
 			\item Uniwersalna architektura obliczeniowa połączona z równoległym modelem programistycznym
 			\item wsparcie dla języków C/C++
 			\item GPGPU = GPU + CUDA
@@ -739,25 +739,25 @@
 		\begin{itemize}
 			\item W miejsce oddzielnych potoków przetwarzających wierzchołki i piksele wprowadzenie uniwersalnego procesora przetwarzającego wierzchołki, piksele i ogólnie geometrię, a także uniwersalne programy obliczeniowe
 			\item Wprowadzenie procesora wątków eliminującego „ręczne” zarządzanie rejestrami wektorowymi
-			\item Wprowadzenie modelu SIMT (single-instruction multiple-thread), w którym wiele niezależnych wątków wykonuje równocześnie tę samą instrukcję
-			\item Wprowadzenie współdzielonej pamięci oraz mechanizmów synchronizacji wątków (barrier synchronization) dla komunikacji między wątkami
+			\item Wprowadzenie modelu SIMT (\emph{single-instruction multiple-thread}), w którym wiele niezależnych wątków wykonuje równocześnie tę samą instrukcję
+			\item Wprowadzenie współdzielonej pamięci oraz mechanizmów synchronizacji wątków (\emph{barrier synchronization}) dla komunikacji między wątkami
 		\end{itemize}
 	\subsection{Multiprocesor strumieniowy}
 		Architektura GT 200.
 		\begin{itemize}
 			\item 8 rdzeni C1 -C8 (SP)
-			\item podręczna pamięć instrukcji (ang. instruction cache),
-			\item podręczna pamięć danych (ang. constant cache) - pamięć tylko do odczytu,
-			\item pamięć współdzielona (ang. shared memory)
+			\item podręczna pamięć instrukcji (ang. \emph{instruction cache}),
+			\item podręczna pamięć danych (ang. \emph{constant cache}) - pamięć tylko do odczytu,
+			\item pamięć współdzielona (ang. \emph{shared memory})
 			\item 16 384 rejestry,
 			\item jednostka arytmetyczna wykonująca obliczenia zmiennoprzecinkowe podwójnej precyzji (fp64),
-			\item dwie jednostki arytmetyczne przeznaczone do obliczania funkcji specjalnych (ang. special function unit),
+			\item dwie jednostki arytmetyczne przeznaczone do obliczania funkcji specjalnych (ang. \emph{special function unit}),
 			\item pamięć globalna
 		\end{itemize}
 	\subsection{Model programistyczny CUDA}
 		\begin{itemize}
 			\item Specjalny kompilator NVCC
-			\item Podział programu na kod wykonywany przez procesor (ang. \emph{Host code}) i przez urządzenie (kartę graficzną) (ang. Device code) - kernel
+			\item Podział programu na kod wykonywany przez procesor (ang. \emph{Host code}) i przez urządzenie (kartę graficzną) (ang. \emph{Device code}) - kernel
 			\item Realizacja operacji równoległych według modelu SIMT (\emph{Single Instruction Multiple Threading})
 		\end{itemize}
 	\subsection{Wykonanie obliczeń z użyciem architektury CUDA (5 faz)}
@@ -772,32 +772,31 @@
 		\begin{itemize}
 			\item Potokowa jednostka arytmetyczna zmp
 			\item Potokowa jednostka arytmetyczna stp
-			\item Ulepszona realizacja operacji zmp FMA (fused multiply-add) dla pojedynczej i podwójnej precyzji
+			\item Ulepszona realizacja operacji zmp FMA (\emph{fused multiply-add}) dla pojedynczej i podwójnej precyzji
 		\end{itemize}
 
 	\subsection{Wątki}
 		\subsubsection{Co to jest?}
 			\begin{itemize}
-				\item Wątek reprezentuje pojedynczą operację (a single work unit or operation)
-				\item Wątki są automatycznie grupowane w bloki, maksymalny rozmiar bloku = 512 wątków (w architekturze Fermi i wyższych –1024 wątki).
-				\item Bloki grupowane są w siatkę (grid -kratę)
-				\item Grupowanie wątków –bloki o geometrii 1, 2 lub 3-wymiarowej
-				\item Grupowanie bloków –siatka (grid) o geometrii 1, 2-wymiarowej
+				\item Wątek reprezentuje pojedynczą operację (\emph{a single work unit or operation})
+				\item Wątki są automatycznie grupowane w bloki, maksymalny rozmiar bloku = 512 wątków (w architekturze Fermi i wyższych - 1024 wątki).
+				\item Bloki grupowane są w siatkę (\emph{grid} - kratę)
+				\item Grupowanie wątków - bloki o geometrii 1, 2 lub 3-wymiarowej
+				\item Grupowanie bloków - siatka (\emph{grid}) o geometrii 1, 2-wymiarowej
 				\item Wymaga się, aby bloki wątków tworzących siatkę mogły się wykonywać niezależnie: musi być możliwe ich wykonanie w dowolnym porządku, równolegle lub szeregowo.
 			\end{itemize}
 		\subsubsection{Grupowanie wątków w bloki i siatkę}
 			\begin{itemize}
 				\item Siatka o geometrii jednowymiarowej (trzy bloki wątków)
-				\item Każdy blok -geometria dwuwymiarowa (wymiary 2 x 3)
+				\item Każdy blok - geometria dwuwymiarowa (wymiary 2 x 3)
 			\end{itemize}
 		\subsubsection{Sprzętowa organizacja wykonywania wątków}
 			\begin{itemize}
-				\item Przy uruchomieniu \textit{kernela} wszystkie bloki tworzące jego siatkę obliczeń są rozdzielane pomiędzy multiprocesory danego GPU
+				\item Przy uruchomieniu kernela wszystkie bloki tworzące jego siatkę obliczeń są rozdzielane pomiędzy multiprocesory danego GPU
 				\item Wszystkie wątki danego bloku są przetwarzane w tym samym multiprocesorze
 				\item W danej chwili (cyklu) pojedynczy rdzeń multiprocesora wykonuje jeden wątek programu
 				\item Multiprocesor tworzy, zarządza, szereguje i wykonuje wątki w grupach po 32, nazywanych wiązkami (\emph{warp}).
 				\item Wiązki są szeregowane do wykonania przez \emph{warp scheduler}. Wiązka wątków jest wykonywana jako jeden wspólny rozkaz (analogia do rozkazu SIMD, tzn. rozkazu wektorowego)
-				
 				\item Sposób wykonania wiązki wątków (rozkazu SIMD) zależy od budowy multiprocesora:
 				\begin{samepage}
 				\begin{itemize}
@@ -818,7 +817,7 @@
 	\subsubsection{Rejestry}
 		Niewielka, bardzo szybka pamięć o czasie życia wątku (po zakończeniu wątku dane z rejestrów są usuwane). Tylko jeden wątek może w danym momencie korzystać z danego rejestru.
 	\subsubsection{Pamięć lokalna i pamięć tekstur}
-		Podobnie jak w przypadku pamięci stałych, są to dedykowane fragmenty pamięci globalnej. Pamięć lokalna jest wykorzystywana do przechowywania danych lokalnych wątku, które nie mieszczą się w rejestrach, a pamięć tekstur posiada specyficzne metody adresowania i cache-owanie specyficzne dla zastosowań graficznych.
+		Podobnie jak w przypadku pamięci stałych, są to dedykowane fragmenty pamięci globalnej. Pamięć lokalna jest wykorzystywana do przechowywania danych lokalnych wątku, które nie mieszczą się w rejestrach, a pamięć tekstur posiada specyficzne metody adresowania i \textit{cache}-owania dla zastosowań graficznych.
 \vfill
 \section{Systemy wieloprocesorowe (UMA)}
 \begin{samepage}
