@@ -2,7 +2,7 @@
 
 \newpage
 \part{Pytania otwarte}
-	\section{2010, Termin I}
+	\section{2010, Termin I (odpowiedzi z forum)}
 		\begin{enumerate}
 			\item \textbf{Które cechy architektury CISC zostały zmienione i w jaki sposób w architekturze RISC?}
 			\begin{itemize}
@@ -24,7 +24,7 @@
 					\item duża liczba trybów adresacji (5 – 20, Vax $ \rightarrow $ 20 )
 					\item model obliczeń pamięć – pamięć
 					\item komplikowana struktura sprzętu, przy małym wykorzystaniu rozkazów złożonych
-					\item uży rozrzut cech rozkazów w zakresie: złożoności, długości, czasu wykonania
+					\item duży rozrzut cech rozkazów w zakresie: złożoności, długości, czasu wykonania
 				\end{itemize}
 			\end{itemize}
 			\label{itm:risc}
@@ -99,103 +99,7 @@
 		\end{enumerate}
 	
 	\newpage
-	\section{2012, Termin I}
-		\begin{enumerate}
-			\item \textbf{Które cechy architektury CISC zostały zmienione i w jaki sposób w architekturze RISC?}\\
-			Patrz: \ref{itm:risc}
-			\item \textbf{Porównaj realizację rozkazów wektorowych w komputerach wektorowych, macierzowych i procesorach superskalarnych z rozszerzeniami SIMD.}\\\\
-			W zasadzie komputery wektorowe zaliczane są do architektury SISD gdzie mamy do
-			czynienia z jedną jednostką wykonawczą i dlatego też operacja na kolejnej danej wektora
-			rozpoczyna się pewien czas dalej, związany z wykonaniem jednej części potoku. Komputery
-			macierzowe należą zaś do klasy SIMD, gdzie istnieje wiele jednostek wykonawczych
-			(elementów procesorowych) sterowanych synchronicznie przez jednostkę sterującą oraz
-			każda jednostka wykonawcza korzysta ze swoich własnych danych. Tak więc odpowiednio rozmieszczając dane możemy dokonać operacji na wszystkich danych wektora w jednym
-			czasie. Dodatkową różnicą jest fakt, iż wektoryzacją programu w komputerze wektorowym zajmuje
-			się kompilator, natomiast w komputerze macierzowym nie jest to już takie łatwe, gdyż
-			wszystko zależy od połączeń EP.\\\\
-			Co do komputerów superskalarnych wykonywanie rozkazu odbywa się jednocześnie na wielu "porcjach danych". Ważnym aspektem jest możliwość wystąpienia problem zależności danych przy potokowej ich realizacji (nie jestem pewien czy dobrze ująłem
-			\label{itm:wektor}
-			
-			\item \textbf{Scharakteryzuj ogólnie systemy wieloprocesorowe z rozproszoną pamięcią.}\\\\
-			\textbf{MPP} (\emph{Massively Parallel Processing}) to rozwiązanie bazujące na architekturze MIMD z
-			pamięcią rozproszoną. Komputer MPP zbudowany jest z dużej ilości niezależnych procesorów
-			(niekoniecznie superszybkich – w kupie siła!), wyposażonych we własną pamięć podręczną
-			CACHE i zwykłą pamięć, połączonych ze sobą za pomocą sieci – przez nią wysyła się
-			komunikaty. Takie podejście do sprawy zapewnia dużą i łatwą skalowalność – dołożenie 1000
-			nowych procesorów nie wiąże się z dużym nakładem pracy – nie trzeba budować nowych
-			układów zarządzających dostępem do pamięci. Każdy EP (Element Przetwarzający – procesor )
-			może wykonywać inne zadanie, przez co może być widziany jako osobny komputer (np. przez
-			system operacyjny). Systemy MPP wymagają jednak dużego nakładu pracy z punktu widzenia
-			oprogramowania, aby w pełni wykorzystać moc komputera, trzeba zadbać o odpowiednie
-			rozłożenie zadań między procesory ( np. fork() $ < $rotfl$ > $).
-			
-			\item \textbf{Wyjaśnij na czym polega problem zależności między danymi przy potokowej realizacji rozkazów. Podaj przykłady rozwiązania tego problemu w jednopotokowych procesorach RISC. Jak komplikuje się ten problem w procesorach superskalarnych?}\\
-			Patrz: \ref{itm:potok}
-			
-			\item \textbf{Jakie zalety i jakie warunki wykonania ma sprzętowa, współbieżna realizacja wielu wątków w jednym rdzeniu?}
-			\label{itm:watek}\\\\
-			Cel współbieżnej realizacji dwóch (lub więcej) wątków w jednym procesorze (rdzeniu): 
-			Minimalizacja strat cykli powstałych w trakcie realizacji pojedynczego wątku w wyniku:
-			\begin{itemize}
-				\item chybionych odwołań do pamięci podręcznej, 
-				\item błędów w przewidywaniu rozgałęzień, 
-				\item zależności między argumentami kolejnych rozkazów.
-			\end{itemize}
-			Warunki sprzętowej realizacji wielowątkowości:
-			\begin{itemize}
-				\item powielenie zestawów rejestrów uniwersalnych (lub powielenie tabel mapowania rejestrów)
-				\item powielenie liczników rozkazów
-				\item powielenie układów dostępu do pamięci podręcznej (tabel stron)
-				\item powielenie sterowników przerwań 
-			\end{itemize}
-		\end{enumerate}
-	
-	\section{2012, Termin II}
-		\begin{enumerate}
-			\item \textbf{Scharakteryzuj architekturę RISC.}\\
-			Patrz: \ref{itm:risc}
-			\item W\textbf{yjaśnij na czym polega problem potokowej realizacji rozkazów skoków (rozgałęzień). Podaj przykłady rozwiązań tego problemu we współczesnych procesorach.}\\\\
-			Problem polega na tym, że rozkaz skoku może spowodować problem „przeładowania potoku” czyli jego wyczyszczenia oraz ponownego wypełnienia - zapewnienie stałego dopływu rozkazów do potoku. Pierwsze rozwiązania opierały się na:
-			\begin{itemize}
-				\item wcześniejszym wyznaczeniu adresu rozgałęzienia (skoku) oraz pobraniu razem z rozkazem następnym za rozgałęzieniem również rozkazu docelowego (jeszcze przed rozstrzygnięciem spełnienia warunku rozgałęzienia
-				\item powielenie potoku (pierwszych stopni) i rozpoczęcie równoległego pobierania dwóch strumieni rozkazów (do chwili rozstrzygnięcia rozgałęzienia), później unieważnienie jednego strumienia
-			\end{itemize}
-			Te działania doprowadziły finalnie do aktualnego podejścia czyli przewidywania rozgałęzień. Wyróżniamy następujące strategie przewidywania rozgałęzień:
-			\begin{enumerate}
-				\item Statyczne
-				\begin{itemize}
-					\item przewidywanie, że rozgałęzienie (skok warunkowy) zawsze nastąpi
-					\item przewidywanie, że rozgałęzienie nigdy nie nastąpi (Motorola 68020, VAX 11/780)
-					\item odejmowanie decyzji na podstawie kodu rozkazu rozgałęzienia (specjalny bit ustawiany przez kompilator) (Ultra SPARC III)
-				\end{itemize}
-				\item Dynamiczne
-				\begin{itemize}
-					\item Czyli tablica historii rozgałęzień
-				\end{itemize}
-				\item Inne
-				\begin{itemize}
-					\item przewidywanie, że skok wstecz względem licznika rozkazów zawsze nastąpi
-					\item przewidywanie, że skok do przodu względem licznika rozkazów nigdy nie nastąpi
-					\item przełączanie wątków zamiast prognozowania rozgałęzień w niektórych procesorach ze sprzętowym wsparciem wielowątkowości
-				\end{itemize}
-			\end{enumerate}
-			
-			\item \textbf{Porównaj realizację rozkazów wektorowych w komputerach wektorowych i macierzowych.}\\
-			Patrz: \ref{itm:wektor}
-			
-			\item \textbf{Scharakteryzuj architekturę systemu UMA.}\\\\
-			Jeden z rodzajów systemu wieloprocesorowego, charakteryzuje się wspólną pamięcią operacyjną dla wszystkich procesorów, każdy procesor ma własną pamięć podręczną (cache). Czas dostępu do pamięci jest dla wszystkich procesów identyczny.  Charakterystyczne dla SMP.
-			\item \textbf{Wymień cele sprzętowej, współbieżnej realizacji wielu wątków w jednym rdzeniu.}\\
-			Cel współbieżnej realizacji dwóch (lub więcej) wątków w jednym procesorze (rdzeniu): 
-			Minimalizacja strat cykli powstałych w trakcie realizacji pojedynczego wątku w wyniku:
-			\begin{itemize}
-				\item chybionych odwołań do pamięci podręcznej, 
-				\item błędów w przewidywaniu rozgałęzień, 
-				\item zależności między argumentami kolejnych rozkazów. 
-			\end{itemize}
-		\end{enumerate}
-	
-	\section{2013, Termin I}
+	\section{2013, Termin I (odpowiedzi z forum)}
 		\begin{enumerate}	
 			\item \textbf{Wymień cechy architektury superskalarnej.}\\
 			Patrz: \ref{itm:superskalar}
@@ -221,7 +125,20 @@
 			Patrz: \ref{itm:potok}
 			
 			\item \textbf{Co jest celem sprzętowego sterowania współbieżną realizacją wielu wątków w jednym rdzeniu? Jakie są metody i jakie warunki sprzętowej realizacji wielowątkowości?}\\
-			Patrz: \ref{itm:watek}
+			Celem współbieżnej realizacji dwóch (lub więcej) wątków w jednym procesorze (rdzeniu) jest 
+			minimalizacja strat cykli powstałych w trakcie realizacji pojedynczego wątku w wyniku:
+			\begin{itemize}
+				\item chybionych odwołań do pamięci podręcznej, 
+				\item błędów w przewidywaniu rozgałęzień, 
+				\item zależności między argumentami kolejnych rozkazów.
+			\end{itemize}
+			Warunki sprzętowej realizacji wielowątkowości:
+			\begin{itemize}
+				\item powielenie zestawów rejestrów uniwersalnych (lub powielenie tabel mapowania rejestrów)
+				\item powielenie liczników rozkazów
+				\item powielenie układów dostępu do pamięci podręcznej (tabel stron)
+				\item powielenie sterowników przerwań 
+			\end{itemize}
 		\end{enumerate}
 		
 	\section{2014, termin I, NSI}
@@ -264,9 +181,6 @@
 				\end{itemize}
 			\end{itemize}
 			\item \textbf{Omów organizację pamięci podręcznych (PaP) oraz metody sprowadzania danych z pamięci operacyjnej do PaP? Dlaczego stosuje się pamięci podręczne.}
-			\begin{itemize}
-				\item 
-			\end{itemize}
 		\end{enumerate}
 	\newpage
 	\section{2015, Termin 0}
